@@ -10,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
-import org.hibernate.type.DateType;
 
 @Entity
 @Table(name = "client")

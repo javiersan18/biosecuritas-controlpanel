@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.biosecuritas.controlpanel.db.entities.Client;
-import com.biosecuritas.controlpanel.db.entities.User;
 import com.biosecuritas.controlpanel.db.repositories.ClientRepository;
-import com.biosecuritas.controlpanel.db.repositories.UserRepository;
 
 @Controller
 public class ClientController {
