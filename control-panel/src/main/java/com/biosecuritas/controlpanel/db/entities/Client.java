@@ -1,4 +1,4 @@
-package com.biosecuritas.controlpanel;
+package com.biosecuritas.controlpanel.db.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
