@@ -16,7 +16,7 @@ import org.hibernate.annotations.Type;
 public class Client {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "client_code")
 	private Integer clientCode;
 

@@ -22,7 +22,7 @@ import org.hibernate.type.DateType;
 public class Installation {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

@@ -1,5 +1,5 @@
 CREATE TABLE `user` (
-  id IDENTITY NOT NULL PRIMARY KEY,
+  id IDENTITY NOT NULL PRIMARY KEY auto_increment,
   username  VARCHAR(50) NOT NULL,
   password  VARCHAR(255) NOT NULL,
   email  VARCHAR(255) NOT NULL,
@@ -7,7 +7,7 @@ CREATE TABLE `user` (
 );
 
 CREATE TABLE `authority` (
-  id IDENTITY NOT NULL PRIMARY KEY,
+  id IDENTITY NOT NULL PRIMARY KEY auto_increment,
   name VARCHAR(255) NOT NULL
 );
 
