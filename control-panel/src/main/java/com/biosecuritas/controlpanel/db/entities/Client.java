@@ -1,5 +1,7 @@
 package com.biosecuritas.controlpanel.db.entities;
 
+import java.sql.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Type;
 import org.hibernate.type.DateType;
 
 @Entity
@@ -40,10 +43,12 @@ public class Client {
 	private String DNI;
 
 	@Column(name = "date_ini")
-	private DateType dateIni;
+	@Type(type = "date")
+	private Date dateIni;
 
 	@Column(name = "date_fin")
-	private DateType dateFin;
+	@Type(type = "date")
+	private Date dateFin;
 
 	private String CC;
 
@@ -155,19 +160,19 @@ public class Client {
 		DNI = dNI;
 	}
 
-	public DateType getDateIni() {
+	public Date getDateIni() {
 		return dateIni;
 	}
 
-	public void setDateIni(DateType dateIni) {
+	public void setDateIni(Date dateIni) {
 		this.dateIni = dateIni;
 	}
 
-	public DateType getDateFin() {
+	public Date getDateFin() {
 		return dateFin;
 	}
 
-	public void setDateFin(DateType dateFin) {
+	public void setDateFin(Date dateFin) {
 		this.dateFin = dateFin;
 	}
 

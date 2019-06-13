@@ -1,11 +1,10 @@
 package com.biosecuritas.controlpanel.db.repositories;
 
-import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.biosecuritas.controlpanel.db.entities.Client;
+import com.biosecuritas.controlpanel.db.entities.Farm;
 
-public interface ClientRepository extends JpaRepository<Client, Integer> {
+public interface FarmRepository extends JpaRepository<Farm, Integer> {
 
 }
