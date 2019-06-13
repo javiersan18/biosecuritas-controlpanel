@@ -78,7 +78,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.hasAnyRole("ADMIN", "USER").and().formLogin().loginPage("/login").usernameParameter("username")
 				.passwordParameter("password").permitAll().loginProcessingUrl("/postLogin")
 				.successForwardUrl("/postLogin").failureUrl("/loginFailed").and().logout().permitAll()
-				.logoutSuccessUrl("/login").and().csrf().disable();
+				.logoutSuccessUrl("/login").and().csrf().disable().headers().frameOptions().sameOrigin();
 
 		/*
 		 * .and().authorizeRequests() .antMatchers("/login",
