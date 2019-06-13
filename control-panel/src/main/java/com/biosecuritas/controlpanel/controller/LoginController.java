@@ -1,20 +1,20 @@
 package com.biosecuritas.controlpanel.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
-import com.biosecuritas.controlpanel.db.entities.User;
 import com.biosecuritas.controlpanel.utils.BiosecuritasUserDetails;
-
-import javax.servlet.http.HttpSession;
 
 @SessionAttributes({ "currentUser" })
 @Controller
@@ -40,16 +40,17 @@ public class LoginController {
 		return "redirect:/login";
 	}
 
-	@RequestMapping(value = "/postLogin", method = RequestMethod.POST)
+	@PostMapping(value = "/postLogin")
 	public String postLogin(Model model, HttpSession session) {
 		log.info("postLogin()");
 		// read principal out of security context and set it to session
 		UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder
 				.getContext().getAuthentication();
 		validatePrinciple(authentication.getPrincipal());
-		User loggedInUser = ((BiosecuritasUserDetails) authentication.getPrincipal()).getUserDetails();
-		model.addAttribute("currentUser", loggedInUser.getUsername());
-		session.setAttribute("userId", loggedInUser.getId());
+		// User loggedInUser = ((BiosecuritasUserDetails)
+		// authentication.getPrincipal()).getUserDetails();
+		// model.addAttribute("currentUser", loggedInUser.getUsername());
+		// session.setAttribute("userId", loggedInUser.getId());
 		return "redirect:/dashboard";
 	}
 

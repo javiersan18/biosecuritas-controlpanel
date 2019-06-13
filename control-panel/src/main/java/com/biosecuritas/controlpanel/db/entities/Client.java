@@ -37,7 +37,7 @@ public class Client {
 
 	private String CIF;
 
-	private String representant;
+	private String representative;
 
 	private String DNI;
 
@@ -143,12 +143,12 @@ public class Client {
 		CIF = cIF;
 	}
 
-	public String getRepresentant() {
-		return representant;
+	public String getRepresentative() {
+		return representative;
 	}
 
-	public void setRepresentant(String representant) {
-		this.representant = representant;
+	public void setRepresentative(String representative) {
+		this.representative = representative;
 	}
 
 	public String getDNI() {
@@ -251,7 +251,7 @@ public class Client {
 	public String toString() {
 		return "Client [clientCode=" + clientCode + ", name=" + name + ", surname=" + surname + ", address=" + address
 				+ ", postalCode=" + postalCode + ", province=" + province + ", city=" + city + ", country=" + country
-				+ ", CIF=" + CIF + ", representant=" + representant + ", DNI=" + DNI + ", dateIni=" + dateIni
+				+ ", CIF=" + CIF + ", representative=" + representative + ", DNI=" + DNI + ", dateIni=" + dateIni
 				+ ", dateFin=" + dateFin + ", CC=" + CC + ", T=" + T + ", fAddress=" + fAddress + ", fPostalCode="
 				+ fPostalCode + ", fProvince=" + fProvince + ", fCity=" + fCity + ", fCountry=" + fCountry + ", numC="
 				+ numC + ", rega=" + rega + "]";

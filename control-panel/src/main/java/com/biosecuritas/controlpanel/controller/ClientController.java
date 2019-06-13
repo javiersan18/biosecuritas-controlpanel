@@ -22,10 +22,10 @@ public class ClientController {
 	@Autowired
 	private ClientRepository clientRepository;
 
-	@GetMapping(path = "/clients")	
-	@ResponseBody
-	public List<Client> getAllClients() {
-		return clientRepository.findAll();
+	@GetMapping(path = "/clients")
+	public String getAllClients(Model model) {
+		model.addAttribute("clients", clientRepository.findAll());
+		return "clients";
 	}
 
 	@PostMapping("/add-client")
