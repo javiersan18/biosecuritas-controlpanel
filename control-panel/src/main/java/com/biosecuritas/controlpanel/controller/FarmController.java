@@ -22,7 +22,7 @@ public class FarmController {
 	@GetMapping(path = "/farms")
 	public String getAllFarms(Model model) {
 		model.addAttribute("farms", farmRepository.findAll());
-		return "farms";
+		return "farms/farms";
 	}
 
 	@PostMapping("/add-farm")
