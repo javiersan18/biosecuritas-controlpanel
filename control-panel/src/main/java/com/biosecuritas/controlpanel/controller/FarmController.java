@@ -20,13 +20,13 @@ public class FarmController {
 	private FarmRepository farmRepository;
 
 	@GetMapping(path = "/farms")
-	public String getAllClients(Model model) {
+	public String getAllFarms(Model model) {
 		model.addAttribute("farms", farmRepository.findAll());
 		return "farms";
 	}
 
 	@PostMapping("/add-farm")
-	public String addClient(@Valid Farm farm, BindingResult result, Model model) {
+	public String addFarm(@Valid Farm farm, BindingResult result, Model model) {
 		if (result.hasErrors()) {
 			return "add-farm";
 		}
@@ -37,7 +37,7 @@ public class FarmController {
 	}
 
 	@PostMapping("/update-farm/{id}")
-	public String updateClient(@PathVariable("id") Integer id, @Valid Farm farm, BindingResult result, Model model) {
+	public String updateFarm(@PathVariable("id") Integer id, @Valid Farm farm, BindingResult result, Model model) {
 		if (result.hasErrors()) {
 			// client.setId(id);
 			return "update-farm";
@@ -49,7 +49,7 @@ public class FarmController {
 	}
 
 	@GetMapping("/delete-farm/{id}")
-	public String deleteClient(@PathVariable("id") Integer id, Model model) {
+	public String deleteFarm(@PathVariable("id") Integer id, Model model) {
 		Farm farm = farmRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Invalid farm Id:" + id));
 		farmRepository.delete(farm);

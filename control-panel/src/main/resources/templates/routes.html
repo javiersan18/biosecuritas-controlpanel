@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Routes - Biosecuritas&reg; Control Panel</title>
+<link rel="icon" href="/static/images/favicon.ico/">
+<!-- CSS FILES -->
+<link rel="stylesheet" data-th-href="@{/webjars/uikit/3.1.5/dist/css/uikit.min.css}" />
+<link href='https://api.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.css' rel='stylesheet' />
+<link rel="stylesheet" type="text/css" href="/static/css/dashboard.css">
+<script src="https://api.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.js"></script>
+</head>
+<style>
+body {
+	margin: 0;
+	padding: 0;
+}
+
+#map {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	width: 100%;
+}
+</style>
+<body>
+
+	<!--HEADER-->
+	<div th:replace="fragments/header :: header"></div>
+	<!--/HEADER-->
+	<!-- LEFT BAR -->
+	<div th:replace="fragments/left-bar :: left-bar"></div>
+	<!-- /LEFT BAR -->
+	<!-- CONTENT -->
+	<div id="content" data-uk-height-viewport="expand: true">
+		<div class="uk-container uk-container-expand">
+			<div id='map' class="mapboxgl-map">
+				<mapbox
+					access-token="pk.eyJ1IjoiamF2aWVyc2FuMTgiLCJhIjoiY2p3dWM5dnY3MGI1NDQ5czFyMzZ2YjMxNyJ9.tIoOuAIva7X3bOg3Q_m3qQ"
+					:map-options="{
+				style: 'mapbox://styles/mapbox/light-v10',
+				center: [-96, 37.8],
+				zoom: 7
+			}"
+					:geolocate-control="{
+				show: true, 
+				position: 'top-left'
+			}"
+					:scale-control="{
+				show: true,
+				position: 'top-left'
+			}"
+					:fullscreen-control="{
+				show: true,
+				position: 'top-left'
+			}" @map-load="mapLoaded"
+					@map-click="mapClicked" @map-mousemove="mapMouseMove"> </mapbox>
+			</div>
+			<script>
+				mapboxgl.accessToken = 'pk.eyJ1IjoiamF2aWVyc2FuMTgiLCJhIjoiY2p3dWM5dnY3MGI1NDQ5czFyMzZ2YjMxNyJ9.tIoOuAIva7X3bOg3Q_m3qQ';
+				var map = new mapboxgl.Map({
+					container : 'map',
+					style : 'mapbox://styles/mapbox/light-v10',
+					center : [ -3.5, 40 ],
+					zoom : 6
+				});
+			</script>
+		</div>
+	</div>
+	<!-- /CONTENT -->
+
+	<!--FOOTER-->
+	<div th:replace="fragments/footer :: footer"></div>
+	<!--/FOOTER-->
+
+	<!-- JS FILES -->
+	<script data-th-src="@{/webjars/uikit/3.1.5/dist/js/uikit.min.js}"></script>
+	<script data-th-src="@{/webjars/uikit/3.1.5/dist/js/uikit-icons.min.js}"></script>
+
+</body>
+</html>
