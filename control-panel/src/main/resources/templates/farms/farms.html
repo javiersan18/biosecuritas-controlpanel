@@ -8,8 +8,15 @@
 <!-- CSS FILES -->
 <link rel="stylesheet" data-th-href="@{/webjars/uikit/3.1.5/dist/css/uikit.min.css}" />
 <link rel="stylesheet" type="text/css" href="/static/css/dashboard.css">
+<!-- JS FILES -->
+<script data-th-src="@{/webjars/uikit/3.1.5/dist/js/uikit.min.js}"></script>
+<script data-th-src="@{/webjars/uikit/3.1.5/dist/js/uikit-icons.min.js}"></script>
+<script data-th-src="@{/webjars/jquery/3.4.1/jquery.min.js}"></script>
+<script data-th-src="@{/webjars/jquery-validation/1.17.0-1/jquery.validate.min.js}"></script>
 </head>
 <body>
+
+
 
 	<!--HEADER-->
 	<div th:replace="fragments/header :: header"></div>
@@ -43,8 +50,8 @@
 								<th th:text="#{farms.table.contactPhone}"></th>
 								<th th:text="#{farms.table.contactName}"></th>
 								<th th:text="#{farms.table.noSandach}"></th>
-								<th th:text="#{common.functions.edit}"></th>
-								<th th:text="#{common.functions.delete}"></th>
+								<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+								<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -69,23 +76,238 @@
 				</div>
 			</div>
 
+			<script type="text/javascript">
+				$(document).ready(function() {
+
+					$('#newFarmForm').validate({
+						rules : {
+							clientList : {
+								reqquired : true
+							},
+							address : {
+								required : true
+							},
+							province : {
+								required : true
+							},
+							city : {
+								required : true
+							},
+							postalCode : {
+								required : true
+							},
+							country : {
+								required : true
+							},
+							contactPhone : {
+								required : true
+							},
+							contactName : {
+								required : true
+							},
+							numSandach : {
+								required : true
+							}
+						},
+						errorPlacement : function(error, element) {
+							offset = element.offset();
+							error.insertBefore(element)
+							error.addClass('uk-form-danger');
+						},
+						errorClass : 'uk-form-danger',
+						submitHandler : function(form) { // for demo
+							return true;
+						}
+					});
+
+					$('#editFarmForm').validate({
+						rules : {
+							clientList : {
+								reqquired : true
+							},
+							address : {
+								required : true
+							},
+							province : {
+								required : true
+							},
+							city : {
+								required : true
+							},
+							postalCode : {
+								required : true
+							},
+							country : {
+								required : true
+							},
+							contactPhone : {
+								required : true
+							},
+							contactName : {
+								required : true
+							},
+							numSandach : {
+								required : true
+							}
+						},
+						errorPlacement : function(error, element) {
+							offset = element.offset();
+							error.insertBefore(element)
+							error.addClass('uk-form-danger');
+						},
+						errorClass : 'uk-form-danger',
+						submitHandler : function(form) { // for demo
+							return true;
+						}
+					});
+					
+					$('#submit-new-button').on('click', function() {
+						$('#newFarmForm').valid();
+					});
+					$('#submit-edit-button').on('click', function() {
+						$('#editFarmForm').valid();
+					});
+
+				});
+			</script>
+
 			<div id="modal-form" class="uk-modal-container" uk-modal>
 				<div class="uk-modal-dialog uk-modal-body">
 					<button class="uk-modal-close-full uk-close-large" type="button" uk-close></button>
-					<div class="uk-modal-header">
-						<h2 class="uk-modal-title" th:text="#{farms.addNew.title}"></h2>
-					</div>
-					<div class="uk-modal-body">
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-							dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-							commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-							pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
-							laborum.</p>
-					</div>
-					<div class="uk-modal-footer uk-text-right">
-						<button class="uk-button uk-button-default uk-modal-close" type="button" th:text="#{common.functions.cancel}"></button>
-						<button class="uk-button uk-button-primary" type="button" th:text="#{common.functions.create}"></button>
-					</div>
+					<form id="newFarmForm" class="uk-form-stacked" method="post" action="#" th:action="@{/add-farm}"
+						th:object="${newFarm}">
+						<div class="uk-modal-header">
+							<h2 class="uk-modal-title" th:text="#{farms.addNew.title}"></h2>
+						</div>
+						<div class="uk-modal-body">
+
+							<div class="uk-margin">
+								<label class="uk-form-label" th:text="#{farms.addNew.client}"></label>
+								<div class="uk-form-controls">
+									<select class="uk-select uk-form-small" id="clients-list" name="clientList" th:field="*{clientId}">
+										<option value="" th:text="#{farms.addNew.selectClient}"></option>
+										<option th:each="client : ${clients}" th:value="${client.clientCode}" th:text="${client.name}"></option>
+									</select>
+								</div>
+
+								<label class="uk-form-label" th:text="#{farms.table.address}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="address" th:field="*{address}" type="text"
+										placeholder="Saavedra Fajardo 7...">
+								</div>
+								<label class="uk-form-label" th:text="#{farms.table.province}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="province" th:field="*{province}" type="text"
+										placeholder="Madrid...">
+								</div>
+								<label class="uk-form-label" th:text="#{farms.table.city}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="city" th:field="*{city}" type="text" placeholder="Madrid...">
+								</div>
+								<label class="uk-form-label" th:text="#{farms.table.postalCode}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="postalCode" th:field="*{postalCode}" type="text"
+										placeholder="28011...">
+								</div>
+								<label class="uk-form-label" th:text="#{farms.table.country}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="country" th:field="*{country}" type="text" placeholder="ES...">
+								</div>
+								<label class="uk-form-label" th:text="#{farms.table.contactPhone}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="contactPhone" th:field="*{contactPhone}" type="text"
+										placeholder="686574620...">
+								</div>
+								<label class="uk-form-label" th:text="#{farms.table.contactName}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="contactName" th:field="*{contactName}" type="text"
+										placeholder="Papi...">
+								</div>
+								<label class="uk-form-label" th:text="#{farms.table.noSandach}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="numSandach" th:field="*{numSandach}" type="text"
+										placeholder="12345678953313546...">
+								</div>
+
+							</div>
+
+						</div>
+						<div class="uk-modal-footer uk-text-right">
+							<button class="uk-button uk-button-default uk-modal-close" id="submit-new-button" type="button"
+								th:text="#{common.functions.cancel}"></button>
+							<button class="uk-button uk-button-primary" type="submit" th:text="#{common.functions.create}"></button>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<div id="modal-form-edit" class="uk-modal-container" uk-modal>
+				<div class="uk-modal-dialog uk-modal-body">
+					<button class="uk-modal-close-full uk-close-large" type="button" uk-close></button>
+					<form id="editFarmForm" class="uk-form-stacked" method="post" action="#" th:action="@{/update-farm}"
+						th:object="${editFarm}">
+						<div class="uk-modal-header">
+							<h2 class="uk-modal-title" th:text="#{farms.edit.title}"></h2>
+						</div>
+						<div class="uk-modal-body">
+
+							<div class="uk-margin">
+								<label class="uk-form-label" th:text="#{farms.addNew.client}"></label>
+								<div class="uk-form-controls">
+									<select class="uk-select uk-form-small" id="clients-list" name="clientList" th:field="*{clientId}">
+										<option value="" th:text="#{farms.addNew.selectClient}"></option>
+										<option th:each="client : ${clients}" th:value="${client.clientCode}" th:text="${client.name}"></option>
+									</select>
+								</div>
+								<input type="hidden" name="farmId" th:field="*{id}" /> <label class="uk-form-label"
+									th:text="#{farms.table.address}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="address" th:field="*{address}" type="text"
+										placeholder="Saavedra Fajardo 7...">
+								</div>
+								<label class="uk-form-label" th:text="#{farms.table.province}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="province" th:field="*{province}" type="text"
+										placeholder="Madrid...">
+								</div>
+								<label class="uk-form-label" th:text="#{farms.table.city}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="city" th:field="*{city}" type="text" placeholder="Madrid...">
+								</div>
+								<label class="uk-form-label" th:text="#{farms.table.postalCode}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="postalCode" th:field="*{postalCode}" type="text"
+										placeholder="28011...">
+								</div>
+								<label class="uk-form-label" th:text="#{farms.table.country}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="country" th:field="*{country}" type="text" placeholder="ES...">
+								</div>
+								<label class="uk-form-label" th:text="#{farms.table.contactPhone}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="contactPhone" th:field="*{contactPhone}" type="text"
+										placeholder="686574620...">
+								</div>
+								<label class="uk-form-label" th:text="#{farms.table.contactName}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="contactName" th:field="*{contactName}" type="text"
+										placeholder="Papi...">
+								</div>
+								<label class="uk-form-label" th:text="#{farms.table.noSandach}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="numSandach" th:field="*{numSandach}" type="text"
+										placeholder="12345678953313546...">
+								</div>
+
+							</div>
+
+						</div>
+						<div class="uk-modal-footer uk-text-right">
+							<button class="uk-button uk-button-default uk-modal-close" id="submit-edit-button" type="button"
+								th:text="#{common.functions.cancel}"></button>
+							<button class="uk-button uk-button-primary" type="submit" th:text="#{common.functions.edit}"></button>
+						</div>
+					</form>
 				</div>
 			</div>
 
@@ -97,10 +319,22 @@
 		<div th:replace="fragments/footer :: footer"></div>
 		<!--/FOOTER-->
 
-		<!-- JS FILES -->
-		<script data-th-src="@{/webjars/uikit/3.1.5/dist/js/uikit.min.js}"></script>
-		<script data-th-src="@{/webjars/uikit/3.1.5/dist/js/uikit-icons.min.js}"></script>
-		<script data-th-src="@{/webjars/chart.js/2.8.0/dist/Chart.min.js}"></script>
-		<script src="/static/js/chartScripts.js"></script>
+		<input type="hidden" id="status" name="status" th:value="${status}" />
+		<script type="text/javascript">
+			$(document).ready(function() {
+				var status = $("#status").val();
+				console.log("status: " + status);
+				if (status == "edit") {
+					UIkit.modal('#modal-form-edit', {
+						modal : false,
+						keyboard : false,
+						bgclose : false,
+						center : true
+					}).show();
+				} else if (status=="created"){
+					UIkit.notification("Granja creada con éxito!", {status: 'success'})
+				}
+			});
+		</script>
 </body>
 </html>

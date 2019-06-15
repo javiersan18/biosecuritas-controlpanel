@@ -7,10 +7,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.biosecuritas.controlpanel.db.entities.Farm;
+import com.biosecuritas.controlpanel.db.repositories.ClientRepository;
 import com.biosecuritas.controlpanel.db.repositories.FarmRepository;
 
 @Controller
@@ -19,33 +21,66 @@ public class FarmController {
 	@Autowired
 	private FarmRepository farmRepository;
 
+	@Autowired
+	private ClientRepository clientRepository;
+
 	@GetMapping(path = "/farms")
 	public String getAllFarms(Model model) {
 		model.addAttribute("farms", farmRepository.findAll());
+		model.addAttribute("clients", clientRepository.findAll());
+		model.addAttribute("newFarm", new Farm());
+		model.addAttribute("editFarm", new Farm());
+		model.addAttribute("status", "fecthAll");
 		return "farms/farms";
 	}
 
 	@PostMapping("/add-farm")
-	public String addFarm(@Valid Farm farm, BindingResult result, Model model) {
+	public String addFarm(@ModelAttribute("newFarm") @Valid Farm farm, BindingResult result, Model model) {
 		if (result.hasErrors()) {
-			return "add-farm";
+			model.addAttribute("farms", farmRepository.findAll());
+			model.addAttribute("newFarm", farm);
+			model.addAttribute("errors", "ko");
+			return "/farms/farms";
 		}
 
 		farmRepository.save(farm);
-		model.addAttribute("farm", farmRepository.findAll());
-		return "farms";
+		model.addAttribute("farms", farmRepository.findAll());
+		model.addAttribute("status", "created");
+		model.addAttribute("newFarm", new Farm());
+		model.addAttribute("editFarm", new Farm());
+		return "redirect:/farms";
 	}
 
-	@PostMapping("/update-farm/{id}")
-	public String updateFarm(@PathVariable("id") Integer id, @Valid Farm farm, BindingResult result, Model model) {
+	@GetMapping("/edit-farm/{id}")
+	public String editFarm(@PathVariable("id") Integer id, @Valid Farm farm, BindingResult result, Model model) {
+		if (result.hasErrors()) {
+			// client.setId(id);
+			return "update-farm";
+		}
+
+		// farmRepository.save(farm);
+		model.addAttribute("farms", farmRepository.findAll());
+		model.addAttribute("newFarm", new Farm());
+		model.addAttribute("editFarm", farmRepository.findById(id));
+		model.addAttribute("clients", clientRepository.findAll());
+		model.addAttribute("status", "edited");
+		return "/farms/farms";
+	}
+
+	@PostMapping("/update-farm")
+	public String updateFarm(@Valid Farm farm, BindingResult result, Model model) {
 		if (result.hasErrors()) {
 			// client.setId(id);
 			return "update-farm";
 		}
 
 		farmRepository.save(farm);
-		model.addAttribute("farm", farmRepository.findAll());
-		return "farms";
+		model.addAttribute("farms", farmRepository.findAll());
+		model.addAttribute("newFarm", new Farm());
+		model.addAttribute("editFarm", new Farm());
+		model.addAttribute("clients", clientRepository.findAll());
+		model.addAttribute("status", "updated");
+		return "redirect:/farms";
 	}
 
 	@GetMapping("/delete-farm/{id}")
@@ -54,7 +89,11 @@ public class FarmController {
 				.orElseThrow(() -> new IllegalArgumentException("Invalid farm Id:" + id));
 		farmRepository.delete(farm);
 		model.addAttribute("farm", farmRepository.findAll());
-		return "farms";
+		model.addAttribute("newFarm", new Farm());
+		model.addAttribute("editFarm", new Farm());
+		model.addAttribute("clients", clientRepository.findAll());
+		model.addAttribute("status", "deleted");
+		return "redirect:/farms";
 	}
 
 	// additional CRUD methods
