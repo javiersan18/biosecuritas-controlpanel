@@ -14,9 +14,45 @@
 <script data-th-src="@{/webjars/jquery/3.4.1/jquery.min.js}"></script>
 <script data-th-src="@{/webjars/jquery-validation/1.17.0-1/jquery.validate.min.js}"></script>
 </head>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+    var createdMessage = [[#{farms.alarm.created}]];
+    var updatedMessage = [[#{farms.alarm.updated}]];
+    var deletedMessage = [[#{farms.alarm.deleted}]];
+/*]]>*/
+</script>
+<script type="text/javascript">
+	$(document)
+		.ready(
+		    function() {
+		    	window.history.pushState({}, document.title, "/farms");
+		        var status = $("#status").val();
+		        console.log("status: " + status);
+		        if (status == "edit") {
+		            UIkit.modal('#modal-form-edit', {
+		                modal: false,
+		                keyboard: false,
+		                bgclose: false,
+		                center: true
+		            }).show();
+		        } else if (status == "created") {
+		            $("#table-data")
+		                .before(
+		                    '<div id="item-created" class="uk-alert-success" uk-alert><a class="uk-alert-close" uk-close></a><p>' + createdMessage + '</p></div>');
+		        } else if (status == "updated") {
+		            $("#table-data")
+		                .before(
+		                    '<div id="item-updated" class="uk-alert-success" uk-alert><a class="uk-alert-close" uk-close></a><p>' + updatedMessage + '</p></div>');
+		        } else if (status == "deleted") {
+		            $("#table-data")
+		                .before(
+		                    '<div id="item-deleted" class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>' + deletedMessage + '</p></div>');
+		        }
+		    });
+</script>
+
 <body>
-
-
 
 	<!--HEADER-->
 	<div th:replace="fragments/header :: header"></div>
@@ -29,7 +65,10 @@
 		<div class="uk-container uk-container-expand">
 			<div th:switch="${farms}">
 				<h2 th:case="null" th:text="#{farms.noFarmsYet}"></h2>
-				<div th:case="*">
+				<div id="table-data" th:case="*">
+
+
+
 					<h3 class="uk-heading-line uk-text-bold">
 						<span th:text="#{farms.title}"></span>
 					</h3>
@@ -52,6 +91,7 @@
 								<th th:text="#{farms.table.noSandach}"></th>
 								<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 								<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+								<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -66,13 +106,94 @@
 								<td th:text="${farm.contactPhone}"></td>
 								<td th:text="${farm.contactName}"></td>
 								<td th:text="${farm.numSandach}"></td>
+								<td><a th:href="@{/view-farm/{id}(id=${farm.id})}"><span data-uk-icon="icon: table"
+										class="uk-margin-small-right"></span></a></td>
 								<td><a th:href="@{/edit-farm/{id}(id=${farm.id})}"><span data-uk-icon="icon: pencil"
 										class="uk-margin-small-right"></span></a></td>
-								<td><a th:href="@{/delete-farm/{id}(id=${farm.id})}"><span data-uk-icon="icon: trash"
-										class="uk-margin-small-right"></span></a></td>
+								<td><a data-target="#modal-delete1" th:attr="data-target='#modal-delete'+${farm.id}" uk-toggle><span
+										data-uk-icon="icon: trash" class="uk-margin-small-right"></span></a></td>
+								<div th:id="modal-delete+${farm.id}" uk-modal>
+									<div class="uk-modal-dialog">
+										<button class="uk-modal-close-default" type="button" uk-close></button>
+										<div class="uk-modal-body">
+											<h4 th:text="#{farms.delete.confirmation}" />
+											<p th:text="#{farms.table.farmId} +': ' + ${farm.id}"></p>
+											<p th:text="#{farms.table.clientName} +': ' + ${farm.clientId.name}"></p>
+										</div>
+										<div class="uk-modal-footer uk-text-right">
+											<button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+											<a th:href="@{/delete-farm/{id}(id=${farm.id})}"><button class="uk-button uk-button-primary"
+													type="button">Delete</button> </a>
+										</div>
+									</div>
+								</div>
 							</tr>
 						</tbody>
 					</table>
+				</div>
+			</div>
+
+			<div id="modal-form-view" class="uk-modal-container" uk-modal>
+				<div class="uk-modal-dialog uk-modal-body">
+					<button class="uk-modal-close-full uk-close-large" type="button" uk-close></button>
+					<form id="newFarmForm" class="uk-form-stacked" method="post" action="#" th:object="${editFarm}">
+						<div class="uk-modal-header">
+							<h2 class="uk-modal-title" th:text="#{farms.view.title}"></h2>
+						</div>
+						<div class="uk-modal-body">
+							<div class="uk-margin">
+								<label class="uk-form-label" th:text="#{farms.addNew.client}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="clientId" th:field="*{clientId.clientCode}" type="text">
+								</div>
+								<label class="uk-form-label" th:text="#{farms.addNew.client}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="clientName" th:field="*{clientId.name}" type="text">
+								</div>
+								<label class="uk-form-label" th:text="#{farms.table.address}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="address" th:field="*{address}" type="text"
+										placeholder="Saavedra Fajardo 7...">
+								</div>
+								<label class="uk-form-label" th:text="#{farms.table.province}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="province" th:field="*{province}" type="text"
+										placeholder="Madrid...">
+								</div>
+								<label class="uk-form-label" th:text="#{farms.table.city}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="city" th:field="*{city}" type="text" placeholder="Madrid...">
+								</div>
+								<label class="uk-form-label" th:text="#{farms.table.postalCode}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="postalCode" th:field="*{postalCode}" type="text"
+										placeholder="28011...">
+								</div>
+								<label class="uk-form-label" th:text="#{farms.table.country}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="country" th:field="*{country}" type="text" placeholder="ES...">
+								</div>
+								<label class="uk-form-label" th:text="#{farms.table.contactPhone}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="contactPhone" th:field="*{contactPhone}" type="text"
+										placeholder="686574620...">
+								</div>
+								<label class="uk-form-label" th:text="#{farms.table.contactName}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="contactName" th:field="*{contactName}" type="text"
+										placeholder="Papi...">
+								</div>
+								<label class="uk-form-label" th:text="#{farms.table.noSandach}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="numSandach" th:field="*{numSandach}" type="text"
+										placeholder="12345678953313546...">
+								</div>
+							</div>
+						</div>
+						<div class="uk-modal-footer uk-text-right">
+							<button class="uk-button uk-button-primary" type="button" th:text="#{common.functions.cancel}"></button>
+						</div>
+					</form>
 				</div>
 			</div>
 
@@ -160,7 +281,7 @@
 							return true;
 						}
 					});
-					
+
 					$('#submit-new-button').on('click', function() {
 						$('#newFarmForm').valid();
 					});
@@ -310,8 +431,6 @@
 					</form>
 				</div>
 			</div>
-
-
 		</div>
 		<!-- /CONTENT -->
 
@@ -320,21 +439,7 @@
 		<!--/FOOTER-->
 
 		<input type="hidden" id="status" name="status" th:value="${status}" />
-		<script type="text/javascript">
-			$(document).ready(function() {
-				var status = $("#status").val();
-				console.log("status: " + status);
-				if (status == "edit") {
-					UIkit.modal('#modal-form-edit', {
-						modal : false,
-						keyboard : false,
-						bgclose : false,
-						center : true
-					}).show();
-				} else if (status=="created"){
-					UIkit.notification("Granja creada con éxito!", {status: 'success'})
-				}
-			});
-		</script>
+	</div>
+
 </body>
 </html>

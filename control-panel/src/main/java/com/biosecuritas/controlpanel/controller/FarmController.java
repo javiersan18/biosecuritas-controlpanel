@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.biosecuritas.controlpanel.db.entities.Farm;
 import com.biosecuritas.controlpanel.db.repositories.ClientRepository;
@@ -25,13 +26,13 @@ public class FarmController {
 	private ClientRepository clientRepository;
 
 	@GetMapping(path = "/farms")
-	public String getAllFarms(Model model) {
+	public String getAllFarms(@RequestParam(required = false) String status, Model model) {
 		model.addAttribute("farms", farmRepository.findAll());
 		model.addAttribute("clients", clientRepository.findAll());
 		model.addAttribute("newFarm", new Farm());
 		model.addAttribute("editFarm", new Farm());
-		model.addAttribute("status", "fecthAll");
-		return "farms/farms";
+		model.addAttribute("status", status);
+		return "/farms/farms";
 	}
 
 	@PostMapping("/add-farm")
@@ -63,7 +64,7 @@ public class FarmController {
 		model.addAttribute("newFarm", new Farm());
 		model.addAttribute("editFarm", farmRepository.findById(id));
 		model.addAttribute("clients", clientRepository.findAll());
-		model.addAttribute("status", "edited");
+		model.addAttribute("status", "edit");
 		return "/farms/farms";
 	}
 
