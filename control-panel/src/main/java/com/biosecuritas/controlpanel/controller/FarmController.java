@@ -59,12 +59,26 @@ public class FarmController {
 			return "update-farm";
 		}
 
-		// farmRepository.save(farm);
 		model.addAttribute("farms", farmRepository.findAll());
 		model.addAttribute("newFarm", new Farm());
 		model.addAttribute("editFarm", farmRepository.findById(id));
 		model.addAttribute("clients", clientRepository.findAll());
 		model.addAttribute("status", "edit");
+		return "/farms/farms";
+	}
+
+	@GetMapping("/view-farm/{id}")
+	public String viewFarm(@PathVariable("id") Integer id, @Valid Farm farm, BindingResult result, Model model) {
+		if (result.hasErrors()) {
+			// client.setId(id);
+			return "update-farm";
+		}
+
+		model.addAttribute("farms", farmRepository.findAll());
+		model.addAttribute("newFarm", new Farm());
+		model.addAttribute("editFarm", farmRepository.findById(id));
+		model.addAttribute("clients", clientRepository.findAll());
+		model.addAttribute("status", "view");
 		return "/farms/farms";
 	}
 
