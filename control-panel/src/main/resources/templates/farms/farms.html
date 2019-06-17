@@ -113,12 +113,12 @@
 								<td th:text="${farm.contactPhone}"></td>
 								<td th:text="${farm.contactName}"></td>
 								<td th:text="${farm.numSandach}"></td>
-								<td><a th:href="@{/view-farm/{id}(id=${farm.id})}"><span data-uk-icon="icon: table"
-										class="uk-margin-small-right"></span></a></td>
-								<td><a th:href="@{/edit-farm/{id}(id=${farm.id})}"><span data-uk-icon="icon: pencil"
-										class="uk-margin-small-right"></span></a></td>
+								<td><a th:href="@{/view-farm/{id}(id=${farm.id})}"><span th:uk-tooltip="#{common.functions.details}"
+										data-uk-icon="icon: table" class="uk-margin-small-right"></span></a></td>
+								<td><a th:href="@{/edit-farm/{id}(id=${farm.id})}"><span th:uk-tooltip="#{common.functions.edit}"
+										data-uk-icon="icon: pencil" class="uk-margin-small-right"></span></a></td>
 								<td><a data-target="#modal-delete1" th:attr="data-target='#modal-delete'+${farm.id}" uk-toggle><span
-										data-uk-icon="icon: trash" class="uk-margin-small-right"></span></a></td>
+										th:uk-tooltip="#{common.functions.delete}" data-uk-icon="icon: trash" class="uk-margin-small-right "></span></a></td>
 								<div th:id="modal-delete+${farm.id}" uk-modal>
 									<div class="uk-modal-dialog">
 										<button class="uk-modal-close-default" type="button" uk-close></button>
