@@ -27,7 +27,7 @@
 	$(document)
 		.ready(
 		    function() {
-		    	//window.history.pushState({}, document.title, "/clients");
+		        //window.history.pushState({}, document.title, "/clients");
 		        var status = $("#status").val();
 		        var errorDesc = $("#errorDesc").val();
 		        console.log("status: " + status);
@@ -39,14 +39,15 @@
 		                bgclose: false,
 		                center: true
 		            }).show();
-		        } if (status == "view") {
+		        }
+		        if (status == "view") {
 		            UIkit.modal('#modal-form-view', {
 		                modal: false,
 		                keyboard: false,
 		                bgclose: false,
 		                center: true
 		            }).show();
-		        }else if (status == "created") {
+		        } else if (status == "created") {
 		            $("#table-data")
 		                .before(
 		                    '<div id="item-created" class="uk-alert-success" uk-alert><a class="uk-alert-close" uk-close></a><p>' + createdMessage + '</p></div>');
@@ -60,13 +61,13 @@
 		                    '<div id="item-deleted" class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>' + deletedMessage + '</p></div>');
 		        } else if (status == "empty") {
 		            $("#table-data")
-	                .before(
-	                    '<div id="item-empty" class="uk-alert-primary" uk-alert><a class="uk-alert-close" uk-close></a><p>' + emptyMessage + '</p></div>');
-	        }  else if (status == "error") {
-	            $("#table-data")
-                .before(
-                    '<div id="item-deleted" class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>ERROR: ' + errorDesc + '</p></div>');
-        }
+		                .before(
+		                    '<div id="item-empty" class="uk-alert-primary" uk-alert><a class="uk-alert-close" uk-close></a><p>' + emptyMessage + '</p></div>');
+		        } else if (status == "error") {
+		            $("#table-data")
+		                .before(
+		                    '<div id="item-deleted" class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>ERROR: ' + errorDesc + '</p></div>');
+		        }
 		    });
 </script>
 
