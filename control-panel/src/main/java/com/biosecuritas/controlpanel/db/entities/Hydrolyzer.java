@@ -1,5 +1,7 @@
 package com.biosecuritas.controlpanel.db.entities;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -25,7 +27,7 @@ public class Hydrolyzer {
 	private Float maxWeight;
 
 	@Column(name = "date_ini")
-	private DateType dateIni;
+	private Date dateIni;
 
 	public Hydrolyzer() {
 
@@ -55,11 +57,11 @@ public class Hydrolyzer {
 		this.maxWeight = maxWeight;
 	}
 
-	public DateType getDateIni() {
+	public Date getDateIni() {
 		return dateIni;
 	}
 
-	public void setDateIni(DateType dateIni) {
+	public void setDateIni(Date dateIni) {
 		this.dateIni = dateIni;
 	}
 

@@ -1,11 +1,24 @@
 package com.biosecuritas.controlpanel.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
+import javax.validation.Valid;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.biosecuritas.controlpanel.db.entities.Hydrolyzer;
@@ -14,6 +27,8 @@ import com.biosecuritas.controlpanel.db.repositories.HydrolyzerRepository;
 
 @Controller
 public class HydrolyzerController {
+
+	private static final Logger log = LogManager.getLogger(HydrolyzerController.class);
 
 	@Autowired
 	private HydrolyzerRepository hydrolyzerRepository;
@@ -35,18 +50,32 @@ public class HydrolyzerController {
 		return "/hydrolyzers/hydrolyzers";
 	}
 
+	@PostMapping("/add-hydro")
+	public String addFarm(@ModelAttribute("newHydro") @Valid Hydrolyzer hydro, BindingResult result, Model model) {
+		if (result.hasErrors()) {
+			model.addAttribute("hydros", hydrolyzerRepository.findAll());
+			model.addAttribute("newHydro", hydro);
+			model.addAttribute("editHydro", new Hydrolyzer());
+			model.addAttribute("errors", "ko");
+			log.error(result.toString());
+			return "/hydrolyzers/hydrolyzers";
+		}
+
+		hydrolyzerRepository.save(hydro);
+		model.addAttribute("hydros", hydrolyzerRepository.findAll());
+		model.addAttribute("status", "created");
+		model.addAttribute("newHydro", new Hydrolyzer());
+		model.addAttribute("editHydro", new Hydrolyzer());
+		return "redirect:/hydrolyzers";
+	}
+
+	@InitBinder
+	protected void initBinder(WebDataBinder binder) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
+	}
+
 	/*
-	 * @PostMapping("/add-farm") public String
-	 * addFarm(@ModelAttribute("newFarm") @Valid Farm farm, BindingResult result,
-	 * Model model) { if (result.hasErrors()) { model.addAttribute("farms",
-	 * farmRepository.findAll()); model.addAttribute("newFarm", farm);
-	 * model.addAttribute("errors", "ko"); return "/farms/farms"; }
-	 * 
-	 * farmRepository.save(farm); model.addAttribute("farms",
-	 * farmRepository.findAll()); model.addAttribute("status", "created");
-	 * model.addAttribute("newFarm", new Farm()); model.addAttribute("editFarm", new
-	 * Farm()); return "redirect:/farms"; }
-	 * 
 	 * @GetMapping("/edit-farm/{id}") public String editFarm(@PathVariable("id")
 	 * Integer id, @Valid Farm farm, BindingResult result, Model model) { if
 	 * (result.hasErrors()) { // client.setId(id); return "update-farm"; }
