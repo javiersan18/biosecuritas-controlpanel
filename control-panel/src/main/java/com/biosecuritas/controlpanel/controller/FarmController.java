@@ -2,6 +2,8 @@ package com.biosecuritas.controlpanel.controller;
 
 import javax.validation.Valid;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +20,8 @@ import com.biosecuritas.controlpanel.db.repositories.FarmRepository;
 
 @Controller
 public class FarmController {
+
+	private static final Logger log = LogManager.getLogger(FarmController.class);
 
 	@Autowired
 	private FarmRepository farmRepository;
@@ -40,7 +44,9 @@ public class FarmController {
 		if (result.hasErrors()) {
 			model.addAttribute("farms", farmRepository.findAll());
 			model.addAttribute("newFarm", farm);
-			model.addAttribute("errors", "ko");
+			model.addAttribute("editFarm", new Farm());
+			model.addAttribute("errors", "error");
+			log.error(result.toString());
 			return "/farms/farms";
 		}
 
@@ -55,8 +61,12 @@ public class FarmController {
 	@GetMapping("/edit-farm/{id}")
 	public String editFarm(@PathVariable("id") Integer id, @Valid Farm farm, BindingResult result, Model model) {
 		if (result.hasErrors()) {
-			// client.setId(id);
-			return "update-farm";
+			model.addAttribute("farms", farmRepository.findAll());
+			model.addAttribute("newFarm", farm);
+			model.addAttribute("editFarm", new Farm());
+			model.addAttribute("errors", "error");
+			log.error(result.toString());
+			return "/farms/farms";
 		}
 
 		model.addAttribute("farms", farmRepository.findAll());
@@ -70,8 +80,12 @@ public class FarmController {
 	@GetMapping("/view-farm/{id}")
 	public String viewFarm(@PathVariable("id") Integer id, @Valid Farm farm, BindingResult result, Model model) {
 		if (result.hasErrors()) {
-			// client.setId(id);
-			return "update-farm";
+			model.addAttribute("farms", farmRepository.findAll());
+			model.addAttribute("newFarm", farm);
+			model.addAttribute("editFarm", new Farm());
+			model.addAttribute("errors", "error");
+			log.error(result.toString());
+			return "/farms/farms";
 		}
 
 		model.addAttribute("farms", farmRepository.findAll());
@@ -85,8 +99,12 @@ public class FarmController {
 	@PostMapping("/update-farm")
 	public String updateFarm(@Valid Farm farm, BindingResult result, Model model) {
 		if (result.hasErrors()) {
-			// client.setId(id);
-			return "update-farm";
+			model.addAttribute("farms", farmRepository.findAll());
+			model.addAttribute("newFarm", farm);
+			model.addAttribute("editFarm", new Farm());
+			model.addAttribute("errors", "error");
+			log.error(result.toString());
+			return "/farms/farms";
 		}
 
 		farmRepository.save(farm);

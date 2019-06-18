@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title th:text="#{clients.header.title}"></title>
+<link rel="icon" href="/static/images/favicon.ico/">
+<!-- CSS FILES -->
+<link rel="stylesheet" data-th-href="@{/webjars/uikit/3.1.5/dist/css/uikit.min.css}" />
+<link rel="stylesheet" type="text/css" href="/static/css/dashboard.css">
+<!-- JS FILES -->
+<script data-th-src="@{/webjars/uikit/3.1.5/dist/js/uikit.min.js}"></script>
+<script data-th-src="@{/webjars/uikit/3.1.5/dist/js/uikit-icons.min.js}"></script>
+<script data-th-src="@{/webjars/jquery/3.4.1/jquery.min.js}"></script>
+<script data-th-src="@{/webjars/jquery-validation/1.17.0-1/jquery.validate.min.js}"></script>
+</head>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+    var createdMessage = [[#{clients.alarm.created}]];
+    var updatedMessage = [[#{clients.alarm.updated}]];
+    var deletedMessage = [[#{clients.alarm.deleted}]];
+    var emptyMessage = [[#{clients.alarm.empty}]];
+/*]]>*/
+</script>
+<script type="text/javascript">
+	$(document)
+		.ready(
+		    function() {
+		    	window.history.pushState({}, document.title, "/clients");
+		        var status = $("#status").val();
+		        console.log("status: " + status);
+		        if (status == "edit") {
+		            UIkit.modal('#modal-form-edit', {
+		                modal: false,
+		                keyboard: false,
+		                bgclose: false,
+		                center: true
+		            }).show();
+		        } if (status == "view") {
+		            UIkit.modal('#modal-form-view', {
+		                modal: false,
+		                keyboard: false,
+		                bgclose: false,
+		                center: true
+		            }).show();
+		        }else if (status == "created") {
+		            $("#table-data")
+		                .before(
+		                    '<div id="item-created" class="uk-alert-success" uk-alert><a class="uk-alert-close" uk-close></a><p>' + createdMessage + '</p></div>');
+		        } else if (status == "updated") {
+		            $("#table-data")
+		                .before(
+		                    '<div id="item-updated" class="uk-alert-success" uk-alert><a class="uk-alert-close" uk-close></a><p>' + updatedMessage + '</p></div>');
+		        } else if (status == "deleted") {
+		            $("#table-data")
+		                .before(
+		                    '<div id="item-deleted" class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>' + deletedMessage + '</p></div>');
+		        }else if (status == "empty") {
+		            $("#table-data")
+	                .before(
+	                    '<div id="item-empty" class="uk-alert-primary" uk-alert><a class="uk-alert-close" uk-close></a><p>' + emptyMessage + '</p></div>');
+	        }
+		    });
+</script>
+
+<body>
+
+	<!--HEADER-->
+	<div th:replace="fragments/header :: header"></div>
+	<!--/HEADER-->
+	<!-- LEFT BAR -->
+	<div th:replace="fragments/left-bar :: left-bar"></div>
+	<!-- /LEFT BAR -->
+	<!-- CONTENT -->
+	<div id="content" data-uk-height-viewport="expand: true">
+		<div class="uk-container uk-container-expand">
+			<div>
+				<div id="table-data">
+					<h3 class="uk-heading-line uk-text-bold">
+						<span th:text="#{clients.title}"></span>
+					</h3>
+					<p>
+						<a class="uk-button uk-button-default" href="#modal-form" uk-toggle><span data-uk-icon="icon: plus-circle"
+							class="uk-margin-small-right"></span><span th:text="#{clients.addNew}"></span></a>
+					</p>
+					<table id="clients-table" class="uk-table uk-table-hover uk-table-striped uk-table-small">
+						<thead>
+							<tr>
+								<th th:text="#{clients.table.clientCode}"></th>
+								<th th:text="#{clients.table.name}"></th>
+								<th th:text="#{clients.table.CIF}"></th>
+								<th th:text="#{clients.table.representative}"></th>
+								<th th:text="#{clients.table.DNI}"></th>
+								<th th:text="#{clients.table.dateIni}"></th>
+								<th th:text="#{clients.table.dateFin}"></th>
+								<th th:text="#{clients.table.address}"></th>
+								<th th:text="#{clients.table.province}"></th>
+								<th th:text="#{clients.table.city}"></th>
+								<th th:text="#{clients.table.postalCode}"></th>
+								<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+								<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+								<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="client : ${clients}">
+								<td th:text="${client.clientCode}"></td>
+								<td th:text="${client.name}"></td>
+								<td th:text="${client.CIF}"></td>
+								<td th:text="${client.representative}"></td>
+								<td th:text="${client.DNI}"></td>
+								<td th:text="${client.dateIni}"></td>
+								<td th:text="${client.dateFin}"></td>
+								<td th:text="${client.address}"></td>
+								<td th:text="${client.province}"></td>
+								<td th:text="${client.city}"></td>
+								<td th:text="${client.postalCode}"></td>
+								<td><a th:href="@{/view-client/{id}(id=${client.clientCode})}"><span
+										th:uk-tooltip="#{common.functions.details}" data-uk-icon="icon: table" class="uk-margin-small-right"></span></a></td>
+								<td><a th:href="@{/edit-client/{id}(id=${client.clientCode})}"><span
+										th:uk-tooltip="#{common.functions.edit}" data-uk-icon="icon: pencil" class="uk-margin-small-right"></span></a></td>
+								<td><a data-target="#modal-delete" th:attr="data-target='#modal-delete'+${client.clientCode}" uk-toggle><span
+										th:uk-tooltip="#{common.functions.delete}" data-uk-icon="icon: trash" class="uk-margin-small-right "></span></a></td>
+								<div th:id="modal-delete+${client.clientCode}" uk-modal>
+									<div class="uk-modal-dialog">
+										<button class="uk-modal-close-default" type="button" uk-close></button>
+										<div class="uk-modal-body">
+											<h4 th:text="#{clients.delete.confirmation}" />
+											<p th:text="#{clients.table.clientCode} +': ' + ${client.clientCode}"></p>
+											<p th:text="#{clients.table.name} +': ' + ${client.name}"></p>
+										</div>
+										<div class="uk-modal-footer uk-text-right">
+											<button class="uk-button uk-button-default uk-modal-close" type="button" th:text="#{common.functions.cancel}"></button>
+											<a th:href="@{/delete-client/{id}(id=${client.clientCode})}"><button class="uk-button uk-button-primary"
+													type="button" th:text="#{common.functions.delete}"></button></a>
+										</div>
+									</div>
+								</div>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<div id="modal-form-view" class="uk-modal-container" uk-modal>
+				<div class="uk-modal-dialog uk-modal-body">
+					<button class="uk-modal-close-full uk-close-large" type="button" uk-close></button>
+					<form id="newClientForm" class="uk-form-horizontal" method="post" action="#" th:object="${editClient}">
+						<div class="uk-modal-header">
+							<h2 class="uk-modal-title" th:text="#{clients.view.title}"></h2>
+						</div>
+						<div class="uk-modal-body">
+							<div class="uk-margin">
+								<label class="uk-form-label" th:text="#{clients.table.clientCode}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="clientId" th:field="*{clientCode}" type="text" disabled>
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.name}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="clientName" th:field="*{name}" type="text" disabled>
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.CIF}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="cif" th:field="*{CIF}" type="text" disabled>
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.representative}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="representative" th:field="*{representative}" type="text" disabled>
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.DNI}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="DNI" th:field="*{DNI}" type="text" disabled>
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.CC}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="CC" th:field="*{CC}" type="text" disabled>
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.dateIni}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="dateIni" th:field="*{dateIni}" type="text" disabled>
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.T}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="T" th:field="*{T}" type="text" disabled>
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.dateFin}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="dateFin" th:field="*{dateFin}" type="text" disabled>
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.address}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="address" th:field="*{address}" type="text" disabled>
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.province}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="province" th:field="*{province}" type="text" disabled>
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.city}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="city" th:field="*{city}" type="text" disabled>
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.postalCode}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="postalCode" th:field="*{postalCode}" type="text" disabled>
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.country}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="country" th:field="*{country}" type="text" disabled>
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.numC}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="numC" th:field="*{numC}" type="text" disabled>
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.REGA}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="rega" th:field="*{rega}" type="text" disabled>
+								</div>
+							</div>
+						</div>
+						<div class="uk-position-relative uk-margin-medium">
+							<div class="uk-position-top-left uk-margin-small-top">
+								<ul class="uk-iconnav">
+									<li><a style="text-decoration: none; color: #1e87f0;" th:href="'/print-client/'+${id}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+											th:uk-tooltip="#{common.functions.print}" data-uk-icon="icon: print; ratio: 1.4"
+											class="uk-margin-small-right"></span></a></li>
+								</ul>
+							</div>
+						</div>
+						<div class="uk-modal-footer uk-text-right">
+							<button class="uk-button uk-button-primary uk-modal-close" type="button" th:text="#{common.functions.back}"></button>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<script type="text/javascript">
+				$(document).ready(function() {
+
+					$('#newClientForm').validate({
+						rules : {
+							clientList : {
+								reqquired : true
+							},
+							address : {
+								required : true
+							},
+							province : {
+								required : true
+							},
+							city : {
+								required : true
+							},
+							postalCode : {
+								required : true
+							},
+							country : {
+								required : true
+							},
+							contactPhone : {
+								required : true
+							},
+							contactName : {
+								required : true
+							},
+							numSandach : {
+								required : true
+							}
+						},
+						errorPlacement : function(error, element) {
+							offset = element.offset();
+							error.insertBefore(element)
+							error.addClass('uk-form-danger');
+						},
+						errorClass : 'uk-form-danger',
+						submitHandler : function(form) { // for demo
+							return true;
+						}
+					});
+
+					$('#editClientForm').validate({
+						rules : {
+							clientList : {
+								reqquired : true
+							},
+							address : {
+								required : true
+							},
+							province : {
+								required : true
+							},
+							city : {
+								required : true
+							},
+							postalCode : {
+								required : true
+							},
+							country : {
+								required : true
+							},
+							contactPhone : {
+								required : true
+							},
+							contactName : {
+								required : true
+							},
+							numSandach : {
+								required : true
+							}
+						},
+						errorPlacement : function(error, element) {
+							offset = element.offset();
+							error.insertBefore(element)
+							error.addClass('uk-form-danger');
+						},
+						errorClass : 'uk-form-danger',
+						submitHandler : function(form) { // for demo
+							return true;
+						}
+					});
+
+					$('#submit-new-button').on('click', function() {
+						$('#newClientForm').valid();
+					});
+					$('#submit-edit-button').on('click', function() {
+						$('#editClientForm').valid();
+					});
+
+				});
+			</script>
+
+			<div id="modal-form" class="uk-modal-container" uk-modal>
+				<div class="uk-modal-dialog uk-modal-body">
+					<button class="uk-modal-close-full uk-close-large" type="button" uk-close></button>
+					<form id="newClientForm" class="uk-form-horizontal" method="post" action="#" th:action="@{/add-client}"
+						th:object="${newClient}">
+						<div class="uk-modal-header">
+							<h2 class="uk-modal-title" th:text="#{clients.addNew.title}"></h2>
+						</div>
+						<div class="uk-modal-body">
+
+							<div class="uk-margin">
+								<label class="uk-form-label" th:text="#{clients.table.name}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="clientName" th:field="*{name}" type="text">
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.CIF}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="cif" th:field="*{CIF}" type="text">
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.representative}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="representative" th:field="*{representative}" type="text">
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.DNI}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="DNI" th:field="*{DNI}" type="text">
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.CC}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="CC" th:field="*{CC}" type="text">
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.dateIni}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="dateIni" th:field="*{dateIni}" type="date">
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.T}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="T" th:field="*{T}" type="text">
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.dateFin}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="dateFin" th:field="*{dateFin}" type="date">
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.address}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="address" th:field="*{address}" type="text">
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.province}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="province" th:field="*{province}" type="text">
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.city}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="city" th:field="*{city}" type="text">
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.postalCode}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="postalCode" th:field="*{postalCode}" type="text">
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.country}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="country" th:field="*{country}" type="text">
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.numC}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="numC" th:field="*{numC}" type="text">
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.REGA}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="rega" th:field="*{rega}" type="text">
+								</div>
+							</div>
+
+						</div>
+						<div class="uk-modal-footer uk-text-right">
+							<button class="uk-button uk-button-default uk-modal-close" id="submit-new-button" type="button"
+								th:text="#{common.functions.cancel}"></button>
+							<button class="uk-button uk-button-primary" type="submit" th:text="#{common.functions.create}"></button>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<div id="modal-form-edit" class="uk-modal-container" uk-modal>
+				<div class="uk-modal-dialog uk-modal-body">
+					<button class="uk-modal-close-full uk-close-large" type="button" uk-close></button>
+					<form id="editClientForm" class="uk-form-horizontal" method="post" action="#" th:action="@{/update-client}"
+						th:object="${editClient}">
+						<div class="uk-modal-header">
+							<h2 class="uk-modal-title" th:text="#{clients.edit.title}"></h2>
+						</div>
+						<div class="uk-modal-body">
+							<div class="uk-margin">
+								<input type="hidden" name="clientId" th:field="*{clientCode}" /> <label class="uk-form-label"
+									th:text="#{hydros.table.dateIni}"></label> <label class="uk-form-label" th:text="#{clients.table.name}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="clientName" th:field="*{name}" type="text">
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.CIF}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="cif" th:field="*{CIF}" type="text">
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.representative}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="representative" th:field="*{representative}" type="text">
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.DNI}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="DNI" th:field="*{DNI}" type="text">
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.CC}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="CC" th:field="*{CC}" type="text">
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.dateIni}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="dateIni" th:field="*{dateIni}" type="date">
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.T}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="T" th:field="*{T}" type="text">
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.dateFin}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="dateFin" th:field="*{dateFin}" type="date">
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.address}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="address" th:field="*{address}" type="text">
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.province}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="province" th:field="*{province}" type="text">
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.city}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="city" th:field="*{city}" type="text">
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.postalCode}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="postalCode" th:field="*{postalCode}" type="text">
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.country}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="country" th:field="*{country}" type="text">
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.numC}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="numC" th:field="*{numC}" type="text">
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.REGA}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="rega" th:field="*{rega}" type="text">
+								</div>
+							</div>
+						</div>
+						<div class="uk-modal-footer uk-text-right">
+							<button class="uk-button uk-button-default uk-modal-close" id="submit-edit-button" type="button"
+								th:text="#{common.functions.cancel}"></button>
+							<button class="uk-button uk-button-primary" type="submit" th:text="#{common.functions.edit}"></button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!-- /CONTENT -->
+
+		<!--FOOTER-->
+		<div th:replace="fragments/footer :: footer"></div>
+		<!--/FOOTER-->
+
+		<input type="hidden" id="status" name="status" th:value="${status}" />
+	</div>
+
+</body>
+</html>
