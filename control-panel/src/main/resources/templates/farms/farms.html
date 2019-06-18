@@ -20,6 +20,7 @@
     var createdMessage = [[#{farms.alarm.created}]];
     var updatedMessage = [[#{farms.alarm.updated}]];
     var deletedMessage = [[#{farms.alarm.deleted}]];
+    var emptyMessage = [[#{farms.alarm.empty}]];
 /*]]>*/
 </script>
 <script type="text/javascript">
@@ -55,7 +56,11 @@
 		            $("#table-data")
 		                .before(
 		                    '<div id="item-deleted" class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>' + deletedMessage + '</p></div>');
-		        }
+		        }else if (status == "empty") {
+		            $("#table-data")
+	                .before(
+	                    '<div id="item-empty" class="uk-alert-primary" uk-alert><a class="uk-alert-close" uk-close></a><p>' + emptyMessage + '</p></div>');
+	        }
 		    });
 </script>
 
@@ -70,12 +75,8 @@
 	<!-- CONTENT -->
 	<div id="content" data-uk-height-viewport="expand: true">
 		<div class="uk-container uk-container-expand">
-			<div th:switch="${farms}">
-				<h2 th:case="null" th:text="#{farms.noFarmsYet}"></h2>
-				<div id="table-data" th:case="*">
-
-
-
+			<div>
+				<div id="table-data">
 					<h3 class="uk-heading-line uk-text-bold">
 						<span th:text="#{farms.title}"></span>
 					</h3>
@@ -83,7 +84,7 @@
 						<a class="uk-button uk-button-default" href="#modal-form" uk-toggle><span data-uk-icon="icon: plus-circle"
 							class="uk-margin-small-right"></span><span th:text="#{farms.addNew}"></span></a>
 					</p>
-					<table id="farms-table" class="uk-table uk-table-hover uk-table-striped" cellspacing="0" width="100%">
+					<table id="farms-table" class="uk-table uk-table-hover uk-table-striped uk-table-small">
 						<thead>
 							<tr>
 								<th th:text="#{farms.table.farmId}"></th>
@@ -130,7 +131,7 @@
 										<div class="uk-modal-footer uk-text-right">
 											<button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
 											<a th:href="@{/delete-farm/{id}(id=${farm.id})}"><button class="uk-button uk-button-primary"
-													type="button">Delete</button> </a>
+													type="button">Delete</button></a>
 										</div>
 									</div>
 								</div>
@@ -143,12 +144,16 @@
 			<div id="modal-form-view" class="uk-modal-container" uk-modal>
 				<div class="uk-modal-dialog uk-modal-body">
 					<button class="uk-modal-close-full uk-close-large" type="button" uk-close></button>
-					<form id="newFarmForm" class="uk-form-stacked" method="post" action="#" th:object="${editFarm}">
+					<form id="newFarmForm" class="uk-form-horizontal" method="post" action="#" th:object="${editFarm}">
 						<div class="uk-modal-header">
 							<h2 class="uk-modal-title" th:text="#{farms.view.title}"></h2>
 						</div>
 						<div class="uk-modal-body">
 							<div class="uk-margin">
+								<label class="uk-form-label" th:text="#{farms.table.farmId}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="farmId" th:field="*{id}" type="text" disabled>
+								</div>
 								<label class="uk-form-label" th:text="#{farms.table.clientId}"></label>
 								<div class="uk-form-controls">
 									<input class="uk-input uk-form-small" name="clientId" th:field="*{clientId.clientCode}" type="text" disabled>
@@ -189,6 +194,15 @@
 								<div class="uk-form-controls">
 									<input class="uk-input uk-form-small" name="numSandach" th:field="*{numSandach}" type="text" disabled>
 								</div>
+							</div>
+						</div>
+						<div class="uk-position-relative uk-margin-medium">
+							<div class="uk-position-top-left uk-margin-small-top">
+								<ul class="uk-iconnav">
+									<li><a style="text-decoration: none; color: #1e87f0;" th:href="'/print-farm/'+${id}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+											th:uk-tooltip="#{common.functions.print}" data-uk-icon="icon: print; ratio: 1.4"
+											class="uk-margin-small-right"></span></a></li>
+								</ul>
 							</div>
 						</div>
 						<div class="uk-modal-footer uk-text-right">
@@ -296,7 +310,7 @@
 			<div id="modal-form" class="uk-modal-container" uk-modal>
 				<div class="uk-modal-dialog uk-modal-body">
 					<button class="uk-modal-close-full uk-close-large" type="button" uk-close></button>
-					<form id="newFarmForm" class="uk-form-stacked" method="post" action="#" th:action="@{/add-farm}"
+					<form id="newFarmForm" class="uk-form-horizontal" method="post" action="#" th:action="@{/add-farm}"
 						th:object="${newFarm}">
 						<div class="uk-modal-header">
 							<h2 class="uk-modal-title" th:text="#{farms.addNew.title}"></h2>
@@ -366,7 +380,7 @@
 			<div id="modal-form-edit" class="uk-modal-container" uk-modal>
 				<div class="uk-modal-dialog uk-modal-body">
 					<button class="uk-modal-close-full uk-close-large" type="button" uk-close></button>
-					<form id="editFarmForm" class="uk-form-stacked" method="post" action="#" th:action="@{/update-farm}"
+					<form id="editFarmForm" class="uk-form-horizontal" method="post" action="#" th:action="@{/update-farm}"
 						th:object="${editFarm}">
 						<div class="uk-modal-header">
 							<h2 class="uk-modal-title" th:text="#{farms.edit.title}"></h2>

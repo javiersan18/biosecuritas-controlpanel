@@ -21,8 +21,8 @@ public class Hydrolyzer {
 	@ManyToOne
 	private Client clientId;
 
-	@Column(name = "max_weigth")
-	private Float maxWeigth;
+	@Column(name = "max_weight")
+	private Float maxWeight;
 
 	@Column(name = "date_ini")
 	private DateType dateIni;
@@ -47,12 +47,12 @@ public class Hydrolyzer {
 		this.clientId = clientId;
 	}
 
-	public Float getMaxWeigth() {
-		return maxWeigth;
+	public Float getMaxWeight() {
+		return maxWeight;
 	}
 
-	public void setMaxWeigth(Float maxWeigth) {
-		this.maxWeigth = maxWeigth;
+	public void setMaxWeight(Float maxWeight) {
+		this.maxWeight = maxWeight;
 	}
 
 	public DateType getDateIni() {
@@ -65,7 +65,7 @@ public class Hydrolyzer {
 
 	@Override
 	public String toString() {
-		return "Hydrolyzer [id=" + id + ", clientId=" + clientId + ", maxWeigth=" + maxWeigth + ", dateIni=" + dateIni
+		return "Hydrolyzer [id=" + id + ", clientId=" + clientId + ", maxWeight=" + maxWeight + ", dateIni=" + dateIni
 				+ "]";
 	}
 
