@@ -18,6 +18,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -36,6 +37,12 @@ public class HydrolyzerController {
 	@Autowired
 	private ClientRepository clientRepository;
 
+	@InitBinder
+	protected void initBinder(WebDataBinder binder) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
+	}
+
 	@GetMapping(path = "/hydrolyzers")
 	public String getAllHydrolyzers(@RequestParam(required = false) String status, Model model) {
 		List<Hydrolyzer> hydros = hydrolyzerRepository.findAll();
@@ -51,12 +58,12 @@ public class HydrolyzerController {
 	}
 
 	@PostMapping("/add-hydro")
-	public String addFarm(@ModelAttribute("newHydro") @Valid Hydrolyzer hydro, BindingResult result, Model model) {
+	public String addHydro(@ModelAttribute("newHydro") @Valid Hydrolyzer hydro, BindingResult result, Model model) {
 		if (result.hasErrors()) {
 			model.addAttribute("hydros", hydrolyzerRepository.findAll());
 			model.addAttribute("newHydro", hydro);
 			model.addAttribute("editHydro", new Hydrolyzer());
-			model.addAttribute("errors", "ko");
+			model.addAttribute("errors", "error");
 			log.error(result.toString());
 			return "/hydrolyzers/hydrolyzers";
 		}
@@ -69,51 +76,80 @@ public class HydrolyzerController {
 		return "redirect:/hydrolyzers";
 	}
 
-	@InitBinder
-	protected void initBinder(WebDataBinder binder) {
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
+	@GetMapping("/edit-hydro/{id}")
+	public String editHydro(@PathVariable("id") Integer id, @Valid Hydrolyzer hydro, BindingResult result,
+			Model model) {
+		if (result.hasErrors()) {
+			model.addAttribute("hydros", hydrolyzerRepository.findAll());
+			model.addAttribute("newHydro", hydro);
+			model.addAttribute("editHydro", new Hydrolyzer());
+			model.addAttribute("errors", "error");
+			log.error(result.toString());
+			return "/hydrolyzers/hydrolyzers";
+		}
+
+		model.addAttribute("hydros", hydrolyzerRepository.findAll());
+		model.addAttribute("newHydro", new Hydrolyzer());
+		model.addAttribute("editHydro", hydrolyzerRepository.findById(id));
+		model.addAttribute("clients", clientRepository.findAll());
+		model.addAttribute("status", "edit");
+		return "/hydrolyzers/hydrolyzers";
+
 	}
 
-	/*
-	 * @GetMapping("/edit-farm/{id}") public String editFarm(@PathVariable("id")
-	 * Integer id, @Valid Farm farm, BindingResult result, Model model) { if
-	 * (result.hasErrors()) { // client.setId(id); return "update-farm"; }
-	 * 
-	 * model.addAttribute("farms", farmRepository.findAll());
-	 * model.addAttribute("newFarm", new Farm()); model.addAttribute("editFarm",
-	 * farmRepository.findById(id)); model.addAttribute("clients",
-	 * clientRepository.findAll()); model.addAttribute("status", "edit"); return
-	 * "/farms/farms"; }
-	 * 
-	 * @GetMapping("/view-farm/{id}") public String viewFarm(@PathVariable("id")
-	 * Integer id, @Valid Farm farm, BindingResult result, Model model) { if
-	 * (result.hasErrors()) { // client.setId(id); return "update-farm"; }
-	 * 
-	 * model.addAttribute("farms", farmRepository.findAll());
-	 * model.addAttribute("newFarm", new Farm()); model.addAttribute("editFarm",
-	 * farmRepository.findById(id)); model.addAttribute("clients",
-	 * clientRepository.findAll()); model.addAttribute("status", "view"); return
-	 * "/farms/farms"; }
-	 * 
-	 * @PostMapping("/update-farm") public String updateFarm(@Valid Farm farm,
-	 * BindingResult result, Model model) { if (result.hasErrors()) { //
-	 * client.setId(id); return "update-farm"; }
-	 * 
-	 * farmRepository.save(farm); model.addAttribute("farms",
-	 * farmRepository.findAll()); model.addAttribute("newFarm", new Farm());
-	 * model.addAttribute("editFarm", new Farm()); model.addAttribute("clients",
-	 * clientRepository.findAll()); model.addAttribute("status", "updated"); return
-	 * "redirect:/farms"; }
-	 * 
-	 * @GetMapping("/delete-farm/{id}") public String deleteFarm(@PathVariable("id")
-	 * Integer id, Model model) { Farm farm = farmRepository.findById(id)
-	 * .orElseThrow(() -> new IllegalArgumentException("Invalid farm Id:" + id));
-	 * farmRepository.delete(farm); model.addAttribute("farm",
-	 * farmRepository.findAll()); model.addAttribute("newFarm", new Farm());
-	 * model.addAttribute("editFarm", new Farm()); model.addAttribute("clients",
-	 * clientRepository.findAll()); model.addAttribute("status", "deleted"); return
-	 * "redirect:/farms"; }
-	 */
+	@GetMapping("/view-hydro/{id}")
+	public String viewHydro(@PathVariable("id") Integer id, @Valid Hydrolyzer hydro, BindingResult result,
+			Model model) {
+		if (result.hasErrors()) {
+			model.addAttribute("hydros", hydrolyzerRepository.findAll());
+			model.addAttribute("newHydro", hydro);
+			model.addAttribute("editHydro", new Hydrolyzer());
+			model.addAttribute("errors", "error");
+			log.error(result.toString());
+			return "/hydrolyzers/hydrolyzers";
+		}
+
+		model.addAttribute("hydros", hydrolyzerRepository.findAll());
+		model.addAttribute("newHydro", new Hydrolyzer());
+		model.addAttribute("editHydro", hydrolyzerRepository.findById(id));
+		model.addAttribute("clients", clientRepository.findAll());
+		model.addAttribute("status", "view");
+		return "/hydrolyzers/hydrolyzers";
+
+	}
+
+	@PostMapping("/update-hydro")
+	public String updateFarm(@Valid Hydrolyzer hydro, BindingResult result, Model model) {
+		if (result.hasErrors()) {
+			model.addAttribute("hydros", hydrolyzerRepository.findAll());
+			model.addAttribute("newHydro", hydro);
+			model.addAttribute("editHydro", new Hydrolyzer());
+			model.addAttribute("errors", "error");
+			log.error(result.toString());
+			return "/hydrolyzers/hydrolyzers";
+		}
+
+		hydrolyzerRepository.save(hydro);
+		model.addAttribute("hydros", hydrolyzerRepository.findAll());
+		model.addAttribute("newHydro", new Hydrolyzer());
+		model.addAttribute("editHydro", new Hydrolyzer());
+		model.addAttribute("clients", clientRepository.findAll());
+		model.addAttribute("status", "updated");
+		return "redirect:/hydrolyzers";
+	}
+
+	@GetMapping("/delete-hydro/{id}")
+	public String deleteHydro(@PathVariable("id") Integer id, Model model) {
+		Hydrolyzer hydro = hydrolyzerRepository.findById(id)
+				.orElseThrow(() -> new IllegalArgumentException("Invalid Hydro Id:" + id));
+		hydrolyzerRepository.delete(hydro);
+		model.addAttribute("hydros", hydrolyzerRepository.findAll());
+		model.addAttribute("newHydro", new Hydrolyzer());
+		model.addAttribute("editHydro", new Hydrolyzer());
+		model.addAttribute("clients", clientRepository.findAll());
+		model.addAttribute("status", "deleted");
+		return "redirect:/hydrolyzers";
+	}
+
 	// additional CRUD methods
 }
