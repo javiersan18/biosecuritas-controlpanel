@@ -4,7 +4,9 @@ import javax.validation.Valid;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,11 +28,13 @@ public class ClientController {
 	private ClientRepository clientRepository;
 
 	@GetMapping(path = "/clients")
-	public String getAllClients(@RequestParam(required = false) String status, Model model) {
+	public String getAllClients(@RequestParam(required = false) String status,
+			@RequestParam(required = false) String errorDesc, Model model) {
 		model.addAttribute("clients", clientRepository.findAll());
 		model.addAttribute("newClient", new Client());
 		model.addAttribute("editClient", new Client());
 		model.addAttribute("status", status);
+		model.addAttribute("errorDesc", errorDesc);
 		return "/clients/clients";
 	}
 
@@ -112,11 +116,19 @@ public class ClientController {
 	public String deleteClient(@PathVariable("id") Integer id, Model model) {
 		Client client = clientRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Invalid client Id:" + id));
-		clientRepository.delete(client);
-		model.addAttribute("clients", clientRepository.findAll());
-		model.addAttribute("newClient", new Client());
-		model.addAttribute("editClient", new Client());
-		model.addAttribute("status", "deleted");
+
+		try {
+			clientRepository.delete(client);
+			model.addAttribute("clients", clientRepository.findAll());
+			model.addAttribute("newClient", new Client());
+			model.addAttribute("editClient", new Client());
+			model.addAttribute("status", "deleted");
+		} catch (DataIntegrityViolationException e) {
+			model.addAttribute("status", "error");
+			model.addAttribute("errorDesc",
+					"No se ha podido borrar el cliente porque existen Granjas o Contenedores asociados a este cliente.");
+		}
+
 		return "redirect:/clients";
 	}
 

@@ -27,9 +27,11 @@
 	$(document)
 		.ready(
 		    function() {
-		    	window.history.pushState({}, document.title, "/clients");
+		    	//window.history.pushState({}, document.title, "/clients");
 		        var status = $("#status").val();
+		        var errorDesc = $("#errorDesc").val();
 		        console.log("status: " + status);
+		        console.log("error: " + errorDesc);
 		        if (status == "edit") {
 		            UIkit.modal('#modal-form-edit', {
 		                modal: false,
@@ -56,11 +58,15 @@
 		            $("#table-data")
 		                .before(
 		                    '<div id="item-deleted" class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>' + deletedMessage + '</p></div>');
-		        }else if (status == "empty") {
+		        } else if (status == "empty") {
 		            $("#table-data")
 	                .before(
 	                    '<div id="item-empty" class="uk-alert-primary" uk-alert><a class="uk-alert-close" uk-close></a><p>' + emptyMessage + '</p></div>');
-	        }
+	        }  else if (status == "error") {
+	            $("#table-data")
+                .before(
+                    '<div id="item-deleted" class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>ERROR: ' + errorDesc + '</p></div>');
+        }
 		    });
 </script>
 
@@ -500,7 +506,8 @@
 		<div th:replace="fragments/footer :: footer"></div>
 		<!--/FOOTER-->
 
-		<input type="hidden" id="status" name="status" th:value="${status}" />
+		<input type="hidden" id="status" name="status" th:value="${status}" /> <input type="hidden" id="errorDesc"
+			name="errorDesc" th:value="${errorDesc}" />
 	</div>
 
 </body>
