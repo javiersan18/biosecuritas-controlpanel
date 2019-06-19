@@ -224,85 +224,46 @@ $(window).on("load", function(){
 
 			<script type="text/javascript">
 				$(document).ready(function() {
-
-					$('#newInstallForm').validate({
-						rules : {
-							clientList : {
-								required : true
+					$('form').each(function(){
+						$(this).validate({	
+							rules : {
+								clientList : {
+									required : true
+								},
+								farmList : {
+									required : true
+								},
+								hydroList : {
+									required : true
+								},
+								deliveryDate : {
+									required : true
+								},
+								initialWeight : {
+									required : true,
+									number: true
+								},
+								sealDate : {
+									required : false
+								},
+								returnDate : {
+									required : false
+								},
+								collectedWeight : {
+									required : false,
+									number: true
+								}
 							},
-							farmList : {
-								required : true
+							errorPlacement : function(error, element) {
+								offset = element.offset();
+								error.insertBefore(element)
+								error.addClass('uk-form-danger');
 							},
-							hydroList : {
-								required : true
-							},
-							deliveryDate : {
-								required : true
-							},
-							initialWeight : {
-								required : true,
-								number: true
-							},
-							sealDate : {
-								required : false
-							},
-							returnDate : {
-								required : false
-							},
-							collectedWeight : {
-								required : false,
-								number: true
+							errorClass : 'uk-form-danger',
+							submitHandler : function(form) { // for demo
+								return true;
 							}
-						},
-						errorPlacement : function(error, element) {
-							offset = element.offset();
-							error.insertBefore(element)
-							error.addClass('uk-form-danger');
-						},
-						errorClass : 'uk-form-danger',
-						submitHandler : function(form) { // for demo
-							return true;
-						}
-					});
-
-					$('#editInstallForm').validate({
-						rules : {
-							clientList : {
-								required : true
-							},
-							farmList : {
-								required : true
-							},
-							hydroList : {
-								required : true
-							},
-							deliveryDate : {
-								required : true
-							},
-							initialWeight : {
-								required : true,
-								number: true
-							},
-							sealDate : {
-								required : false
-							},
-							returnDate : {
-								required : false
-							},
-							collectedWeight : {
-								required : false,
-								number: true
-							}
-						},
-						errorPlacement : function(error, element) {
-							offset = element.offset();
-							error.insertBefore(element)
-							error.addClass('uk-form-danger');
-						},
-						errorClass : 'uk-form-danger',
-						submitHandler : function(form) { // for demo
-							return true;
-						}
+						});
 					});
 
 					$('#submit-new-button').on('click', function() {

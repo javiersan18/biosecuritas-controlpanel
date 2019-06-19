@@ -229,105 +229,57 @@ $(document)
 
 			<script type="text/javascript">
 				$(document).ready(function() {
-
-					$('#newFarmForm').validate({
-						rules : {
-							clientList : {
-								required : true
+					$('form').each(function(){
+						$(this).validate({					
+							debug: false,
+							rules : {
+								clientList : {
+									required : true
+								},
+								address : {
+									required : true
+								},
+								province : {
+									required : true
+								},
+								city : {
+									required : true
+								},
+								postalCode : {
+									required : true,
+									digits: true
+								},
+								country : {
+									required : true
+								},
+								latitude : {
+									required : true,
+									number: true
+								},
+								longitude : {
+									required : true,
+									number: true
+								},
+								contactPhone : {
+									required : true
+								},
+								contactName : {
+									required : true
+								},
+								numSandach : {
+									required : true
+								}
 							},
-							address : {
-								required : true
+							errorPlacement : function(error, element) {
+								offset = element.offset();
+								error.insertBefore(element)
+								error.addClass('uk-form-danger');
 							},
-							province : {
-								required : true
-							},
-							city : {
-								required : true
-							},
-							postalCode : {
-								required : true
-								digits: true
-							},
-							country : {
-								required : true
-							},
-							latitude : {
-								required : true,
-								number: true
-							},
-							longitude : {
-								required : true,
-								number: true
-							},
-							contactPhone : {
-								required : true
-							},
-							contactName : {
-								required : true
-							},
-							numSandach : {
-								required : true
+							errorClass : 'uk-form-danger',
+							submitHandler : function(form) { // for demo
+								return true;
 							}
-						},
-						errorPlacement : function(error, element) {
-							offset = element.offset();
-							error.insertBefore(element)
-							error.addClass('uk-form-danger');
-						},
-						errorClass : 'uk-form-danger',
-						submitHandler : function(form) { // for demo
-							return true;
-						}
-					});
-
-					$('#editFarmForm').validate({
-						rules : {
-							clientList : {
-								required : true
-							},
-							address : {
-								required : true
-							},
-							province : {
-								required : true
-							},
-							city : {
-								required : true
-							},
-							postalCode : {
-								required : true,
-								digits: true
-							},
-							country : {
-								required : true
-							},
-							latitude : {
-								required : true,
-								number: true
-							},
-							longitude : {
-								required : true,
-								number: true
-							},
-							contactPhone : {
-								required : true
-							},
-							contactName : {
-								required : true
-							},
-							numSandach : {
-								required : true
-							}
-						},
-						errorPlacement : function(error, element) {
-							offset = element.offset();
-							error.insertBefore(element)
-							error.addClass('uk-form-danger');
-						},
-						errorClass : 'uk-form-danger',
-						submitHandler : function(form) { // for demo
-							return true;
-						}
+						});
 					});
 
 					$('#submit-new-button').on('click', function() {
@@ -336,7 +288,6 @@ $(document)
 					$('#submit-edit-button').on('click', function() {
 						$('#editFarmForm').valid();
 					});
-
 				});
 			</script>
 

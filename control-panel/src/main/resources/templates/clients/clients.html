@@ -243,97 +243,54 @@
 
 			<script type="text/javascript">
 				$(document).ready(function() {
-
-					$('#newClientForm').validate({
-						rules : {
-							clientName : {
-								required : true
+					$('form').each(function(){
+						$(this).validate({					
+							debug: false,
+							rules : {
+								clientName : {
+									required : true
+								},
+								cif : {
+									required : true
+								},
+								representative : {
+									required : true
+								},
+								DNI : {
+									required : true
+								},
+								dateIni : {
+									required : true
+								},
+								address : {
+									required : true
+								},
+								province : {
+									required : true
+								},
+								city : {
+									required : true
+								},
+								country : {
+									required : true
+								},
+								postalCode : {
+									required : true,
+									digits: true
+								}
 							},
-							cif : {
-								required : true
+							errorPlacement : function(error, element) {
+								offset = element.offset();
+								error.insertBefore(element)
+								error.addClass('uk-form-danger');
 							},
-							representative : {
-								required : true
-							},
-							DNI : {
-								required : true
-							},
-							dateIni : {
-								required : true
-							},
-							address : {
-								required : true
-							},
-							province : {
-								required : true
-							},
-							city : {
-								required : true
-							},
-							country : {
-								required : true
-							},
-							postalCode : {
-								required : true,
-								digits: true
+							errorClass : 'uk-form-danger',
+							submitHandler : function(form) { // for demo
+								return true;
 							}
-						},
-						errorPlacement : function(error, element) {
-							offset = element.offset();
-							error.insertBefore(element)
-							error.addClass('uk-form-danger');
-						},
-						errorClass : 'uk-form-danger',
-						submitHandler : function(form) { // for demo
-							return true;
-						}
+						});
 					});
-
-					$('#editClientForm').validate({
-						rules : {
-							clientName : {
-								required : true
-							},
-							cif : {
-								required : true
-							},
-							representative : {
-								required : true
-							},
-							DNI : {
-								required : true
-							},
-							dateIni : {
-								required : true
-							},
-							address : {
-								required : true
-							},
-							province : {
-								required : true
-							},
-							city : {
-								required : true
-							},
-							country : {
-								required : true
-							},
-							postalCode : {
-								required : true,
-								digits: true
-							}
-						},
-						errorPlacement : function(error, element) {
-							offset = element.offset();
-							error.insertBefore(element)
-							error.addClass('uk-form-danger');
-						},
-						errorClass : 'uk-form-danger',
-						submitHandler : function(form) { // for demo
-							return true;
-						}
-					});
-
+		
 					$('#submit-new-button').on('click', function() {
 						$('#newClientForm').valid();
 					});

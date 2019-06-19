@@ -186,51 +186,30 @@ $(document)
 
 			<script type="text/javascript">
 				$(document).ready(function() {
-					$('#newHydroForm').validate({
-						rules : {
-							clientList : {
-								required : true
+					$('form').each(function(){
+						$(this).validate({	
+							rules : {
+								clientList : {
+									required : true
+								},
+								maxWeight : {
+									required : true,
+									number: true
+								},
+								dateIni : {
+									required : true
+								}
 							},
-							maxWeight : {
-								required : true,
-								number: true
+							errorPlacement : function(error, element) {
+								offset = element.offset();
+								error.insertBefore(element)
+								error.addClass('uk-form-danger');
 							},
-							dateIni : {
-								required : true
+							errorClass : 'uk-form-danger',
+							submitHandler : function(form) { // for demo
+								return true;
 							}
-						},
-						errorPlacement : function(error, element) {
-							offset = element.offset();
-							error.insertBefore(element)
-							error.addClass('uk-form-danger');
-						},
-						errorClass : 'uk-form-danger',
-						submitHandler : function(form) { // for demo
-							return true;
-						}
-					});
-					$('#editHydroForm').validate({
-						rules : {
-							clientList : {
-								required : true
-							},
-							maxWeight : {
-								required : true,
-								number: true
-							},
-							dateIni : {
-								required : true
-							}
-						},
-						errorPlacement : function(error, element) {
-							offset = element.offset();
-							error.insertBefore(element)
-							error.addClass('uk-form-danger');
-						},
-						errorClass : 'uk-form-danger',
-						submitHandler : function(form) { // for demo
-							return true;
-						}
+						});					
 					});
 
 					$('#submit-new-button').on('click', function() {
