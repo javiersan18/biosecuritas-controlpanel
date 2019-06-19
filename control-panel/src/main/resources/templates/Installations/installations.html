@@ -227,14 +227,17 @@ $(window).on("load", function(){
 					$('form').each(function(){
 						$(this).validate({	
 							rules : {
-								clientList : {
-									required : true
+								clientId : {
+									required : true,
+									min: 1
 								},
-								farmList : {
-									required : true
+								farmId : {
+									required : true,
+									min: 1
 								},
-								hydroList : {
-									required : true
+								hydroId : {
+									required : true,
+									min: 1
 								},
 								deliveryDate : {
 									required : true
@@ -298,7 +301,7 @@ $(window).on("load", function(){
 								<label class="uk-form-label" th:text="#{installations.addNew.farm}"></label>
 								<div class="uk-form-controls">
 									<select class="uk-select uk-form-small" id="farms-list" name="farmList" th:field="*{farmId}">
-										<option value="" th:text="#{installations.addNew.selectFarm}" data-clientId='0'></option>
+										<option value="0" th:text="#{installations.addNew.selectFarm}" data-clientId='0'></option>
 										<option th:each="farm : ${farms}" th:value="${farm.id}" th:text="'['+${farm.id}+'] '+${farm.address}"
 											th:data-clientId="${farm.clientId.clientCode}"></option>
 									</select>
@@ -306,7 +309,7 @@ $(window).on("load", function(){
 								<label class="uk-form-label" th:text="#{installations.addNew.hydrolyzer}"></label>
 								<div class="uk-form-controls">
 									<select class="uk-select uk-form-small" id="hydros-list" name="hydroList" th:field="*{hydrolyzerId}">
-										<option value="" th:text="#{installations.addNew.selectHydro}" data-clientId='0'></option>
+										<option value="0" th:text="#{installations.addNew.selectHydro}" data-clientId='0'></option>
 										<option th:each="hydro : ${hydros}" th:value="${hydro.id}" th:text="${hydro.id}"
 											th:data-clientId="${hydro.clientId.clientCode}"></option>
 									</select>

@@ -233,8 +233,9 @@ $(document)
 						$(this).validate({					
 							debug: false,
 							rules : {
-								clientList : {
-									required : true
+								clientId : {
+									required : true,
+									min: 1
 								},
 								address : {
 									required : true
@@ -305,7 +306,7 @@ $(document)
 								<label class="uk-form-label" th:text="#{farms.addNew.client}"></label>
 								<div class="uk-form-controls">
 									<select class="uk-select uk-form-small" id="clients-list" name="clientList" th:field="*{clientId}">
-										<option value="" th:text="#{farms.addNew.selectClient}"></option>
+										<option value='0' th:text="#{farms.addNew.selectClient}"></option>
 										<option th:each="client : ${clients}" th:value="${client.clientCode}" th:text="${client.name}"></option>
 									</select>
 								</div>

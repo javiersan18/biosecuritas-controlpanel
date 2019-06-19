@@ -189,8 +189,9 @@ $(document)
 					$('form').each(function(){
 						$(this).validate({	
 							rules : {
-								clientList : {
-									required : true
+								clientId : {
+									required : true,
+									min: 1
 								},
 								maxWeight : {
 									required : true,
@@ -235,7 +236,7 @@ $(document)
 								<label class="uk-form-label" th:text="#{hydros.addNew.client}"></label>
 								<div class="uk-form-controls">
 									<select class="uk-select uk-form-small" id="clients-list" name="clientList" th:field="*{clientId}">
-										<option value="" th:text="#{hydros.addNew.selectClient}"></option>
+										<option value="0" th:text="#{hydros.addNew.selectClient}"></option>
 										<option th:each="client : ${clients}" th:value="${client.clientCode}" th:text="${client.name}"></option>
 									</select>
 								</div>
