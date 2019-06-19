@@ -1,21 +1,14 @@
 package com.biosecuritas.controlpanel.db.entities;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.hibernate.type.DateType;
 
 @Entity
 @Table(name = "installation")
@@ -25,30 +18,29 @@ public class Installation {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinTable(name = "installation_hydrolyzer", joinColumns = {
-			@JoinColumn(name = "installation_id") }, inverseJoinColumns = { @JoinColumn(name = "hydrolyzer_id") })
-	private Set<Hydrolyzer> hydrolyzers = new HashSet<>();
+	@ManyToOne
+	private Client clientId;
 
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinTable(name = "installation_farm", joinColumns = {
-			@JoinColumn(name = "installation_id") }, inverseJoinColumns = { @JoinColumn(name = "farm_id") })
-	private Set<Farm> farms = new HashSet<>();
+	@ManyToOne
+	private Farm farmId;
 
-	@Column(name = "initial_weigth")
-	private Float initialWeigth;
+	@ManyToOne
+	private Hydrolyzer hydrolyzerId;
 
-	@Column(name = "collected_weigth")
-	private Float collectedWeigth;
+	@Column(name = "initial_weight")
+	private Float initialWeight;
+
+	@Column(name = "collected_weight")
+	private Float collectedWeight;
 
 	@Column(name = "delivery_date")
-	private DateType deliveyDate;
+	private Date deliveryDate;
 
 	@Column(name = "seal_date")
-	private DateType sealDate;
+	private Date sealDate;
 
 	@Column(name = "return_date")
-	private DateType returnDate;
+	private Date returnDate;
 
 	public Installation() {
 	}
@@ -61,67 +53,75 @@ public class Installation {
 		this.id = id;
 	}
 
-	public Set<Hydrolyzer> getHydrolyzers() {
-		return hydrolyzers;
+	public Client getClientId() {
+		return clientId;
 	}
 
-	public void setHydrolyzers(Set<Hydrolyzer> hydrolyzers) {
-		this.hydrolyzers = hydrolyzers;
+	public void setClientId(Client clientId) {
+		this.clientId = clientId;
 	}
 
-	public Set<Farm> getFarms() {
-		return farms;
+	public Farm getFarmId() {
+		return farmId;
 	}
 
-	public void setFarms(Set<Farm> farms) {
-		this.farms = farms;
+	public void setFarmId(Farm farmId) {
+		this.farmId = farmId;
 	}
 
-	public Float getInitialWeigth() {
-		return initialWeigth;
+	public Hydrolyzer getHydrolyzerId() {
+		return hydrolyzerId;
 	}
 
-	public void setInitialWeigth(Float initialWeigth) {
-		this.initialWeigth = initialWeigth;
+	public void setHydrolyzerId(Hydrolyzer hydrolyzerId) {
+		this.hydrolyzerId = hydrolyzerId;
 	}
 
-	public Float getCollectedWeigth() {
-		return collectedWeigth;
+	public Float getInitialWeight() {
+		return initialWeight;
 	}
 
-	public void setCollectedWeigth(Float collectedWeigth) {
-		this.collectedWeigth = collectedWeigth;
+	public void setInitialWeight(Float initialWeight) {
+		this.initialWeight = initialWeight;
 	}
 
-	public DateType getDeliveyDate() {
-		return deliveyDate;
+	public Float getCollectedWeight() {
+		return collectedWeight;
 	}
 
-	public void setDeliveyDate(DateType deliveyDate) {
-		this.deliveyDate = deliveyDate;
+	public void setCollectedWeight(Float collectedWeight) {
+		this.collectedWeight = collectedWeight;
 	}
 
-	public DateType getSealDate() {
+	public Date getDeliveryDate() {
+		return deliveryDate;
+	}
+
+	public void setDeliveryDate(Date deliveryDate) {
+		this.deliveryDate = deliveryDate;
+	}
+
+	public Date getSealDate() {
 		return sealDate;
 	}
 
-	public void setSealDate(DateType sealDate) {
+	public void setSealDate(Date sealDate) {
 		this.sealDate = sealDate;
 	}
 
-	public DateType getReturnDate() {
+	public Date getReturnDate() {
 		return returnDate;
 	}
 
-	public void setReturnDate(DateType returnDate) {
+	public void setReturnDate(Date returnDate) {
 		this.returnDate = returnDate;
 	}
 
 	@Override
 	public String toString() {
-		return "Installation [id=" + id + ", hydrolyzers=" + hydrolyzers + ", farms=" + farms + ", initialWeigth="
-				+ initialWeigth + ", collectedWeigth=" + collectedWeigth + ", deliveyDate=" + deliveyDate
-				+ ", sealDate=" + sealDate + ", returnDate=" + returnDate + "]";
+		return "Installation [id=" + id + ", clientId=" + clientId + ", farmId=" + farmId + ", hydrolyzerId="
+				+ hydrolyzerId + ", initialWeight=" + initialWeight + ", collectedWeight=" + collectedWeight
+				+ ", deliveryDate=" + deliveryDate + ", sealDate=" + sealDate + ", returnDate=" + returnDate + "]";
 	}
 
 }

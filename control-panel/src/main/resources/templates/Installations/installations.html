@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title th:text="#{installations.header.title}"></title>
+<link rel="icon" href="/static/images/favicon.ico/">
+<!-- CSS FILES -->
+<link rel="stylesheet" data-th-href="@{/webjars/uikit/3.1.5/dist/css/uikit.min.css}" />
+<link rel="stylesheet" type="text/css" href="/static/css/dashboard.css">
+<!-- JS FILES -->
+<script data-th-src="@{/webjars/uikit/3.1.5/dist/js/uikit.min.js}"></script>
+<script data-th-src="@{/webjars/uikit/3.1.5/dist/js/uikit-icons.min.js}"></script>
+<script data-th-src="@{/webjars/jquery/3.4.1/jquery.min.js}"></script>
+<script data-th-src="@{/webjars/jquery-validation/1.17.0-1/jquery.validate.min.js}"></script>
+</head>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+    var createdMessage = [[#{installations.alarm.created}]];
+    var updatedMessage = [[#{installations.alarm.updated}]];
+    var deletedMessage = [[#{installations.alarm.deleted}]];
+    var emptyMessage = [[#{installations.alarm.empty}]];
+/*]]>*/
+</script>
+<script type="text/javascript">
+$(document)
+.ready(
+    function() {
+        //window.history.pushState({}, document.title, "/clients");
+        var status = $("#status").val();
+        var errorDesc = $("#errorDesc").val();
+        console.log("status: " + status);
+        console.log("error: " + errorDesc);
+        if (status == "edit") {
+            UIkit.modal('#modal-form-edit', {
+                modal: false,
+                keyboard: false,
+                bgclose: false,
+                center: true
+            }).show();
+        }
+        if (status == "view") {
+            UIkit.modal('#modal-form-view', {
+                modal: false,
+                keyboard: false,
+                bgclose: false,
+                center: true
+            }).show();
+        } else if (status == "created") {
+            $("#table-data")
+                .before(
+                    '<div id="item-created" class="uk-alert-success" uk-alert><a class="uk-alert-close" uk-close></a><p>' + createdMessage + '</p></div>');
+        } else if (status == "updated") {
+            $("#table-data")
+                .before(
+                    '<div id="item-updated" class="uk-alert-success" uk-alert><a class="uk-alert-close" uk-close></a><p>' + updatedMessage + '</p></div>');
+        } else if (status == "deleted") {
+            $("#table-data")
+                .before(
+                    '<div id="item-deleted" class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>' + deletedMessage + '</p></div>');
+        } else if (status == "empty") {
+            $("#table-data")
+                .before(
+                    '<div id="item-empty" class="uk-alert-primary" uk-alert><a class="uk-alert-close" uk-close></a><p>' + emptyMessage + '</p></div>');
+        } else if (status == "error") {
+            $("#table-data")
+                .before(
+                    '<div id="item-deleted" class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>ERROR: ' + errorDesc + '</p></div>');
+        }
+    });
+</script>
+
+<body>
+
+	<!--HEADER-->
+	<div th:replace="fragments/header :: header"></div>
+	<!--/HEADER-->
+	<!-- LEFT BAR -->
+	<div th:replace="fragments/left-bar :: left-bar"></div>
+	<!-- /LEFT BAR -->
+	<!-- CONTENT -->
+	<div id="content" data-uk-height-viewport="expand: true">
+		<div class="uk-container uk-container-expand">
+			<div>
+				<div id="table-data">
+					<h3 class="uk-heading-line uk-text-bold">
+						<span th:text="#{installations.title}"></span>
+					</h3>
+					<p>
+						<a class="uk-button uk-button-default" href="#modal-form" uk-toggle><span data-uk-icon="icon: plus-circle"
+							class="uk-margin-small-right"></span><span th:text="#{installations.addNew}"></span></a>
+					</p>
+					<table id="installations-table" class="uk-table uk-table-hover uk-table-striped uk-table-small">
+						<thead>
+							<tr>
+								<th th:text="#{installations.table.installationId}"></th>
+								<th th:text="#{installations.table.hydrolyzerId}"></th>
+								<th th:text="#{installations.table.clientName}"></th>
+								<th th:text="#{installations.table.deliveryDate}"></th>
+								<th th:text="#{installations.table.sealDate}"></th>
+								<th th:text="#{installations.table.returnDate}"></th>
+								<th th:text="#{installations.table.initialWeight}"></th>
+								<th th:text="#{installations.table.collectedWeight}"></th>
+								<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+								<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+								<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="install : ${installations}">
+								<td th:text="${install.id}"></td>
+								<td th:text="${install.hydrolyzerId.id}"></td>
+								<td th:text="${install.clientId.name}"></td>
+								<td th:text="${install.deliveryDate}"></td>
+								<td th:text="${install.sealDate}"></td>
+								<td th:text="${install.returnDate}"></td>
+								<td th:text="${install.initialWeight}"></td>
+								<td th:text="${install.collectedWeight}"></td>
+								<td><a th:href="@{/view-install/{id}(id=${install.id})}"><span
+										th:uk-tooltip="#{common.functions.details}" data-uk-icon="icon: table" class="uk-margin-small-right"></span></a></td>
+								<td><a th:href="@{/edit-install/{id}(id=${install.id})}"><span th:uk-tooltip="#{common.functions.edit}"
+										data-uk-icon="icon: pencil" class="uk-margin-small-right"></span></a></td>
+								<td><a data-target="#modal-delete1" th:attr="data-target='#modal-delete'+${install.id}" uk-toggle><span
+										th:uk-tooltip="#{common.functions.delete}" data-uk-icon="icon: trash" class="uk-margin-small-right "></span></a></td>
+								<div th:id="modal-delete+${install.id}" uk-modal>
+									<div class="uk-modal-dialog">
+										<button class="uk-modal-close-default" type="button" uk-close></button>
+										<div class="uk-modal-body">
+											<h4 th:text="#{installations.delete.confirmation}" />
+											<p th:text="#{installations.table.installationId} +': ' + ${install.id}"></p>
+											<p th:text="#{installations.table.clientId} +': ' + ${install.clientId.clientCode}"></p>
+											<p th:text="#{installations.table.clientName} +': ' + ${install.clientId.name}"></p>
+											<p th:text="#{installations.table.farmId} +': ' + ${install.farmId.id}"></p>
+											<p th:text="#{installations.table.farmAddress} +': ' + ${install.farmId.address}"></p>
+											<p th:text="#{installations.table.hydrolyzerId} +': ' + ${install.hydrolyzerId.id}"></p>
+										</div>
+										<div class="uk-modal-footer uk-text-right">
+											<button class="uk-button uk-button-default uk-modal-close" type="button" th:text="#{common.functions.cancel}"></button>
+											<a th:href="@{/delete-install/{id}(id=${install.id})}"><button class="uk-button uk-button-primary"
+													type="button" th:text="#{common.functions.delete}"></button></a>
+										</div>
+									</div>
+								</div>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<div id="modal-form-view" class="uk-modal-container" uk-modal>
+				<div class="uk-modal-dialog uk-modal-body">
+					<button class="uk-modal-close-full uk-close-large" type="button" uk-close></button>
+					<form id="newInstallForm" class="uk-form-horizontal" method="post" action="#" th:object="${editInstall}">
+						<div class="uk-modal-header">
+							<h2 class="uk-modal-title" th:text="#{installations.view.title}"></h2>
+						</div>
+						<div class="uk-modal-body">
+							<div class="uk-margin">
+								<label class="uk-form-label" th:text="#{installations.table.clientId}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="clientId" th:field="*{clientId.clientCode}" type="text" disabled>
+								</div>
+								<label class="uk-form-label" th:text="#{installations.table.clientName}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="clientName" th:field="*{clientId.name}" type="text" disabled>
+								</div>
+								<label class="uk-form-label" th:text="#{installations.table.farmId}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="farmId" th:field="*{farmId.id}" type="text" disabled>
+								</div>
+								<label class="uk-form-label" th:text="#{installations.table.farmAddress}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="farmAddress" th:field="*{farmId.address}" type="text" disabled>
+								</div>
+								<label class="uk-form-label" th:text="#{installations.table.deliveryDate}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="deliveryDate" th:field="*{deliveryDate}" type="text" disabled>
+								</div>
+								<label class="uk-form-label" th:text="#{installations.table.sealDate}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="sealDate" th:field="*{sealDate}" type="text" disabled>
+								</div>
+								<label class="uk-form-label" th:text="#{installations.table.returnDate}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="returnDate" th:field="*{returnDate}" type="text" disabled>
+								</div>
+								<label class="uk-form-label" th:text="#{installations.table.initialWeight}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="initialWeight" th:field="*{initialWeight}" type="text" disabled>
+								</div>
+								<label class="uk-form-label" th:text="#{installations.table.collectedWeight}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="collectedWeight" th:field="*{collectedWeight}" type="text" disabled>
+								</div>
+							</div>
+						</div>
+						<div class="uk-position-relative uk-margin-medium">
+							<div class="uk-position-top-left uk-margin-small-top">
+								<ul class="uk-iconnav">
+									<li><a style="text-decoration: none; color: #1e87f0;" th:href="'/print-install/'+${id}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+											th:uk-tooltip="#{common.functions.print}" data-uk-icon="icon: print; ratio: 1.4"
+											class="uk-margin-small-right"></span></a></li>
+								</ul>
+							</div>
+						</div>
+						<div class="uk-modal-footer uk-text-right">
+							<button class="uk-button uk-button-primary uk-modal-close" type="button" th:text="#{common.functions.back}"></button>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<script type="text/javascript">
+				$(document).ready(function() {
+
+					$('#newInstallForm').validate({
+						rules : {
+							clientList : {
+								reqquired : true
+							},
+							address : {
+								required : true
+							},
+							province : {
+								required : true
+							},
+							city : {
+								required : true
+							},
+							postalCode : {
+								required : true
+							},
+							country : {
+								required : true
+							},
+							contactPhone : {
+								required : true
+							},
+							contactName : {
+								required : true
+							},
+							numSandach : {
+								required : true
+							}
+						},
+						errorPlacement : function(error, element) {
+							offset = element.offset();
+							error.insertBefore(element)
+							error.addClass('uk-form-danger');
+						},
+						errorClass : 'uk-form-danger',
+						submitHandler : function(form) { // for demo
+							return true;
+						}
+					});
+
+					$('#editInstallForm').validate({
+						rules : {
+							clientList : {
+								reqquired : true
+							},
+							address : {
+								required : true
+							},
+							province : {
+								required : true
+							},
+							city : {
+								required : true
+							},
+							postalCode : {
+								required : true
+							},
+							country : {
+								required : true
+							},
+							contactPhone : {
+								required : true
+							},
+							contactName : {
+								required : true
+							},
+							numSandach : {
+								required : true
+							}
+						},
+						errorPlacement : function(error, element) {
+							offset = element.offset();
+							error.insertBefore(element)
+							error.addClass('uk-form-danger');
+						},
+						errorClass : 'uk-form-danger',
+						submitHandler : function(form) { // for demo
+							return true;
+						}
+					});
+
+					$('#submit-new-button').on('click', function() {
+						$('#newInstallForm').valid();
+					});
+					$('#submit-edit-button').on('click', function() {
+						$('#editInstallForm').valid();
+					});
+
+				});
+			</script>
+
+			<div id="modal-form" class="uk-modal-container" uk-modal>
+				<div class="uk-modal-dialog uk-modal-body">
+					<button class="uk-modal-close-full uk-close-large" type="button" uk-close></button>
+					<form id="newInstallForm" class="uk-form-horizontal" method="post" action="#" th:action="@{/add-install}"
+						th:object="${newInstall}">
+						<div class="uk-modal-header">
+							<h2 class="uk-modal-title" th:text="#{installations.addNew.title}"></h2>
+						</div>
+						<div class="uk-modal-body">
+
+							<div class="uk-margin">
+								<label class="uk-form-label" th:text="#{installations.addNew.client}"></label>
+								<div class="uk-form-controls">
+									<select class="uk-select uk-form-small" id="clients-list" name="clientList" th:field="*{clientId}">
+										<option value="" th:text="#{installations.addNew.selectClient}"></option>
+										<option th:each="client : ${clients}" th:value="${client.clientCode}" th:text="${client.name}"></option>
+									</select>
+								</div>
+								<label class="uk-form-label" th:text="#{installations.addNew.farm}"></label>
+								<div class="uk-form-controls">
+									<select class="uk-select uk-form-small" id="farms-list" name="farmsList" th:field="*{farmId}">
+										<option value="" th:text="#{installations.addNew.selectFarm}"></option>
+										<option th:each="farm : ${farms}" th:value="${farm.id}" th:text="${farm.address}"></option>
+									</select>
+								</div>
+								<label class="uk-form-label" th:text="#{installations.addNew.hydrolyzer}"></label>
+								<div class="uk-form-controls">
+									<select class="uk-select uk-form-small" id="hydros-list" name="hydrosList" th:field="*{hydrolyzerId}">
+										<option value="" th:text="#{installations.addNew.selectHydro}"></option>
+										<option th:each="hydro : ${hydros}" th:value="${hydro.id}" th:text="${hydro.id}"></option>
+									</select>
+								</div>
+								<label class="uk-form-label" th:text="#{installations.table.deliveryDate}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="deliveryDate" th:field="*{deliveryDate}" type="date"
+										placeholder="08/05/2019">
+								</div>
+								<label class="uk-form-label" th:text="#{installations.table.initialWeight}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="initialWeight" th:field="*{initialWeight}" type="text"
+										placeholder="100">
+								</div>
+							</div>
+						</div>
+						<div class="uk-modal-footer uk-text-right">
+							<button class="uk-button uk-button-default uk-modal-close" id="submit-new-button" type="button"
+								th:text="#{common.functions.cancel}"></button>
+							<button class="uk-button uk-button-primary" type="submit" th:text="#{common.functions.create}"></button>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<div id="modal-form-edit" class="uk-modal-container" uk-modal>
+				<div class="uk-modal-dialog uk-modal-body">
+					<button class="uk-modal-close-full uk-close-large" type="button" uk-close></button>
+					<form id="editInstallForm" class="uk-form-horizontal" method="post" action="#" th:action="@{/update-install}"
+						th:object="${editInstall}">
+						<div class="uk-modal-header">
+							<h2 class="uk-modal-title" th:text="#{installations.edit.title}"></h2>
+						</div>
+						<div class="uk-modal-body">
+
+							<div class="uk-margin">
+								<label class="uk-form-label" th:text="#{installations.addNew.client}"></label>
+								<div class="uk-form-controls">
+									<select class="uk-select uk-form-small" id="clients-list" name="clientList" th:field="*{clientId}">
+										<option value="" th:text="#{installations.addNew.selectClient}"></option>
+										<option th:each="client : ${clients}" th:value="${client.clientCode}" th:text="${client.name}"></option>
+									</select>
+								</div>
+								<label class="uk-form-label" th:text="#{installations.addNew.farm}"></label>
+								<div class="uk-form-controls">
+									<select class="uk-select uk-form-small" id="farms-list" name="farmsList" th:field="*{farmId}">
+										<option value="" th:text="#{installations.addNew.selectFarm}"></option>
+										<option th:each="farm : ${farms}" th:value="${farm.id}" th:text="${farm.address}"></option>
+									</select>
+								</div>
+								<label class="uk-form-label" th:text="#{installations.addNew.hydrolyzer}"></label>
+								<div class="uk-form-controls">
+									<select class="uk-select uk-form-small" id="hydros-list" name="hydrosList" th:field="*{hydrolyzerId}">
+										<option value="" th:text="#{installations.addNew.selectHydro}"></option>
+										<option th:each="hydro : ${hydros}" th:value="${hydro.id}" th:text="${hydro.id}"></option>
+									</select>
+								</div>
+								<input type="hidden" name="installationId" th:field="*{id}" /> <label class="uk-form-label"
+									th:text="#{installations.table.deliveryDate}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="deliveryDate" th:field="*{deliveryDate}" type="date"
+										placeholder="08/05/2019">
+								</div>
+								<label class="uk-form-label" th:text="#{installations.table.sealDate}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="sealDate" th:field="*{sealDate}" type="date"
+										placeholder="08/05/2019">
+								</div>
+								<label class="uk-form-label" th:text="#{installations.table.returnDate}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="returnDate" th:field="*{returnDate}" type="date"
+										placeholder="08/05/2019">
+								</div>
+								<label class="uk-form-label" th:text="#{installations.table.initialWeight}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="initialWeight" th:field="*{initialWeight}" type="text"
+										placeholder="100">
+								</div>
+								<label class="uk-form-label" th:text="#{installations.table.collectedWeight}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="collectedWeight" th:field="*{collectedWeight}" type="text"
+										placeholder="700">
+								</div>
+							</div>
+
+						</div>
+						<div class="uk-modal-footer uk-text-right">
+							<button class="uk-button uk-button-default uk-modal-close" id="submit-edit-button" type="button"
+								th:text="#{common.functions.cancel}"></button>
+							<button class="uk-button uk-button-primary" type="submit" th:text="#{common.functions.edit}"></button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!-- /CONTENT -->
+
+		<!--FOOTER-->
+		<div th:replace="fragments/footer :: footer"></div>
+		<!--/FOOTER-->
+
+		<input type="hidden" id="status" name="status" th:value="${status}" /> <input type="hidden" id="errorDesc"
+			name="errorDesc" th:value="${errorDesc}" />
+	</div>
+
+</body>
+</html>
