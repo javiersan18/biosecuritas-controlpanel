@@ -189,6 +189,14 @@ $(document)
 								<div class="uk-form-controls">
 									<input class="uk-input uk-form-small" name="country" th:field="*{country}" type="text" disabled>
 								</div>
+								<label class="uk-form-label" th:text="#{farms.table.latitude}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="latitude" th:field="*{latitude}" type="text" disabled>
+								</div>
+								<label class="uk-form-label" th:text="#{farms.table.longitude}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="longitude" th:field="*{longitude}" type="text" disabled>
+								</div>
 								<label class="uk-form-label" th:text="#{farms.table.contactPhone}"></label>
 								<div class="uk-form-controls">
 									<input class="uk-input uk-form-small" name="contactPhone" th:field="*{contactPhone}" type="text" disabled>
@@ -225,7 +233,7 @@ $(document)
 					$('#newFarmForm').validate({
 						rules : {
 							clientList : {
-								reqquired : true
+								required : true
 							},
 							address : {
 								required : true
@@ -238,9 +246,18 @@ $(document)
 							},
 							postalCode : {
 								required : true
+								digits: true
 							},
 							country : {
 								required : true
+							},
+							latitude : {
+								required : true,
+								number: true
+							},
+							longitude : {
+								required : true,
+								number: true
 							},
 							contactPhone : {
 								required : true
@@ -266,7 +283,7 @@ $(document)
 					$('#editFarmForm').validate({
 						rules : {
 							clientList : {
-								reqquired : true
+								required : true
 							},
 							address : {
 								required : true
@@ -278,10 +295,19 @@ $(document)
 								required : true
 							},
 							postalCode : {
-								required : true
+								required : true,
+								digits: true
 							},
 							country : {
 								required : true
+							},
+							latitude : {
+								required : true,
+								number: true
+							},
+							longitude : {
+								required : true,
+								number: true
 							},
 							contactPhone : {
 								required : true
@@ -356,6 +382,14 @@ $(document)
 								<div class="uk-form-controls">
 									<input class="uk-input uk-form-small" name="country" th:field="*{country}" type="text" placeholder="ES...">
 								</div>
+								<label class="uk-form-label" th:text="#{farms.table.latitude}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="latitude" th:field="*{latitude}" type="text" placeholder="40,1563">
+								</div>
+								<label class="uk-form-label" th:text="#{farms.table.longitude}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="longitude" th:field="*{longitude}" type="text" placeholder="3,5495">
+								</div>
 								<label class="uk-form-label" th:text="#{farms.table.contactPhone}"></label>
 								<div class="uk-form-controls">
 									<input class="uk-input uk-form-small" name="contactPhone" th:field="*{contactPhone}" type="text"
@@ -376,9 +410,9 @@ $(document)
 
 						</div>
 						<div class="uk-modal-footer uk-text-right">
-							<button class="uk-button uk-button-default uk-modal-close" id="submit-new-button" type="button"
-								th:text="#{common.functions.cancel}"></button>
-							<button class="uk-button uk-button-primary" type="submit" th:text="#{common.functions.create}"></button>
+							<button class="uk-button uk-button-default uk-modal-close" type="button" th:text="#{common.functions.cancel}"></button>
+							<button class="uk-button uk-button-primary" id="submit-new-button" type="submit"
+								th:text="#{common.functions.create}"></button>
 						</div>
 					</form>
 				</div>
@@ -426,6 +460,14 @@ $(document)
 								<div class="uk-form-controls">
 									<input class="uk-input uk-form-small" name="country" th:field="*{country}" type="text" placeholder="ES...">
 								</div>
+								<label class="uk-form-label" th:text="#{farms.table.latitude}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="latitude" th:field="*{latitude}" type="text" placeholder="40,1563">
+								</div>
+								<label class="uk-form-label" th:text="#{farms.table.longitude}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="longitude" th:field="*{longitude}" type="text" placeholder="3,5495">
+								</div>
 								<label class="uk-form-label" th:text="#{farms.table.contactPhone}"></label>
 								<div class="uk-form-controls">
 									<input class="uk-input uk-form-small" name="contactPhone" th:field="*{contactPhone}" type="text"
@@ -446,9 +488,9 @@ $(document)
 
 						</div>
 						<div class="uk-modal-footer uk-text-right">
-							<button class="uk-button uk-button-default uk-modal-close" id="submit-edit-button" type="button"
-								th:text="#{common.functions.cancel}"></button>
-							<button class="uk-button uk-button-primary" type="submit" th:text="#{common.functions.edit}"></button>
+							<button class="uk-button uk-button-default uk-modal-close" type="button" th:text="#{common.functions.cancel}"></button>
+							<button class="uk-button uk-button-primary" id="submit-edit-button" type="submit"
+								th:text="#{common.functions.edit}"></button>
 						</div>
 					</form>
 				</div>

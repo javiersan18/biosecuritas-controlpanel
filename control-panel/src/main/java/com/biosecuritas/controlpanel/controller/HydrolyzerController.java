@@ -81,8 +81,8 @@ public class HydrolyzerController {
 			Model model) {
 		if (result.hasErrors()) {
 			model.addAttribute("hydros", hydrolyzerRepository.findAll());
-			model.addAttribute("newHydro", hydro);
-			model.addAttribute("editHydro", new Hydrolyzer());
+			model.addAttribute("newHydro", new Hydrolyzer());
+			model.addAttribute("editHydro", hydro);
 			model.addAttribute("errors", "error");
 			log.error(result.toString());
 			return "/hydrolyzers/hydrolyzers";
@@ -122,8 +122,8 @@ public class HydrolyzerController {
 	public String updateFarm(@Valid Hydrolyzer hydro, BindingResult result, Model model) {
 		if (result.hasErrors()) {
 			model.addAttribute("hydros", hydrolyzerRepository.findAll());
-			model.addAttribute("newHydro", hydro);
-			model.addAttribute("editHydro", new Hydrolyzer());
+			model.addAttribute("newHydro", new Hydrolyzer());
+			model.addAttribute("editHydro", hydro);
 			model.addAttribute("errors", "error");
 			log.error(result.toString());
 			return "/hydrolyzers/hydrolyzers";

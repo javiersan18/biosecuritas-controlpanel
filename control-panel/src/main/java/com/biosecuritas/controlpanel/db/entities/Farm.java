@@ -30,7 +30,9 @@ public class Farm {
 
 	private String country;
 
-	private String prefix;
+	private Double latitude;
+
+	private Double longitude;
 
 	@Column(name = "contact_phone")
 	private Integer contactPhone;
@@ -100,12 +102,26 @@ public class Farm {
 		this.country = country;
 	}
 
-	public String getPrefix() {
-		return prefix;
+	public Double getLatitude() {
+		return latitude;
 	}
 
-	public void setPrefix(String prefix) {
-		this.prefix = prefix;
+	public void setLatitude(Double latitude) {
+		this.latitude = latitude;
+	}
+
+	/**
+	 * @return the longitude
+	 */
+	public Double getLongitude() {
+		return longitude;
+	}
+
+	/**
+	 * @param longitude the longitude to set
+	 */
+	public void setLongitude(Double longitude) {
+		this.longitude = longitude;
 	}
 
 	public Integer getContactPhone() {
@@ -135,9 +151,9 @@ public class Farm {
 	@Override
 	public String toString() {
 		return "Farm [id=" + id + ", clientId=" + clientId + ", address=" + address + ", postalCode=" + postalCode
-				+ ", province=" + province + ", city=" + city + ", country=" + country + ", prefix=" + prefix
-				+ ", contactPhone=" + contactPhone + ", contactName=" + contactName + ", numSandach=" + numSandach
-				+ "]";
+				+ ", province=" + province + ", city=" + city + ", country=" + country + ", latitude=" + latitude
+				+ ", longitude=" + longitude + ", contactPhone=" + contactPhone + ", contactName=" + contactName
+				+ ", numSandach=" + numSandach + "]";
 	}
 
 }

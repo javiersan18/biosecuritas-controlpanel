@@ -246,8 +246,20 @@
 
 					$('#newClientForm').validate({
 						rules : {
-							clientList : {
-								reqquired : true
+							clientName : {
+								required : true
+							},
+							cif : {
+								required : true
+							},
+							representative : {
+								required : true
+							},
+							DNI : {
+								required : true
+							},
+							dateIni : {
+								required : true
 							},
 							address : {
 								required : true
@@ -258,20 +270,12 @@
 							city : {
 								required : true
 							},
-							postalCode : {
-								required : true
-							},
 							country : {
 								required : true
 							},
-							contactPhone : {
-								required : true
-							},
-							contactName : {
-								required : true
-							},
-							numSandach : {
-								required : true
+							postalCode : {
+								required : true,
+								digits: true
 							}
 						},
 						errorPlacement : function(error, element) {
@@ -287,8 +291,20 @@
 
 					$('#editClientForm').validate({
 						rules : {
-							clientList : {
-								reqquired : true
+							clientName : {
+								required : true
+							},
+							cif : {
+								required : true
+							},
+							representative : {
+								required : true
+							},
+							DNI : {
+								required : true
+							},
+							dateIni : {
+								required : true
 							},
 							address : {
 								required : true
@@ -299,20 +315,12 @@
 							city : {
 								required : true
 							},
-							postalCode : {
-								required : true
-							},
 							country : {
 								required : true
 							},
-							contactPhone : {
-								required : true
-							},
-							contactName : {
-								required : true
-							},
-							numSandach : {
-								required : true
+							postalCode : {
+								required : true,
+								digits: true
 							}
 						},
 						errorPlacement : function(error, element) {
@@ -353,7 +361,7 @@
 								</div>
 								<label class="uk-form-label" th:text="#{clients.table.CIF}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="cif" th:field="*{CIF}" type="text">
+									<input class="uk-input uk-form-small" name="CIF" th:field="*{CIF}" type="text">
 								</div>
 								<label class="uk-form-label" th:text="#{clients.table.representative}"></label>
 								<div class="uk-form-controls">
@@ -411,9 +419,9 @@
 
 						</div>
 						<div class="uk-modal-footer uk-text-right">
-							<button class="uk-button uk-button-default uk-modal-close" id="submit-new-button" type="button"
-								th:text="#{common.functions.cancel}"></button>
-							<button class="uk-button uk-button-primary" type="submit" th:text="#{common.functions.create}"></button>
+							<button class="uk-button uk-button-default uk-modal-close" type="button" th:text="#{common.functions.cancel}"></button>
+							<button class="uk-button uk-button-primary" id="submit-new-button" type="submit"
+								th:text="#{common.functions.create}"></button>
 						</div>
 					</form>
 				</div>
@@ -493,9 +501,9 @@
 							</div>
 						</div>
 						<div class="uk-modal-footer uk-text-right">
-							<button class="uk-button uk-button-default uk-modal-close" id="submit-edit-button" type="button"
-								th:text="#{common.functions.cancel}"></button>
-							<button class="uk-button uk-button-primary" type="submit" th:text="#{common.functions.edit}"></button>
+							<button class="uk-button uk-button-default uk-modal-close" type="button" th:text="#{common.functions.cancel}"></button>
+							<button class="uk-button uk-button-primary" id="submit-edit-button" type="submit"
+								th:text="#{common.functions.edit}"></button>
 						</div>
 					</form>
 				</div>

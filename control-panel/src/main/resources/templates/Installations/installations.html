@@ -228,31 +228,30 @@ $(window).on("load", function(){
 					$('#newInstallForm').validate({
 						rules : {
 							clientList : {
-								reqquired : true
-							},
-							address : {
 								required : true
 							},
-							province : {
+							farmList : {
 								required : true
 							},
-							city : {
+							hydroList : {
 								required : true
 							},
-							postalCode : {
+							deliveryDate : {
 								required : true
 							},
-							country : {
-								required : true
+							initialWeight : {
+								required : true,
+								number: true
 							},
-							contactPhone : {
-								required : true
+							sealDate : {
+								required : false
 							},
-							contactName : {
-								required : true
+							returnDate : {
+								required : false
 							},
-							numSandach : {
-								required : true
+							collectedWeight : {
+								required : false,
+								number: true
 							}
 						},
 						errorPlacement : function(error, element) {
@@ -269,31 +268,30 @@ $(window).on("load", function(){
 					$('#editInstallForm').validate({
 						rules : {
 							clientList : {
-								reqquired : true
-							},
-							address : {
 								required : true
 							},
-							province : {
+							farmList : {
 								required : true
 							},
-							city : {
+							hydroList : {
 								required : true
 							},
-							postalCode : {
+							deliveryDate : {
 								required : true
 							},
-							country : {
-								required : true
+							initialWeight : {
+								required : true,
+								number: true
 							},
-							contactPhone : {
-								required : true
+							sealDate : {
+								required : false
 							},
-							contactName : {
-								required : true
+							returnDate : {
+								required : false
 							},
-							numSandach : {
-								required : true
+							collectedWeight : {
+								required : false,
+								number: true
 							}
 						},
 						errorPlacement : function(error, element) {
@@ -338,7 +336,7 @@ $(window).on("load", function(){
 								</div>
 								<label class="uk-form-label" th:text="#{installations.addNew.farm}"></label>
 								<div class="uk-form-controls">
-									<select class="uk-select uk-form-small" id="farms-list" name="farmsList" th:field="*{farmId}">
+									<select class="uk-select uk-form-small" id="farms-list" name="farmList" th:field="*{farmId}">
 										<option value="" th:text="#{installations.addNew.selectFarm}" data-clientId='0'></option>
 										<option th:each="farm : ${farms}" th:value="${farm.id}" th:text="'['+${farm.id}+'] '+${farm.address}"
 											th:data-clientId="${farm.clientId.clientCode}"></option>
@@ -346,7 +344,7 @@ $(window).on("load", function(){
 								</div>
 								<label class="uk-form-label" th:text="#{installations.addNew.hydrolyzer}"></label>
 								<div class="uk-form-controls">
-									<select class="uk-select uk-form-small" id="hydros-list" name="hydrosList" th:field="*{hydrolyzerId}">
+									<select class="uk-select uk-form-small" id="hydros-list" name="hydroList" th:field="*{hydrolyzerId}">
 										<option value="" th:text="#{installations.addNew.selectHydro}" data-clientId='0'></option>
 										<option th:each="hydro : ${hydros}" th:value="${hydro.id}" th:text="${hydro.id}"
 											th:data-clientId="${hydro.clientId.clientCode}"></option>

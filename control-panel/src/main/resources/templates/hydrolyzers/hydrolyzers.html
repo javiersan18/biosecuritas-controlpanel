@@ -14,7 +14,6 @@
 <script data-th-src="@{/webjars/jquery/3.4.1/jquery.min.js}"></script>
 <script data-th-src="@{/webjars/jquery-validation/1.17.0-1/jquery.validate.min.js}"></script>
 </head>
-
 <script th:inline="javascript">
 /*<![CDATA[*/
     var createdMessage = [[#{hydros.alarm.created}]];
@@ -82,61 +81,60 @@ $(document)
 	<!-- CONTENT -->
 	<div id="content" data-uk-height-viewport="expand: true">
 		<div class="uk-container uk-container-expand">
-			<div>
-				<div id="table-data">
-					<h3 class="uk-heading-line uk-text-bold">
-						<span th:text="#{hydros.title}"></span>
-					</h3>
-					<p>
-						<a class="uk-button uk-button-default" href="#modal-form" uk-toggle><span data-uk-icon="icon: plus-circle"
-							class="uk-margin-small-right"></span><span th:text="#{hydros.addNew}"></span></a>
-					</p>
 
-					<!-- 					<h2 th:if="${hydros==null or hydros.empty}" th:text="#{hydros.noHydrosYet}"></h2> -->
+			<div id="table-data">
+				<h3 class="uk-heading-line uk-text-bold">
+					<span th:text="#{hydros.title}"></span>
+				</h3>
+				<p>
+					<a class="uk-button uk-button-default" href="#modal-form" uk-toggle><span data-uk-icon="icon: plus-circle"
+						class="uk-margin-small-right"></span><span th:text="#{hydros.addNew}"></span></a>
+				</p>
 
-					<table id="farms-table" class="uk-table uk-table-hover uk-table-striped uk-table-small">
-						<thead>
-							<tr>
-								<th th:text="#{hydros.table.hydroId}"></th>
-								<th th:text="#{hydros.table.clientName}"></th>
-								<th th:text="#{hydros.table.dateIni}"></th>
-								<th th:text="#{hydros.table.maxWeight}"></th>
-								<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-								<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-								<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr th:each="hydro : ${hydros}">
-								<td th:text="${hydro.id}"></td>
-								<td th:text="${hydro.clientId.name}"></td>
-								<td th:text="${#dates.format(hydro.dateIni, 'dd-MMM-yyyy')}"></td>
-								<td th:text="${hydro.maxWeight}"></td>
-								<td><a th:href="@{/view-hydro/{id}(id=${hydro.id})}"><span th:uk-tooltip="#{common.functions.details}"
-										data-uk-icon="icon: table" class="uk-margin-small-right"></span></a></td>
-								<td><a th:href="@{/edit-hydro/{id}(id=${hydro.id})}"><span th:uk-tooltip="#{common.functions.edit}"
-										data-uk-icon="icon: pencil" class="uk-margin-small-right"></span></a></td>
-								<td><a data-target="#modal-delete1" th:attr="data-target='#modal-delete'+${hydro.id}" uk-toggle><span
-										th:uk-tooltip="#{common.functions.delete}" data-uk-icon="icon: trash" class="uk-margin-small-right "></span></a></td>
-								<div th:id="modal-delete+${hydro.id}" uk-modal>
-									<div class="uk-modal-dialog">
-										<button class="uk-modal-close-default" type="button" uk-close></button>
-										<div class="uk-modal-body">
-											<h4 th:text="#{hydros.delete.confirmation}" />
-											<p th:text="#{hydros.table.hydroId} +': ' + ${hydro.id}"></p>
-											<p th:text="#{hydros.table.clientName} +': ' + ${hydro.clientId.name}"></p>
-										</div>
-										<div class="uk-modal-footer uk-text-right">
-											<button class="uk-button uk-button-default uk-modal-close" type="button" th:text="#{common.functions.cancel}"></button>
-											<a th:href="@{/delete-hydro/{id}(id=${hydro.id})}"><button class="uk-button uk-button-primary"
-													type="button" th:text="#{common.functions.delete}"></button></a>
-										</div>
+				<!-- 					<h2 th:if="${hydros==null or hydros.empty}" th:text="#{hydros.noHydrosYet}"></h2> -->
+
+				<table id="farms-table" class="uk-table uk-table-hover uk-table-striped uk-table-small">
+					<thead>
+						<tr>
+							<th th:text="#{hydros.table.hydroId}"></th>
+							<th th:text="#{hydros.table.clientName}"></th>
+							<th th:text="#{hydros.table.dateIni}"></th>
+							<th th:text="#{hydros.table.maxWeight}"></th>
+							<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+							<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+							<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="hydro : ${hydros}">
+							<td th:text="${hydro.id}"></td>
+							<td th:text="${hydro.clientId.name}"></td>
+							<td th:text="${#dates.format(hydro.dateIni, 'dd-MMM-yyyy')}"></td>
+							<td th:text="${hydro.maxWeight}"></td>
+							<td><a th:href="@{/view-hydro/{id}(id=${hydro.id})}"><span th:uk-tooltip="#{common.functions.details}"
+									data-uk-icon="icon: table" class="uk-margin-small-right"></span></a></td>
+							<td><a th:href="@{/edit-hydro/{id}(id=${hydro.id})}"><span th:uk-tooltip="#{common.functions.edit}"
+									data-uk-icon="icon: pencil" class="uk-margin-small-right"></span></a></td>
+							<td><a data-target="#modal-delete1" th:attr="data-target='#modal-delete'+${hydro.id}" uk-toggle><span
+									th:uk-tooltip="#{common.functions.delete}" data-uk-icon="icon: trash" class="uk-margin-small-right "></span></a></td>
+							<div th:id="modal-delete+${hydro.id}" uk-modal>
+								<div class="uk-modal-dialog">
+									<button class="uk-modal-close-default" type="button" uk-close></button>
+									<div class="uk-modal-body">
+										<h4 th:text="#{hydros.delete.confirmation}" />
+										<p th:text="#{hydros.table.hydroId} +': ' + ${hydro.id}"></p>
+										<p th:text="#{hydros.table.clientName} +': ' + ${hydro.clientId.name}"></p>
+									</div>
+									<div class="uk-modal-footer uk-text-right">
+										<button class="uk-button uk-button-default uk-modal-close" type="button" th:text="#{common.functions.cancel}"></button>
+										<a th:href="@{/delete-hydro/{id}(id=${hydro.id})}"><button class="uk-button uk-button-primary"
+												type="button" th:text="#{common.functions.delete}"></button></a>
 									</div>
 								</div>
-							</tr>
-						</tbody>
-					</table>
-				</div>
+							</div>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 
 			<div id="modal-form-view" class="uk-modal-container" uk-modal>
@@ -188,14 +186,14 @@ $(document)
 
 			<script type="text/javascript">
 				$(document).ready(function() {
-
 					$('#newHydroForm').validate({
 						rules : {
 							clientList : {
-								reqquired : true
+								required : true
 							},
 							maxWeight : {
-								required : true
+								required : true,
+								number: true
 							},
 							dateIni : {
 								required : true
@@ -211,14 +209,14 @@ $(document)
 							return true;
 						}
 					});
-
 					$('#editHydroForm').validate({
 						rules : {
 							clientList : {
-								reqquired : true
+								required : true
 							},
 							maxWeight : {
-								required : true
+								required : true,
+								number: true
 							},
 							dateIni : {
 								required : true
@@ -244,7 +242,7 @@ $(document)
 
 				});
 			</script>
-
+			
 			<div id="modal-form" class="uk-modal-container" uk-modal>
 				<div class="uk-modal-dialog uk-modal-body">
 					<button class="uk-modal-close-full uk-close-large" type="button" uk-close></button>
@@ -264,7 +262,7 @@ $(document)
 								</div>
 								<label class="uk-form-label" th:text="#{hydros.table.dateIni}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="dateIni" th:field="*{dateIni}" type="date" placeholder="08/05/1990">
+									<input class="uk-input uk-form-small" name="dateIni" th:field="*{dateIni}" type="date" placeholder="dd/mm/aaaa">
 								</div>
 								<label class="uk-form-label" th:text="#{hydros.table.maxWeight}"></label>
 								<div class="uk-form-controls">
@@ -273,14 +271,14 @@ $(document)
 							</div>
 						</div>
 						<div class="uk-modal-footer uk-text-right">
-							<button class="uk-button uk-button-default uk-modal-close" id="submit-new-button" type="button"
-								th:text="#{common.functions.cancel}"></button>
-							<button class="uk-button uk-button-primary" type="submit" th:text="#{common.functions.create}"></button>
+							<button class="uk-button uk-button-default uk-modal-close" type="button" th:text="#{common.functions.cancel}"></button>
+							<button class="uk-button uk-button-primary" id="submit-new-button" type="submit"
+								th:text="#{common.functions.create}"></button>
 						</div>
 					</form>
 				</div>
 			</div>
-
+			
 			<div id="modal-form-edit" class="uk-modal-container" uk-modal>
 				<div class="uk-modal-dialog uk-modal-body">
 					<button class="uk-modal-close-full uk-close-large" type="button" uk-close></button>
@@ -301,7 +299,7 @@ $(document)
 								<input type="hidden" name="hydroId" th:field="*{id}" /> <label class="uk-form-label"
 									th:text="#{hydros.table.dateIni}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="dateIni" th:field="*{dateIni}" type="date" placeholder="08/05/1990">
+									<input class="uk-input uk-form-small" name="dateIni" th:field="*{dateIni}" type="date" placeholder="dd/mm/aaaa">
 								</div>
 								<label class="uk-form-label" th:text="#{hydros.table.maxWeight}"></label>
 								<div class="uk-form-controls">
@@ -310,13 +308,14 @@ $(document)
 							</div>
 						</div>
 						<div class="uk-modal-footer uk-text-right">
-							<button class="uk-button uk-button-default uk-modal-close" id="submit-edit-button" type="button"
-								th:text="#{common.functions.cancel}"></button>
-							<button class="uk-button uk-button-primary" type="submit" th:text="#{common.functions.edit}"></button>
+							<button class="uk-button uk-button-default uk-modal-close" type="button" th:text="#{common.functions.cancel}"></button>
+							<button class="uk-button uk-button-primary" id="submit-edit-button" type="submit"
+								th:text="#{common.functions.edit}"></button>
 						</div>
 					</form>
 				</div>
 			</div>
+		
 		</div>
 		<!-- /CONTENT -->
 
