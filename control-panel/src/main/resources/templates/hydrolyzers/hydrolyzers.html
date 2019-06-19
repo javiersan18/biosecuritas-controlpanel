@@ -109,7 +109,7 @@ $(document)
 						<tr th:each="hydro : ${hydros}">
 							<td th:text="${hydro.id}"></td>
 							<td th:text="${hydro.clientId.name}"></td>
-							<td th:text="${#dates.format(hydro.dateIni, 'dd-MMM-yyyy')}"></td>
+							<td th:text="${#dates.format(hydro.dateIni, 'dd-MM-yyyy')}"></td>
 							<td th:text="${hydro.maxWeight}"></td>
 							<td><a th:href="@{/view-hydro/{id}(id=${hydro.id})}"><span th:uk-tooltip="#{common.functions.details}"
 									data-uk-icon="icon: table" class="uk-margin-small-right"></span></a></td>

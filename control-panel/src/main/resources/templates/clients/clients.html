@@ -117,8 +117,8 @@
 								<td th:text="${client.CIF}"></td>
 								<td th:text="${client.representative}"></td>
 								<td th:text="${client.DNI}"></td>
-								<td th:text="${client.dateIni}"></td>
-								<td th:text="${client.dateFin}"></td>
+								<td th:text="${#dates.format(client.dateIni, 'dd-MM-yyyy')}"></td>
+								<td th:text="${#dates.format(client.dateFin, 'dd-MM-yyyy')}"></td>
 								<td th:text="${client.address}"></td>
 								<td th:text="${client.province}"></td>
 								<td th:text="${client.city}"></td>

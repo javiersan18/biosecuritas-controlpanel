@@ -123,9 +123,9 @@ $(window).on("load", function(){
 								<td th:text="${install.id}"></td>
 								<td th:text="${install.hydrolyzerId.id}"></td>
 								<td th:text="${install.clientId.name}"></td>
-								<td th:text="${install.deliveryDate}"></td>
-								<td th:text="${install.sealDate}"></td>
-								<td th:text="${install.returnDate}"></td>
+								<td th:text="${#dates.format(install.deliveryDate, 'dd-MM-yyyy')}"></td>
+								<td th:text="${#dates.format(install.sealDate, 'dd-MM-yyyy')}"></td>
+								<td th:text="${#dates.format(install.returnDate, 'dd-MM-yyyy')}"></td>
 								<td th:text="${install.initialWeight}"></td>
 								<td th:text="${install.collectedWeight}"></td>
 								<td><a th:href="@{/view-install/{id}(id=${install.id})}"><span
