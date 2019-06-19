@@ -14,7 +14,6 @@
 <script data-th-src="@{/webjars/jquery/3.4.1/jquery.min.js}"></script>
 <script data-th-src="@{/webjars/jquery-validation/1.17.0-1/jquery.validate.min.js}"></script>
 </head>
-
 <script th:inline="javascript">
 /*<![CDATA[*/
     var createdMessage = [[#{installations.alarm.created}]];
@@ -24,52 +23,64 @@
 /*]]>*/
 </script>
 <script type="text/javascript">
-$(document)
-.ready(
-    function() {
-        //window.history.pushState({}, document.title, "/clients");
-        var status = $("#status").val();
-        var errorDesc = $("#errorDesc").val();
-        console.log("status: " + status);
-        console.log("error: " + errorDesc);
-        if (status == "edit") {
-            UIkit.modal('#modal-form-edit', {
-                modal: false,
-                keyboard: false,
-                bgclose: false,
-                center: true
-            }).show();
-        }
-        if (status == "view") {
-            UIkit.modal('#modal-form-view', {
-                modal: false,
-                keyboard: false,
-                bgclose: false,
-                center: true
-            }).show();
-        } else if (status == "created") {
-            $("#table-data")
-                .before(
-                    '<div id="item-created" class="uk-alert-success" uk-alert><a class="uk-alert-close" uk-close></a><p>' + createdMessage + '</p></div>');
-        } else if (status == "updated") {
-            $("#table-data")
-                .before(
-                    '<div id="item-updated" class="uk-alert-success" uk-alert><a class="uk-alert-close" uk-close></a><p>' + updatedMessage + '</p></div>');
-        } else if (status == "deleted") {
-            $("#table-data")
-                .before(
-                    '<div id="item-deleted" class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>' + deletedMessage + '</p></div>');
-        } else if (status == "empty") {
-            $("#table-data")
-                .before(
-                    '<div id="item-empty" class="uk-alert-primary" uk-alert><a class="uk-alert-close" uk-close></a><p>' + emptyMessage + '</p></div>');
-        } else if (status == "error") {
-            $("#table-data")
-                .before(
-                    '<div id="item-deleted" class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>ERROR: ' + errorDesc + '</p></div>');
-        }
-    });
+$(document).ready(function() {
+    //window.history.pushState({}, document.title, "/clients");
+    var status = $("#status").val();
+    var errorDesc = $("#errorDesc").val();
+    console.log("status: " + status);
+    console.log("error: " + errorDesc);
+    if (status == "edit") {
+        UIkit.modal('#modal-form-edit', {
+            modal: false,
+            keyboard: false,
+            bgclose: false,
+            center: true
+        }).show();
+    }
+    if (status == "view") {
+        UIkit.modal('#modal-form-view', {
+            modal: false,
+            keyboard: false,
+            bgclose: false,
+            center: true
+        }).show();
+    } else if (status == "created") {
+        $("#table-data")
+            .before(
+                '<div id="item-created" class="uk-alert-success" uk-alert><a class="uk-alert-close" uk-close></a><p>' + createdMessage + '</p></div>');
+    } else if (status == "updated") {
+        $("#table-data")
+            .before(
+                '<div id="item-updated" class="uk-alert-success" uk-alert><a class="uk-alert-close" uk-close></a><p>' + updatedMessage + '</p></div>');
+    } else if (status == "deleted") {
+        $("#table-data")
+            .before(
+                '<div id="item-deleted" class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>' + deletedMessage + '</p></div>');
+    } else if (status == "empty") {
+        $("#table-data")
+            .before(
+                '<div id="item-empty" class="uk-alert-primary" uk-alert><a class="uk-alert-close" uk-close></a><p>' + emptyMessage + '</p></div>');
+    } else if (status == "error") {
+        $("#table-data")
+            .before(
+                '<div id="item-deleted" class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>ERROR: ' + errorDesc + '</p></div>');
+    }
+});
+
+$(window).on("load", function(){
+	
+	var $selectClients = $( '#clients-list' ), $selectFarms = $( '#farms-list' ), $selectHydros = $( '#hydros-list' ),
+	$optionsFarms = $selectFarms.find( 'option' ), $optionsHydros = $selectHydros.find( 'option' );
+
+	$selectClients.on( 'change' , function() {
+		$selectFarms.html($optionsFarms.filter('[data-clientId="' + this.value + '"]'));
+		$selectHydros.html($optionsHydros.filter('[data-clientId="' + this.value + '"]'));
+	}).trigger('change');	
+	 
+});
+    
 </script>
+
 
 <body>
 
@@ -320,22 +331,25 @@ $(document)
 								<label class="uk-form-label" th:text="#{installations.addNew.client}"></label>
 								<div class="uk-form-controls">
 									<select class="uk-select uk-form-small" id="clients-list" name="clientList" th:field="*{clientId}">
-										<option value="" th:text="#{installations.addNew.selectClient}"></option>
-										<option th:each="client : ${clients}" th:value="${client.clientCode}" th:text="${client.name}"></option>
+										<option value="0" th:text="#{installations.addNew.selectClient}"></option>
+										<option th:each="client : ${clients}" th:value="${client.clientCode}"
+											th:text="'['+${client.clientCode}+'] '+${client.name}"></option>
 									</select>
 								</div>
 								<label class="uk-form-label" th:text="#{installations.addNew.farm}"></label>
 								<div class="uk-form-controls">
 									<select class="uk-select uk-form-small" id="farms-list" name="farmsList" th:field="*{farmId}">
-										<option value="" th:text="#{installations.addNew.selectFarm}"></option>
-										<option th:each="farm : ${farms}" th:value="${farm.id}" th:text="${farm.address}"></option>
+										<option value="" th:text="#{installations.addNew.selectFarm}" data-clientId='0'></option>
+										<option th:each="farm : ${farms}" th:value="${farm.id}" th:text="'['+${farm.id}+'] '+${farm.address}"
+											th:data-clientId="${farm.clientId.clientCode}"></option>
 									</select>
 								</div>
 								<label class="uk-form-label" th:text="#{installations.addNew.hydrolyzer}"></label>
 								<div class="uk-form-controls">
 									<select class="uk-select uk-form-small" id="hydros-list" name="hydrosList" th:field="*{hydrolyzerId}">
-										<option value="" th:text="#{installations.addNew.selectHydro}"></option>
-										<option th:each="hydro : ${hydros}" th:value="${hydro.id}" th:text="${hydro.id}"></option>
+										<option value="" th:text="#{installations.addNew.selectHydro}" data-clientId='0'></option>
+										<option th:each="hydro : ${hydros}" th:value="${hydro.id}" th:text="${hydro.id}"
+											th:data-clientId="${hydro.clientId.clientCode}"></option>
 									</select>
 								</div>
 								<label class="uk-form-label" th:text="#{installations.table.deliveryDate}"></label>
