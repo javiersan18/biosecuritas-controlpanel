@@ -131,8 +131,8 @@ $(document)
 								<td th:text="${farm.contactName}"></td>
 								<td th:text="${farm.numSandach}"></td>
 								<td><a href="#modal-map"
-									th:onclick="'$(function(){ map.invalidateSize(); addMarker('+${farm.latitude}+','+${farm.longitude}+');})'"
-									uk-toggle><span th:uk-tooltip="#{common.functions.details}" data-uk-icon="icon: location"
+									th:onclick="'$(function(){ map.invalidateSize(); addMarker('+${farm.latitude}+','+${farm.longitude}+'); centerMap(9);})'"
+									uk-toggle><span th:uk-tooltip="#{common.functions.viewInMap}" data-uk-icon="icon: location"
 										class="uk-margin-small-right"></span></a></td>
 								<td><a th:href="@{/view-farm/{id}(id=${farm.id})}"><span th:uk-tooltip="#{common.functions.details}"
 										data-uk-icon="icon: table" class="uk-margin-small-right"></span></a></td>
@@ -480,9 +480,16 @@ $(document)
 						              map.removeLayer(marker);
 						        };
 							    //Add a marker to show where the farm is.
-							     marker = L.marker([latitude, longitude]).addTo(map);
-							     
+							     marker = L.marker([latitude, longitude]).addTo(map);							     
 							}			
+							
+							var centerMap = function centerLeafletMapOnMarker(zoom) {
+								  var latLngs = [ marker.getLatLng() ];
+								  var markerBounds = L.latLngBounds(latLngs);
+								  map.fitBounds(markerBounds);
+								  map.setZoom(zoom);
+							}
+							
 						</script>
 					</div>
 				</div>

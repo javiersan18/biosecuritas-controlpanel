@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title th:text="#{installations.header.title}"></title>
+<link rel="icon" href="/static/images/favicon.ico/">
+<!-- CSS FILES -->
+<link rel="stylesheet" data-th-href="@{/webjars/uikit/3.1.5/dist/css/uikit.min.css}" />
+<link rel="stylesheet" type="text/css" href="/static/css/dashboard.css">
+<!-- JS FILES -->
+<script data-th-src="@{/webjars/uikit/3.1.5/dist/js/uikit.min.js}"></script>
+<script data-th-src="@{/webjars/uikit/3.1.5/dist/js/uikit-icons.min.js}"></script>
+<script data-th-src="@{/webjars/jquery/3.4.1/jquery.min.js}"></script>
+<script data-th-src="@{/webjars/jquery-validation/1.17.0-1/jquery.validate.min.js}"></script>
+<script data-th-src="@{/webjars/leaflet/1.5.1/dist/leaflet.js}"></script>
+<script src="https://api.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.js"></script>
+
+<script src='https://api.mapbox.com/mapbox.js/v3.2.0/mapbox.js'></script>
+<link href='https://api.mapbox.com/mapbox.js/v3.2.0/mapbox.css' rel='stylesheet' />
+</head>
+<script th:inline="javascript">
+/*<![CDATA[*/
+    var createdMessage = [[#{installations.alarm.created}]];
+    var updatedMessage = [[#{installations.alarm.updated}]];
+    var deletedMessage = [[#{installations.alarm.deleted}]];
+    var emptyMessage = [[#{installations.alarm.empty}]];
+/*]]>*/
+</script>
+<script type="text/javascript">
+$(document).ready(function() {
+	//$("#table-body").find("tr").hide().filter("[data-active='true']").show();
+    //window.history.pushState({}, document.title, "/clients");
+    var status = $("#status").val();
+    var errorDesc = $("#errorDesc").val();
+    console.log("status: " + status);
+    console.log("error: " + errorDesc);
+    if (status == "edit") {
+        UIkit.modal('#modal-form-edit', {
+            modal: false,
+            keyboard: false,
+            bgclose: false,
+            center: true
+        }).show();
+    }
+    if (status == "view") {
+        UIkit.modal('#modal-form-view', {
+            modal: false,
+            keyboard: false,
+            bgclose: false,
+            center: true
+        }).show();
+    } else if (status == "created") {
+        $("#table-data")
+            .before(
+                '<div id="item-created" class="uk-alert-success" uk-alert><a class="uk-alert-close" uk-close></a><p>' + createdMessage + '</p></div>');
+    } else if (status == "updated") {
+        $("#table-data")
+            .before(
+                '<div id="item-updated" class="uk-alert-success" uk-alert><a class="uk-alert-close" uk-close></a><p>' + updatedMessage + '</p></div>');
+    } else if (status == "deleted") {
+        $("#table-data")
+            .before(
+                '<div id="item-deleted" class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>' + deletedMessage + '</p></div>');
+    } else if (status == "empty") {
+        $("#table-data")
+            .before(
+                '<div id="item-empty" class="uk-alert-primary" uk-alert><a class="uk-alert-close" uk-close></a><p>' + emptyMessage + '</p></div>');
+    } else if (status == "error") {
+        $("#table-data")
+            .before(
+                '<div id="item-deleted" class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>ERROR: ' + errorDesc + '</p></div>');
+    }
+});
+
+$(window).on("load", function(){
+	
+});
+
+</script>
+
+
+<body>
+
+	<!--HEADER-->
+	<div th:replace="fragments/header :: header"></div>
+	<!--/HEADER-->
+	<!-- LEFT BAR -->
+	<div th:replace="fragments/left-bar :: left-bar"></div>
+	<!-- /LEFT BAR -->
+	<!-- CONTENT -->
+	<div id="content" data-uk-height-viewport="expand: true">
+		<div class="uk-container uk-container-expand">
+			<div>
+				<div id="table-data">
+					<h3 class="uk-heading-line uk-text-bold">
+						<span th:text="#{routes.prepare.title}"></span>
+					</h3>
+
+					<a class="uk-button uk-button-default" href="#modal-form" uk-toggle><span data-uk-icon="icon: social"
+						class="uk-margin-small-right"></span><span th:text="#{routes.prepare.calcRoute}"></span></a>
+
+					<table id="installations-table" class="uk-table uk-table-hover uk-table-striped uk-table-small">
+						<thead>
+							<tr>
+								<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+								<th th:text="#{installations.table.installationId}"></th>
+								<th th:text="#{installations.table.hydrolyzerId}"></th>
+								<th th:text="#{installations.table.clientName}"></th>
+								<th th:text="#{installations.table.deliveryDate}"></th>
+								<th th:text="#{installations.table.sealDate}"></th>
+								<th th:text="#{installations.table.initialWeight}"></th>
+								<th th:text="#{installations.table.collectedWeight}"></th>
+								<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+								<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+							</tr>
+						</thead>
+						<tbody id="table-body">
+							<tr th:each="install : ${installations}" th:data-active="${install.active}">
+								<td><input class="uk-checkbox" type="checkbox" name="calcRouteCB"></td>
+								<td th:text="${install.id}"></td>
+								<td th:text="${install.hydrolyzerId.id}"></td>
+								<td th:text="${install.clientId.name}"></td>
+								<td th:text="${#dates.format(install.deliveryDate, 'dd-MM-yyyy')}"></td>
+								<td th:text="${#dates.format(install.sealDate, 'dd-MM-yyyy')}"></td>
+								<td th:text="${install.initialWeight}"></td>
+								<td th:text="${install.collectedWeight}"></td>
+								<td><a th:href="@{/view-install-routes/{id}(id=${install.id})}"><span
+										th:uk-tooltip="#{common.functions.details}" data-uk-icon="icon: table" class="uk-margin-small-right"></span></a></td>
+								<td><a href="#modal-map"
+									th:onclick="'$(function(){ map.invalidateSize(); addMarker('+${install.farmId.latitude}+','+${install.farmId.longitude}+'); centerMap(9);})'"
+									uk-toggle><span th:uk-tooltip="#{common.functions.viewInMap}" data-uk-icon="icon: location"
+										class="uk-margin-small-right"></span></a></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<div id="modal-form-view" class="uk-modal-container" uk-modal>
+				<div class="uk-modal-dialog uk-modal-body">
+					<button class="uk-modal-close-full uk-close-large" type="button" uk-close></button>
+					<form id="viewInstallForm" class="uk-form-horizontal" method="post" action="#" th:object="${editInstall}">
+						<div class="uk-modal-header">
+							<h2 class="uk-modal-title" th:text="#{installations.view.title}"></h2>
+						</div>
+						<div class="uk-modal-body">
+							<div class="uk-margin">
+								<label class="uk-form-label" th:text="#{installations.table.clientId}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="clientId" th:field="*{clientId.clientCode}" type="text" disabled>
+								</div>
+								<label class="uk-form-label" th:text="#{installations.table.clientName}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="clientName" th:field="*{clientId.name}" type="text" disabled>
+								</div>
+								<label class="uk-form-label" th:text="#{installations.table.farmId}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="farmId" th:field="*{farmId.id}" type="text" disabled>
+								</div>
+								<label class="uk-form-label" th:text="#{installations.table.farmAddress}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="farmAddress" th:field="*{farmId.address}" type="text" disabled>
+								</div>
+								<label class="uk-form-label" th:text="#{installations.table.deliveryDate}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="deliveryDate" th:field="*{deliveryDate}" type="text" disabled>
+								</div>
+								<label class="uk-form-label" th:text="#{installations.table.sealDate}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="sealDate" th:field="*{sealDate}" type="text" disabled>
+								</div>
+								<label class="uk-form-label" th:text="#{installations.table.returnDate}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="returnDate" th:field="*{returnDate}" type="text" disabled>
+								</div>
+								<label class="uk-form-label" th:text="#{installations.table.initialWeight}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="initialWeight" th:field="*{initialWeight}" type="text" disabled>
+								</div>
+								<label class="uk-form-label" th:text="#{installations.table.collectedWeight}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="collectedWeight" th:field="*{collectedWeight}" type="text" disabled>
+								</div>
+							</div>
+						</div>
+						<div class="uk-position-relative uk-margin-medium">
+							<div class="uk-position-top-left uk-margin-small-top">
+								<ul class="uk-iconnav">
+									<li><a style="text-decoration: none; color: #1e87f0;" th:href="'/print-install/'+${id}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+											th:uk-tooltip="#{common.functions.print}" data-uk-icon="icon: print; ratio: 1.4"
+											class="uk-margin-small-right"></span></a></li>
+								</ul>
+							</div>
+						</div>
+						<div class="uk-modal-footer uk-text-right">
+							<button class="uk-button uk-button-primary uk-modal-close" type="button" th:text="#{common.functions.back}"></button>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<div id="modal-map" class="uk-modal-container" uk-modal>
+				<div class="uk-modal-dialog uk-modal-body">
+					<button class="uk-modal-close-default" type="button" uk-close></button>
+					<div id="map" class="mapboxgl-map" uk-height-viewport="offset-bottom: 20">
+						<script>
+							L.mapbox.accessToken = 'pk.eyJ1IjoiamF2aWVyc2FuMTgiLCJhIjoiY2p3dWM5dnY3MGI1NDQ5czFyMzZ2YjMxNyJ9.tIoOuAIva7X3bOg3Q_m3qQ';
+							var marker = {};
+								
+							var map = L.mapbox.map('map')
+							  .setView([40,-3.5], 6)
+							  .addLayer(L.mapbox.styleLayer('mapbox://styles/mapbox/light-v10'));
+											
+							var addMarker = function(latitude, longitude){
+								
+								if (marker != undefined) {
+						              map.removeLayer(marker);
+						        };
+							    //Add a marker to show where the farm is.
+							     marker = L.marker([latitude, longitude]).addTo(map);
+							     
+							}
+							
+							var centerMap = function centerLeafletMapOnMarker(zoom) {
+								  var latLngs = [ marker.getLatLng() ];
+								  var markerBounds = L.latLngBounds(latLngs);
+								  map.fitBounds(markerBounds);
+								  map.setZoom(zoom);
+							}
+							
+						</script>
+					</div>
+				</div>
+			</div>
+
+
+		</div>
+		<!-- /CONTENT -->
+
+		<!--FOOTER-->
+		<div th:replace="fragments/footer :: footer"></div>
+		<!--/FOOTER-->
+
+		<input type="hidden" id="status" name="status" th:value="${status}" /> <input type="hidden" id="errorDesc"
+			name="errorDesc" th:value="${errorDesc}" />
+	</div>
+
+</body>
+</html>
