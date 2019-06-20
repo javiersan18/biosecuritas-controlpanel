@@ -8,7 +8,6 @@ import javax.validation.Valid;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.biosecuritas.controlpanel.db.entities.Client;
 import com.biosecuritas.controlpanel.db.entities.Installation;
 import com.biosecuritas.controlpanel.db.repositories.ClientRepository;
 import com.biosecuritas.controlpanel.db.repositories.FarmRepository;

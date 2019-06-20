@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class HomeController {
 
-	//private static final Logger log = LogManager.getLogger(HomeController.class);
+	// private static final Logger log = LogManager.getLogger(HomeController.class);
 
 	@RequestMapping("/")
 	public String index() {

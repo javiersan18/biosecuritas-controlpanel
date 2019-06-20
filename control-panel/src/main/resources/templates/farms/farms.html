@@ -7,12 +7,20 @@
 <link rel="icon" href="/static/images/favicon.ico/">
 <!-- CSS FILES -->
 <link rel="stylesheet" data-th-href="@{/webjars/uikit/3.1.5/dist/css/uikit.min.css}" />
+<link rel="stylesheet" data-th-href="@{/webjars/leaflet/1.5.1/dist/leaflet.css}" />
+<link href='https://api.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.css' rel='stylesheet' />
 <link rel="stylesheet" type="text/css" href="/static/css/dashboard.css">
 <!-- JS FILES -->
 <script data-th-src="@{/webjars/uikit/3.1.5/dist/js/uikit.min.js}"></script>
 <script data-th-src="@{/webjars/uikit/3.1.5/dist/js/uikit-icons.min.js}"></script>
 <script data-th-src="@{/webjars/jquery/3.4.1/jquery.min.js}"></script>
 <script data-th-src="@{/webjars/jquery-validation/1.17.0-1/jquery.validate.min.js}"></script>
+<script data-th-src="@{/webjars/leaflet/1.5.1/dist/leaflet.js}"></script>
+<script src="https://api.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.js"></script>
+
+<script src='https://api.mapbox.com/mapbox.js/v3.2.0/mapbox.js'></script>
+<link href='https://api.mapbox.com/mapbox.js/v3.2.0/mapbox.css' rel='stylesheet' />
+
 </head>
 
 <script th:inline="javascript">
@@ -107,6 +115,7 @@ $(document)
 								<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 								<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 								<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+								<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -121,6 +130,10 @@ $(document)
 								<td th:text="${farm.contactPhone}"></td>
 								<td th:text="${farm.contactName}"></td>
 								<td th:text="${farm.numSandach}"></td>
+								<td><a href="#modal-map"
+									th:onclick="'$(function(){ map.invalidateSize(); addMarker('+${farm.latitude}+','+${farm.longitude}+');})'"
+									uk-toggle><span th:uk-tooltip="#{common.functions.details}" data-uk-icon="icon: location"
+										class="uk-margin-small-right"></span></a></td>
 								<td><a th:href="@{/view-farm/{id}(id=${farm.id})}"><span th:uk-tooltip="#{common.functions.details}"
 										data-uk-icon="icon: table" class="uk-margin-small-right"></span></a></td>
 								<td><a th:href="@{/edit-farm/{id}(id=${farm.id})}"><span th:uk-tooltip="#{common.functions.edit}"
@@ -447,7 +460,42 @@ $(document)
 					</form>
 				</div>
 			</div>
+
+
+			<div id="modal-map" class="uk-modal-container" uk-modal>
+				<div class="uk-modal-dialog uk-modal-body">
+					<button class="uk-modal-close-default" type="button" uk-close></button>
+					<div id="map" class="mapboxgl-map" uk-height-viewport="offset-bottom: 20">
+						<script>
+							L.mapbox.accessToken = 'pk.eyJ1IjoiamF2aWVyc2FuMTgiLCJhIjoiY2p3dWM5dnY3MGI1NDQ5czFyMzZ2YjMxNyJ9.tIoOuAIva7X3bOg3Q_m3qQ';
+							var marker = {};
+								
+							var map = L.mapbox.map('map')
+							  .setView([40,-3.5], 6)
+							  .addLayer(L.mapbox.styleLayer('mapbox://styles/mapbox/light-v10'));
+											
+							var addMarker = function(latitude, longitude){
+								
+								if (marker != undefined) {
+						              map.removeLayer(marker);
+						        };
+							    //Add a marker to show where the farm is.
+							     marker = L.marker([latitude, longitude]).addTo(map);
+							     
+							}			
+						</script>
+					</div>
+				</div>
+			</div>
+
+
+
+
+
+
 		</div>
+
+
 		<!-- /CONTENT -->
 
 		<!--FOOTER-->
