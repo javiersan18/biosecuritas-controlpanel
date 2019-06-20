@@ -116,9 +116,10 @@ $(window).on("load", function(){
 						<span th:text="#{installations.title}"></span>
 					</h3>
 
+					<a class="uk-button uk-button-default" href="#modal-form" uk-toggle><span data-uk-icon="icon: plus-circle"
+						class="uk-margin-small-right"></span><span th:text="#{installations.addNew}"></span></a>
+
 					<ul class="uk-flex-right" uk-tab>
-						<a class="uk-button uk-button-default" href="#modal-form" uk-toggle><span data-uk-icon="icon: plus-circle"
-							class="uk-margin-small-right"></span><span th:text="#{installations.addNew}"></span></a>
 						<li><a href="#" id="all">Todas</a></li>
 						<li class="uk-active" id="actives"><a href="#">Activas</a></li>
 						<li><a href="#" id="inactives">Historico</a></li>
