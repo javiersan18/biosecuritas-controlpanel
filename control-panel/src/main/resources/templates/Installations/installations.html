@@ -24,6 +24,7 @@
 </script>
 <script type="text/javascript">
 $(document).ready(function() {
+	$("#table-body").find("tr").hide().filter("[data-active='true']").show();
     //window.history.pushState({}, document.title, "/clients");
     var status = $("#status").val();
     var errorDesc = $("#errorDesc").val();
@@ -76,9 +77,25 @@ $(window).on("load", function(){
 		$selectFarms.html($optionsFarms.filter('[data-clientId="' + this.value + '"]'));
 		$selectHydros.html($optionsHydros.filter('[data-clientId="' + this.value + '"]'));
 	}).trigger('change');	
-	 
+		
+	$("#all").on('click', function(){
+		var rows = $("#table-body").find("tr").hide();
+		rows.filter("[data-active='true']").show();
+		rows.filter("[data-active='false']").show();
+	});  
+	
+	$("#actives").on('click', function(){
+		var rows = $("#table-body").find("tr").hide();
+		rows.filter("[data-active='true']").show();
+	}); 
+			
+	$("#inactives").on('click', function(){
+		var rows = $("#table-body").find("tr").hide();
+		rows.filter("[data-active='false']").show();
+	});  
+	
 });
-    
+
 </script>
 
 
@@ -98,10 +115,14 @@ $(window).on("load", function(){
 					<h3 class="uk-heading-line uk-text-bold">
 						<span th:text="#{installations.title}"></span>
 					</h3>
-					<p>
+
+					<ul class="uk-flex-right" uk-tab>
 						<a class="uk-button uk-button-default" href="#modal-form" uk-toggle><span data-uk-icon="icon: plus-circle"
 							class="uk-margin-small-right"></span><span th:text="#{installations.addNew}"></span></a>
-					</p>
+						<li><a href="#" id="all">Todas</a></li>
+						<li class="uk-active" id="actives"><a href="#">Activas</a></li>
+						<li><a href="#" id="inactives">Historico</a></li>
+					</ul>
 					<table id="installations-table" class="uk-table uk-table-hover uk-table-striped uk-table-small">
 						<thead>
 							<tr>
@@ -118,8 +139,9 @@ $(window).on("load", function(){
 								<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 							</tr>
 						</thead>
-						<tbody>
-							<tr th:each="install : ${installations}">
+						<tbody id="table-body">
+							<tr th:each="install : ${installations}" th:data-active="${install.active}">
+
 								<td th:text="${install.id}"></td>
 								<td th:text="${install.hydrolyzerId.id}"></td>
 								<td th:text="${install.clientId.name}"></td>
@@ -367,8 +389,8 @@ $(window).on("load", function(){
 										<option th:each="hydro : ${hydros}" th:value="${hydro.id}" th:text="${hydro.id}"></option>
 									</select>
 								</div>
-								<input type="hidden" name="installationId" th:field="*{id}" /> <label class="uk-form-label"
-									th:text="#{installations.table.deliveryDate}"></label>
+								<input type="hidden" name="installationId" th:field="*{id}" /><input type="hidden" name="active"
+									th:field="*{active}" /> <label class="uk-form-label" th:text="#{installations.table.deliveryDate}"></label>
 								<div class="uk-form-controls">
 									<input class="uk-input uk-form-small" name="deliveryDate" th:field="*{deliveryDate}" type="date"
 										placeholder="08/05/2019">

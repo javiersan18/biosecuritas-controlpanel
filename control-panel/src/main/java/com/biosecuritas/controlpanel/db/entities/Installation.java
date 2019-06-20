@@ -42,6 +42,9 @@ public class Installation {
 	@Column(name = "return_date")
 	private Date returnDate;
 
+	@Column(nullable = false)
+	private Boolean active = true;
+
 	public Installation() {
 	}
 
@@ -122,6 +125,20 @@ public class Installation {
 		return "Installation [id=" + id + ", clientId=" + clientId + ", farmId=" + farmId + ", hydrolyzerId="
 				+ hydrolyzerId + ", initialWeight=" + initialWeight + ", collectedWeight=" + collectedWeight
 				+ ", deliveryDate=" + deliveryDate + ", sealDate=" + sealDate + ", returnDate=" + returnDate + "]";
+	}
+
+	/**
+	 * @return the active
+	 */
+	public Boolean getActive() {
+		return active;
+	}
+
+	/**
+	 * @param active the active to set
+	 */
+	public void setActive(Boolean active) {
+		this.active = active;
 	}
 
 }
