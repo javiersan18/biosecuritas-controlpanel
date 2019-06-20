@@ -64,7 +64,7 @@ public class InstallationController {
 			status = "empty";
 		}
 		model.addAttribute("status", status);
-		return "/installations/installations";
+		return "installations/installations";
 	}
 
 	@PostMapping("/add-install")
@@ -84,7 +84,7 @@ public class InstallationController {
 			model.addAttribute("status", "error");
 			model.addAttribute("errorDesc", "errorDesc");
 			log.error(result.toString());
-			return "/installations/installations";
+			return "installations/installations";
 		}
 
 		installationRepository.save(install);
@@ -108,10 +108,10 @@ public class InstallationController {
 			model.addAttribute("status", "error");
 			model.addAttribute("errorDesc", "errorDesc");
 			log.error(result.toString());
-			return "/installations/installations";
+			return "installations/installations";
 		}
 
-		return "/installations/installations";
+		return "installations/installations";
 	}
 
 	@GetMapping("/view-install/{id}")
@@ -131,10 +131,10 @@ public class InstallationController {
 			model.addAttribute("status", "error");
 			model.addAttribute("errorDesc", "errorDesc");
 			log.error(result.toString());
-			return "/installations/installations";
+			return "installations/installations";
 		}
 
-		return "/installations/installations";
+		return "installations/installations";
 	}
 
 	@PostMapping("/update-install")
@@ -153,7 +153,7 @@ public class InstallationController {
 			model.addAttribute("status", "error");
 			model.addAttribute("errorDesc", "errorDesc");
 			log.error(result.toString());
-			return "/installations/installations";
+			return "installations/installations";
 		}
 
 		installationRepository.save(install);

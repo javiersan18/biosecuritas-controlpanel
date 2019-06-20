@@ -54,7 +54,7 @@ public class HydrolyzerController {
 			status = "empty";
 		}
 		model.addAttribute("status", status);
-		return "/hydrolyzers/hydrolyzers";
+		return "hydrolyzers/hydrolyzers";
 	}
 
 	@PostMapping("/add-hydro")
@@ -65,7 +65,7 @@ public class HydrolyzerController {
 			model.addAttribute("editHydro", new Hydrolyzer());
 			model.addAttribute("errors", "error");
 			log.error(result.toString());
-			return "/hydrolyzers/hydrolyzers";
+			return "hydrolyzers/hydrolyzers";
 		}
 
 		hydrolyzerRepository.save(hydro);
@@ -85,7 +85,7 @@ public class HydrolyzerController {
 			model.addAttribute("editHydro", hydro);
 			model.addAttribute("errors", "error");
 			log.error(result.toString());
-			return "/hydrolyzers/hydrolyzers";
+			return "hydrolyzers/hydrolyzers";
 		}
 
 		model.addAttribute("hydros", hydrolyzerRepository.findAll());
@@ -93,7 +93,7 @@ public class HydrolyzerController {
 		model.addAttribute("editHydro", hydrolyzerRepository.findById(id));
 		model.addAttribute("clients", clientRepository.findAll());
 		model.addAttribute("status", "edit");
-		return "/hydrolyzers/hydrolyzers";
+		return "hydrolyzers/hydrolyzers";
 
 	}
 
@@ -106,7 +106,7 @@ public class HydrolyzerController {
 			model.addAttribute("editHydro", new Hydrolyzer());
 			model.addAttribute("errors", "error");
 			log.error(result.toString());
-			return "/hydrolyzers/hydrolyzers";
+			return "hydrolyzers/hydrolyzers";
 		}
 
 		model.addAttribute("hydros", hydrolyzerRepository.findAll());
@@ -114,7 +114,7 @@ public class HydrolyzerController {
 		model.addAttribute("editHydro", hydrolyzerRepository.findById(id));
 		model.addAttribute("clients", clientRepository.findAll());
 		model.addAttribute("status", "view");
-		return "/hydrolyzers/hydrolyzers";
+		return "hydrolyzers/hydrolyzers";
 
 	}
 
@@ -126,7 +126,7 @@ public class HydrolyzerController {
 			model.addAttribute("editHydro", hydro);
 			model.addAttribute("errors", "error");
 			log.error(result.toString());
-			return "/hydrolyzers/hydrolyzers";
+			return "hydrolyzers/hydrolyzers";
 		}
 
 		hydrolyzerRepository.save(hydro);

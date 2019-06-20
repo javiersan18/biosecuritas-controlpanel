@@ -27,7 +27,7 @@ public class RoutesController {
 	public String showMap(Model model) {
 		model.addAttribute("installations", installationRepository.findByStatus(InstallationStatus.SEALED));
 		model.addAttribute("editInstall", new Installation());
-		return "/routes/prepare";
+		return "routes/prepare";
 	}
 
 	@GetMapping("/view-install-routes/{id}")
@@ -46,7 +46,7 @@ public class RoutesController {
 			return "/installations/installations";
 		}
 
-		return "/routes/prepare";
+		return "routes/prepare";
 	}
 
 }

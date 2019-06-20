@@ -36,7 +36,7 @@ public class FarmController {
 		model.addAttribute("newFarm", new Farm());
 		model.addAttribute("editFarm", new Farm());
 		model.addAttribute("status", status);
-		return "/farms/farms";
+		return "farms/farms";
 	}
 
 	@PostMapping("/add-farm")
@@ -47,7 +47,7 @@ public class FarmController {
 			model.addAttribute("editFarm", new Farm());
 			model.addAttribute("errors", "error");
 			log.error(result.toString());
-			return "/farms/farms";
+			return "farms/farms";
 		}
 
 		farmRepository.save(farm);
@@ -66,7 +66,7 @@ public class FarmController {
 			model.addAttribute("editFarm", new Farm());
 			model.addAttribute("errors", "error");
 			log.error(result.toString());
-			return "/farms/farms";
+			return "farms/farms";
 		}
 
 		model.addAttribute("farms", farmRepository.findAll());
@@ -74,7 +74,7 @@ public class FarmController {
 		model.addAttribute("editFarm", farmRepository.findById(id));
 		model.addAttribute("clients", clientRepository.findAll());
 		model.addAttribute("status", "edit");
-		return "/farms/farms";
+		return "farms/farms";
 	}
 
 	@GetMapping("/view-farm/{id}")
@@ -85,7 +85,7 @@ public class FarmController {
 			model.addAttribute("editFarm", new Farm());
 			model.addAttribute("errors", "error");
 			log.error(result.toString());
-			return "/farms/farms";
+			return "farms/farms";
 		}
 
 		model.addAttribute("farms", farmRepository.findAll());
@@ -93,7 +93,7 @@ public class FarmController {
 		model.addAttribute("editFarm", farmRepository.findById(id));
 		model.addAttribute("clients", clientRepository.findAll());
 		model.addAttribute("status", "view");
-		return "/farms/farms";
+		return "farms/farms";
 	}
 
 	@PostMapping("/update-farm")
@@ -104,7 +104,7 @@ public class FarmController {
 			model.addAttribute("editFarm", new Farm());
 			model.addAttribute("errors", "error");
 			log.error(result.toString());
-			return "/farms/farms";
+			return "farms/farms";
 		}
 
 		farmRepository.save(farm);

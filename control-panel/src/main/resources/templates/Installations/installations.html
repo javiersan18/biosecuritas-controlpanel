@@ -157,8 +157,12 @@ $(window).on("load", function(){
 										th:uk-tooltip="#{common.functions.details}" data-uk-icon="icon: table" class="uk-margin-small-right"></span></a></td>
 								<td><a th:href="@{/edit-install/{id}(id=${install.id})}"><span th:uk-tooltip="#{common.functions.edit}"
 										data-uk-icon="icon: pencil" class="uk-margin-small-right"></span></a></td>
-								<td><a data-target="#modal-delete1" th:attr="data-target='#modal-delete'+${install.id}" uk-toggle><span
-										th:uk-tooltip="#{common.functions.delete}" data-uk-icon="icon: trash" class="uk-margin-small-right "></span></a></td>
+								<td><a th:href="@{/seal-install/{id}(id=${install.id})}"><span th:uk-tooltip="#{installations.seal}"
+										data-uk-icon="icon: tag" class="uk-margin-small-right"></span></a></td>
+
+
+								<!-- 								<td><a data-target="#modal-delete1" th:attr="data-target='#modal-delete'+${install.id}" uk-toggle><span -->
+								<!-- 										th:uk-tooltip="#{common.functions.delete}" data-uk-icon="icon: trash" class="uk-margin-small-right "></span></a></td> -->
 								<div th:id="modal-delete+${install.id}" uk-modal>
 									<div class="uk-modal-dialog">
 										<button class="uk-modal-close-default" type="button" uk-close></button>

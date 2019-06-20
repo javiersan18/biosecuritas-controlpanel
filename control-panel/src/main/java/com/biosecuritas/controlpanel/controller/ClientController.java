@@ -34,7 +34,7 @@ public class ClientController {
 		model.addAttribute("editClient", new Client());
 		model.addAttribute("status", status);
 		model.addAttribute("errorDesc", errorDesc);
-		return "/clients/clients";
+		return "clients/clients";
 	}
 
 	@PostMapping("/add-client")
@@ -45,7 +45,7 @@ public class ClientController {
 			model.addAttribute("editClient", new Client());
 			model.addAttribute("errors", "error");
 			log.error(result.toString());
-			return "/clients/clients";
+			return "clients/clients";
 		}
 
 		clientRepository.save(client);
@@ -64,14 +64,14 @@ public class ClientController {
 			model.addAttribute("editClient", new Client());
 			model.addAttribute("errors", "error");
 			log.error(result.toString());
-			return "/clients/clients";
+			return "clients/clients";
 		}
 
 		model.addAttribute("clients", clientRepository.findAll());
 		model.addAttribute("newClient", new Client());
 		model.addAttribute("editClient", clientRepository.findById(id));
 		model.addAttribute("status", "edit");
-		return "/clients/clients";
+		return "clients/clients";
 	}
 
 	@GetMapping("/view-client/{id}")
@@ -82,14 +82,14 @@ public class ClientController {
 			model.addAttribute("editClient", new Client());
 			model.addAttribute("errors", "error");
 			log.error(result.toString());
-			return "/clients/clients";
+			return "clients/clients";
 		}
 
 		model.addAttribute("clients", clientRepository.findAll());
 		model.addAttribute("newClient", new Client());
 		model.addAttribute("editClient", clientRepository.findById(id));
 		model.addAttribute("status", "view");
-		return "/clients/clients";
+		return "clients/clients";
 	}
 
 	@PostMapping("/update-client")
@@ -100,7 +100,7 @@ public class ClientController {
 			model.addAttribute("editClient", new Client());
 			model.addAttribute("errors", "error");
 			log.error(result.toString());
-			return "/clients/clients";
+			return "clients/clients";
 		}
 
 		clientRepository.save(client);
