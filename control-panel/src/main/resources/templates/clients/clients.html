@@ -95,14 +95,16 @@
 					<table id="clients-table" class="uk-table uk-table-hover uk-table-striped uk-table-small">
 						<thead>
 							<tr>
-								<th th:text="#{clients.table.clientCode}"></th>
+								<th th:text="#{clients.table.id}"></th>
 								<th th:text="#{clients.table.name}"></th>
 								<th th:text="#{clients.table.CIF}"></th>
-								<th th:text="#{clients.table.representative}"></th>
+								<th th:text="#{clients.table.repName}"></th>
+								<th th:text="#{clients.table.repSurname1}"></th>
 								<th th:text="#{clients.table.DNI}"></th>
-								<th th:text="#{clients.table.dateIni}"></th>
-								<th th:text="#{clients.table.dateFin}"></th>
-								<th th:text="#{clients.table.address}"></th>
+								<th th:text="#{clients.table.dateAgreementBegin}"></th>
+								<th th:text="#{clients.table.dateAgreementEnd}"></th>
+								<th th:text="#{clients.table.fiscalAddress}"></th>
+								<th th:text="#{clients.table.unit}"></th>
 								<th th:text="#{clients.table.province}"></th>
 								<th th:text="#{clients.table.city}"></th>
 								<th th:text="#{clients.table.postalCode}"></th>
@@ -113,34 +115,36 @@
 						</thead>
 						<tbody>
 							<tr th:each="client : ${clients}">
-								<td th:text="${client.clientCode}"></td>
+								<td th:text="${client.id}"></td>
 								<td th:text="${client.name}"></td>
 								<td th:text="${client.CIF}"></td>
-								<td th:text="${client.representative}"></td>
+								<td th:text="${client.repName}"></td>
+								<td th:text="${client.repSurname1}"></td>
 								<td th:text="${client.DNI}"></td>
-								<td th:text="${#dates.format(client.dateIni, 'dd-MM-yyyy')}"></td>
-								<td th:text="${#dates.format(client.dateFin, 'dd-MM-yyyy')}"></td>
-								<td th:text="${client.address}"></td>
+								<td th:text="${#dates.format(client.dateAgreementBegin, 'dd-MM-yyyy')}"></td>
+								<td th:text="${#dates.format(client.dateAgreementEnd, 'dd-MM-yyyy')}"></td>
+								<td th:text="${client.fiscalAddress}"></td>
+								<td th:text="${client.unit}"></td>
 								<td th:text="${client.province}"></td>
 								<td th:text="${client.city}"></td>
 								<td th:text="${client.postalCode}"></td>
-								<td><a th:href="@{/view-client/{id}(id=${client.clientCode})}"><span
+								<td><a th:href="@{/view-client/{id}(id=${client.id})}"><span
 										th:uk-tooltip="#{common.functions.details}" data-uk-icon="icon: table" class="uk-margin-small-right"></span></a></td>
-								<td><a th:href="@{/edit-client/{id}(id=${client.clientCode})}"><span
-										th:uk-tooltip="#{common.functions.edit}" data-uk-icon="icon: pencil" class="uk-margin-small-right"></span></a></td>
-								<td><a data-target="#modal-delete" th:attr="data-target='#modal-delete'+${client.clientCode}" uk-toggle><span
+								<td><a th:href="@{/edit-client/{id}(id=${client.id})}"><span th:uk-tooltip="#{common.functions.edit}"
+										data-uk-icon="icon: pencil" class="uk-margin-small-right"></span></a></td>
+								<td><a data-target="#modal-delete" th:attr="data-target='#modal-delete'+${client.id}" uk-toggle><span
 										th:uk-tooltip="#{common.functions.delete}" data-uk-icon="icon: trash" class="uk-margin-small-right "></span></a></td>
-								<div th:id="modal-delete+${client.clientCode}" uk-modal>
+								<div th:id="modal-delete+${client.id}" uk-modal>
 									<div class="uk-modal-dialog">
 										<button class="uk-modal-close-default" type="button" uk-close></button>
 										<div class="uk-modal-body">
 											<h4 th:text="#{clients.delete.confirmation}" />
-											<p th:text="#{clients.table.clientCode} +': ' + ${client.clientCode}"></p>
+											<p th:text="#{clients.table.id} +': ' + ${client.id}"></p>
 											<p th:text="#{clients.table.name} +': ' + ${client.name}"></p>
 										</div>
 										<div class="uk-modal-footer uk-text-right">
 											<button class="uk-button uk-button-default uk-modal-close" type="button" th:text="#{common.functions.cancel}"></button>
-											<a th:href="@{/delete-client/{id}(id=${client.clientCode})}"><button class="uk-button uk-button-primary"
+											<a th:href="@{/delete-client/{id}(id=${client.id})}"><button class="uk-button uk-button-primary"
 													type="button" th:text="#{common.functions.delete}"></button></a>
 										</div>
 									</div>
@@ -160,9 +164,9 @@
 						</div>
 						<div class="uk-modal-body">
 							<div class="uk-margin">
-								<label class="uk-form-label" th:text="#{clients.table.clientCode}"></label>
+								<label class="uk-form-label" th:text="#{clients.table.id}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="clientId" th:field="*{clientCode}" type="text" disabled>
+									<input class="uk-input uk-form-small" name="clientId" th:field="*{id}" type="text" disabled>
 								</div>
 								<label class="uk-form-label" th:text="#{clients.table.name}"></label>
 								<div class="uk-form-controls">
@@ -172,33 +176,48 @@
 								<div class="uk-form-controls">
 									<input class="uk-input uk-form-small" name="cif" th:field="*{CIF}" type="text" disabled>
 								</div>
-								<label class="uk-form-label" th:text="#{clients.table.representative}"></label>
+								<label class="uk-form-label" th:text="#{clients.table.repName}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="representative" th:field="*{representative}" type="text" disabled>
+									<input class="uk-input uk-form-small" name="repName" th:field="*{repName}" type="text" disabled>
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.repSurname1}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="repSurname1" th:field="*{repSurname1}" type="text" disabled>
 								</div>
 								<label class="uk-form-label" th:text="#{clients.table.DNI}"></label>
 								<div class="uk-form-controls">
 									<input class="uk-input uk-form-small" name="DNI" th:field="*{DNI}" type="text" disabled>
 								</div>
-								<label class="uk-form-label" th:text="#{clients.table.CC}"></label>
+								<label class="uk-form-label" th:text="#{clients.table.bankAccount}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="CC" th:field="*{CC}" type="text" disabled>
+									<input class="uk-input uk-form-small" name="bankAccount" th:field="*{bankAccount}" type="text" disabled>
 								</div>
-								<label class="uk-form-label" th:text="#{clients.table.dateIni}"></label>
+								<label class="uk-form-label" th:text="#{clients.table.dateAgreementBegin}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="dateIni" th:field="*{dateIni}" type="text" disabled>
+									<input class="uk-input uk-form-small" name="dateAgreementBegin" th:field="*{dateAgreementBegin}" type="text"
+										disabled>
 								</div>
-								<label class="uk-form-label" th:text="#{clients.table.T}"></label>
+								<label class="uk-form-label" th:text="#{clients.table.agreementDuration}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="T" th:field="*{T}" type="text" disabled>
+									<input class="uk-input uk-form-small" name="agreementDuration" th:field="*{agreementDuration}" type="text"
+										disabled>
 								</div>
-								<label class="uk-form-label" th:text="#{clients.table.dateFin}"></label>
+								<label class="uk-form-label" th:text="#{clients.table.dateAgreementEnd}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="dateFin" th:field="*{dateFin}" type="text" disabled>
+									<input class="uk-input uk-form-small" name="dateAgreementEnd" th:field="*{dateAgreementEnd}" type="text"
+										disabled>
 								</div>
-								<label class="uk-form-label" th:text="#{clients.table.address}"></label>
+								<label class="uk-form-label" th:text="#{clients.table.streetType}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="address" th:field="*{address}" type="text" disabled>
+									<input class="uk-input uk-form-small" name="streetType" th:field="*{streetType}" type="text" disabled>
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.fiscalAddress}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="fiscalAddress" th:field="*{fiscalAddress}" type="text" disabled>
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.unit}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="unit" th:field="*{unit}" type="text" disabled>
 								</div>
 								<label class="uk-form-label" th:text="#{clients.table.province}"></label>
 								<div class="uk-form-controls">
@@ -220,9 +239,9 @@
 								<div class="uk-form-controls">
 									<input class="uk-input uk-form-small" name="numHydros" th:field="*{numHydros}" type="text" disabled>
 								</div>
-								<label class="uk-form-label" th:text="#{clients.table.REGA}"></label>
+								<label class="uk-form-label" th:text="#{clients.table.numFarms}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="rega" th:field="*{rega}" type="text" disabled>
+									<input class="uk-input uk-form-small" name="numFarms" th:field="*{numFarms}" type="text" disabled>
 								</div>
 							</div>
 						</div>
@@ -391,7 +410,7 @@
 						</div>
 						<div class="uk-modal-body">
 							<div class="uk-margin">
-								<input type="hidden" name="clientId" th:field="*{clientCode}" /> <label class="uk-form-label"
+								<input type="hidden" name="clientId" th:field="*{id}" /> <label class="uk-form-label"
 									th:text="#{hydros.table.dateIni}"></label> <label class="uk-form-label" th:text="#{clients.table.name}"></label>
 								<div class="uk-form-controls">
 									<input class="uk-input uk-form-small" name="clientName" th:field="*{name}" type="text">

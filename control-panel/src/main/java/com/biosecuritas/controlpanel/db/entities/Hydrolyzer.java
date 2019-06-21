@@ -18,14 +18,20 @@ public class Hydrolyzer {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
+	@Column(nullable = false, name = "serial_code")
+	private String serialCode;
+
 	@ManyToOne
-	private Client clientId;
+	private Farm farmId;
+
+	@Column(nullable = false, name = "hydro_weight")
+	private Float hydroWeight;
 
 	@Column(name = "max_weight")
 	private Float maxWeight;
 
-	@Column(name = "date_ini")
-	private Date dateIni;
+	@Column(nullable = false, name = "date")
+	private Date date;
 
 	public Hydrolyzer() {
 
@@ -39,12 +45,28 @@ public class Hydrolyzer {
 		this.id = id;
 	}
 
-	public Client getClientId() {
-		return clientId;
+	public String getSerialCode() {
+		return serialCode;
 	}
 
-	public void setClientId(Client clientId) {
-		this.clientId = clientId;
+	public void setSerialCode(String serialCode) {
+		this.serialCode = serialCode;
+	}
+
+	public Farm getFarmId() {
+		return farmId;
+	}
+
+	public void setFarmId(Farm farmId) {
+		this.farmId = farmId;
+	}
+
+	public Float getHydroWeight() {
+		return hydroWeight;
+	}
+
+	public void setHydroWeight(Float hydroWeight) {
+		this.hydroWeight = hydroWeight;
 	}
 
 	public Float getMaxWeight() {
@@ -55,18 +77,18 @@ public class Hydrolyzer {
 		this.maxWeight = maxWeight;
 	}
 
-	public Date getDateIni() {
-		return dateIni;
+	public Date getDate() {
+		return date;
 	}
 
-	public void setDateIni(Date dateIni) {
-		this.dateIni = dateIni;
+	public void setDate(Date date) {
+		this.date = date;
 	}
 
 	@Override
 	public String toString() {
-		return "Hydrolyzer [id=" + id + ", clientId=" + clientId + ", maxWeight=" + maxWeight + ", dateIni=" + dateIni
-				+ "]";
+		return "Hydrolyzer [id=" + id + ", serialCode=" + serialCode + ", farmId=" + farmId + ", hydroWeight="
+				+ hydroWeight + ", maxWeight=" + maxWeight + ", date=" + date + "]";
 	}
 
 }

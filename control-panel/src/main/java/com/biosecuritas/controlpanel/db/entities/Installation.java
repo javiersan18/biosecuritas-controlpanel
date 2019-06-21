@@ -12,7 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.biosecuritas.controlpanel.utils.AuthorityType;
 import com.biosecuritas.controlpanel.utils.InstallationStatus;
 
 @Entity
@@ -32,9 +31,6 @@ public class Installation {
 	@ManyToOne
 	private Hydrolyzer hydrolyzerId;
 
-	@Column(name = "initial_weight")
-	private Float initialWeight;
-
 	@Column(name = "collected_weight")
 	private Float collectedWeight;
 
@@ -44,14 +40,14 @@ public class Installation {
 	@Column(name = "seal_date")
 	private Date sealDate;
 
-	@Column(name = "return_date")
-	private Date returnDate;
+	@Column(name = "collected_date")
+	private Date collectedDate;
+
+	@Column(name = "finished_date")
+	private Date finishedDate;
 
 	@Enumerated(EnumType.STRING)
 	private InstallationStatus status = InstallationStatus.ACTIVE;
-
-	@Column(nullable = false)
-	private Boolean active = true;
 
 	public Installation() {
 	}
@@ -88,14 +84,6 @@ public class Installation {
 		this.hydrolyzerId = hydrolyzerId;
 	}
 
-	public Float getInitialWeight() {
-		return initialWeight;
-	}
-
-	public void setInitialWeight(Float initialWeight) {
-		this.initialWeight = initialWeight;
-	}
-
 	public Float getCollectedWeight() {
 		return collectedWeight;
 	}
@@ -120,33 +108,36 @@ public class Installation {
 		this.sealDate = sealDate;
 	}
 
-	public Date getReturnDate() {
-		return returnDate;
+	public Date getCollectedDate() {
+		return collectedDate;
 	}
 
-	public void setReturnDate(Date returnDate) {
-		this.returnDate = returnDate;
+	public void setCollectedDate(Date collectedDate) {
+		this.collectedDate = collectedDate;
+	}
+
+	public Date getFinishedDate() {
+		return finishedDate;
+	}
+
+	public void setFinishedDate(Date finishedDate) {
+		this.finishedDate = finishedDate;
+	}
+
+	public InstallationStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(InstallationStatus status) {
+		this.status = status;
 	}
 
 	@Override
 	public String toString() {
 		return "Installation [id=" + id + ", clientId=" + clientId + ", farmId=" + farmId + ", hydrolyzerId="
-				+ hydrolyzerId + ", initialWeight=" + initialWeight + ", collectedWeight=" + collectedWeight
-				+ ", deliveryDate=" + deliveryDate + ", sealDate=" + sealDate + ", returnDate=" + returnDate + "]";
-	}
-
-	/**
-	 * @return the active
-	 */
-	public Boolean getActive() {
-		return active;
-	}
-
-	/**
-	 * @param active the active to set
-	 */
-	public void setActive(Boolean active) {
-		this.active = active;
+				+ hydrolyzerId + ", collectedWeight=" + collectedWeight + ", deliveryDate=" + deliveryDate
+				+ ", sealDate=" + sealDate + ", collectedDate=" + collectedDate + ", finishedDate=" + finishedDate
+				+ ", status=" + status + "]";
 	}
 
 }

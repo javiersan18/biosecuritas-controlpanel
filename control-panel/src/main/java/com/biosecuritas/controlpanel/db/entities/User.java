@@ -25,6 +25,12 @@ public class User implements Serializable {
 	@Column(nullable = false, unique = true)
 	private String username;
 
+	private String name;
+
+	private String surname1;
+
+	private String surname2;
+
 	@NotEmpty
 	@Column(nullable = false, unique = true)
 	private String email;
@@ -32,7 +38,8 @@ public class User implements Serializable {
 	@NotEmpty
 	private String password;
 
-	private Date dateCreated;
+	@Column(name = "creation_date")
+	private Date creationdate;
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "user_authority", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
@@ -58,6 +65,38 @@ public class User implements Serializable {
 		this.username = username;
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getSurname1() {
+		return surname1;
+	}
+
+	public void setSurname1(String surname1) {
+		this.surname1 = surname1;
+	}
+
+	public String getSurname2() {
+		return surname2;
+	}
+
+	public void setSurname2(String surname2) {
+		this.surname2 = surname2;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	public String getPassword() {
 		return password;
 	}
@@ -66,12 +105,12 @@ public class User implements Serializable {
 		this.password = password;
 	}
 
-	public Date getDateCreated() {
-		return dateCreated;
+	public Date getCreationdate() {
+		return creationdate;
 	}
 
-	public void setDateCreated(Date dateCreated) {
-		this.dateCreated = dateCreated;
+	public void setCreationdate(Date creationdate) {
+		this.creationdate = creationdate;
 	}
 
 	public Set<Authority> getAuthorities() {
@@ -82,12 +121,15 @@ public class User implements Serializable {
 		this.authorities = authorities;
 	}
 
-	public String getEmail() {
-		return email;
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", username=" + username + ", name=" + name + ", surname1=" + surname1 + ", surname2="
+				+ surname2 + ", email=" + email + ", password=" + password + ", creationdate=" + creationdate
+				+ ", authorities=" + authorities + "]";
 	}
 
 }

@@ -1,10 +1,13 @@
 package com.biosecuritas.controlpanel.db.entities;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -16,17 +19,28 @@ public class Farm {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
+	@Column(nullable = false)
+	private String name;
+
+	private String REGA;
+
 	@ManyToOne
+	@Column(nullable = false)
 	private Client clientId;
+
+	@Column(name = "street_type")
+	private String streetType;
 
 	private String address;
 
-	@Column(name = "postal_code")
-	private Integer postalCode;
+	private String unit;
 
 	private String province;
 
 	private String city;
+
+	@Column(name = "postal_code")
+	private Integer postalCode;
 
 	private String country;
 
@@ -34,11 +48,8 @@ public class Farm {
 
 	private Double longitude;
 
-	@Column(name = "contact_phone")
-	private Integer contactPhone;
-
-	@Column(name = "contact_name")
-	private String contactName;
+	@ManyToMany
+	private Set<Contact> contacts;
 
 	@Column(name = "num_sandach")
 	private String numSandach;
@@ -54,12 +65,36 @@ public class Farm {
 		this.id = id;
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getREGA() {
+		return REGA;
+	}
+
+	public void setREGA(String rEGA) {
+		REGA = rEGA;
+	}
+
 	public Client getClientId() {
 		return clientId;
 	}
 
 	public void setClientId(Client clientId) {
 		this.clientId = clientId;
+	}
+
+	public String getStreetType() {
+		return streetType;
+	}
+
+	public void setStreetType(String streetType) {
+		this.streetType = streetType;
 	}
 
 	public String getAddress() {
@@ -70,12 +105,12 @@ public class Farm {
 		this.address = address;
 	}
 
-	public Integer getPostalCode() {
-		return postalCode;
+	public String getUnit() {
+		return unit;
 	}
 
-	public void setPostalCode(Integer postalCode) {
-		this.postalCode = postalCode;
+	public void setUnit(String unit) {
+		this.unit = unit;
 	}
 
 	public String getProvince() {
@@ -94,6 +129,14 @@ public class Farm {
 		this.city = city;
 	}
 
+	public Integer getPostalCode() {
+		return postalCode;
+	}
+
+	public void setPostalCode(Integer postalCode) {
+		this.postalCode = postalCode;
+	}
+
 	public String getCountry() {
 		return country;
 	}
@@ -110,34 +153,20 @@ public class Farm {
 		this.latitude = latitude;
 	}
 
-	/**
-	 * @return the longitude
-	 */
 	public Double getLongitude() {
 		return longitude;
 	}
 
-	/**
-	 * @param longitude the longitude to set
-	 */
 	public void setLongitude(Double longitude) {
 		this.longitude = longitude;
 	}
 
-	public Integer getContactPhone() {
-		return contactPhone;
+	public Set<Contact> getContacts() {
+		return contacts;
 	}
 
-	public void setContactPhone(Integer contactPhone) {
-		this.contactPhone = contactPhone;
-	}
-
-	public String getContactName() {
-		return contactName;
-	}
-
-	public void setContactName(String contactName) {
-		this.contactName = contactName;
+	public void setContacts(Set<Contact> contacts) {
+		this.contacts = contacts;
 	}
 
 	public String getNumSandach() {
@@ -150,10 +179,10 @@ public class Farm {
 
 	@Override
 	public String toString() {
-		return "Farm [id=" + id + ", clientId=" + clientId + ", address=" + address + ", postalCode=" + postalCode
-				+ ", province=" + province + ", city=" + city + ", country=" + country + ", latitude=" + latitude
-				+ ", longitude=" + longitude + ", contactPhone=" + contactPhone + ", contactName=" + contactName
-				+ ", numSandach=" + numSandach + "]";
+		return "Farm [id=" + id + ", name=" + name + ", REGA=" + REGA + ", clientId=" + clientId + ", streetType="
+				+ streetType + ", address=" + address + ", unit=" + unit + ", province=" + province + ", city=" + city
+				+ ", postalCode=" + postalCode + ", country=" + country + ", latitude=" + latitude + ", longitude="
+				+ longitude + ", contacts=" + contacts + ", numSandach=" + numSandach + "]";
 	}
 
 }

@@ -1,5 +1,5 @@
 package com.biosecuritas.controlpanel.utils;
 
 public enum InstallationStatus {
-	ACTIVE, SEALED, FINISHED
+	ACTIVE, SEALED, READY_FOR_PICKUP, FINISHED
 }

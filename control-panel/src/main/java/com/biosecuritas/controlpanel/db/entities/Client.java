@@ -18,12 +18,49 @@ public class Client {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "client_code")
-	private Integer clientCode;
+	private Integer id;
 
+	@Column(nullable = false)
 	private String name;
 
-	private String address;
+	@Column(nullable = false)
+	private String CIF;
+
+	@Column(nullable = false, name = "rep_name")
+	private String repName;
+
+	@Column(name = "rep_surname_1")
+	private String repSurname1;
+
+	@Column(name = "rep_surname_2")
+	private String repSurname2;
+
+	private String DNI;
+
+	@Column(name = "bank_account")
+	private String bankAccount;
+
+	@Column(name = "date_agreement_begin")
+	@Type(type = "date")
+	private Date dateAgreementBegin;
+
+	@Column(name = "date_agreement_end")
+	@Type(type = "date")
+	private Date dateAgreementEnd;
+
+	@Column(name = "agreement_durantion")
+	private Integer agreementDuration;
+
+	@Column(name = "agreement_type")
+	private String agreementType;
+
+	@Column(name = "street_type")
+	private String streetType;
+
+	@Column(name = "fiscal_address")
+	private String fiscalAddress;
+
+	private String unit;
 
 	@Column(name = "postal_code")
 	private Integer postalCode;
@@ -34,49 +71,21 @@ public class Client {
 
 	private String country;
 
-	private String CIF;
-
-	private String representative;
-
-	private String DNI;
-
-	@Column(name = "date_ini")
-	@Type(type = "date")
-	private Date dateIni;
-
-	@Column(name = "date_fin")
-	@Type(type = "date")
-	private Date dateFin;
-
-	private String CC;
-
-	private Integer T;
-
-	private String fAddress;
-
-	@Column(name = "f_postal_code")
-	private Integer fPostalCode;
-
-	private String fProvince;
-
-	private String fCity;
-
-	private String fCountry;
-
-	private String rega;
-
 	@Transient
 	private Integer numHydros;
+
+	@Transient
+	private Integer numFarms;
 
 	public Client() {
 	}
 
-	public Integer getClientCode() {
-		return clientCode;
+	public Integer getId() {
+		return id;
 	}
 
-	public void setClientCode(Integer clientCode) {
-		this.clientCode = clientCode;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public String getName() {
@@ -87,12 +96,108 @@ public class Client {
 		this.name = name;
 	}
 
-	public String getAddress() {
-		return address;
+	public String getCIF() {
+		return CIF;
 	}
 
-	public void setAddress(String address) {
-		this.address = address;
+	public void setCIF(String cIF) {
+		CIF = cIF;
+	}
+
+	public String getRepName() {
+		return repName;
+	}
+
+	public void setRepName(String repName) {
+		this.repName = repName;
+	}
+
+	public String getRepSurname1() {
+		return repSurname1;
+	}
+
+	public void setRepSurname1(String repSurname1) {
+		this.repSurname1 = repSurname1;
+	}
+
+	public String getRepSurname2() {
+		return repSurname2;
+	}
+
+	public void setRepSurname2(String repSurname2) {
+		this.repSurname2 = repSurname2;
+	}
+
+	public String getDNI() {
+		return DNI;
+	}
+
+	public void setDNI(String dNI) {
+		DNI = dNI;
+	}
+
+	public String getBankAccount() {
+		return bankAccount;
+	}
+
+	public void setBankAccount(String bankAccount) {
+		this.bankAccount = bankAccount;
+	}
+
+	public Date getDateAgreementBegin() {
+		return dateAgreementBegin;
+	}
+
+	public void setDateAgreementBegin(Date dateAgreementBegin) {
+		this.dateAgreementBegin = dateAgreementBegin;
+	}
+
+	public Date getDateAgreementEnd() {
+		return dateAgreementEnd;
+	}
+
+	public void setDateAgreementEnd(Date dateAgreementEnd) {
+		this.dateAgreementEnd = dateAgreementEnd;
+	}
+
+	public Integer getAgreementDuration() {
+		return agreementDuration;
+	}
+
+	public void setAgreementDuration(Integer agreementDuration) {
+		this.agreementDuration = agreementDuration;
+	}
+
+	public String getAgreementType() {
+		return agreementType;
+	}
+
+	public void setAgreementType(String agreementType) {
+		this.agreementType = agreementType;
+	}
+
+	public String getStreetType() {
+		return streetType;
+	}
+
+	public void setStreetType(String streetType) {
+		this.streetType = streetType;
+	}
+
+	public String getFiscalAddress() {
+		return fiscalAddress;
+	}
+
+	public void setFiscalAddress(String fiscalAddress) {
+		this.fiscalAddress = fiscalAddress;
+	}
+
+	public String getUnit() {
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
 	}
 
 	public Integer getPostalCode() {
@@ -127,110 +232,6 @@ public class Client {
 		this.country = country;
 	}
 
-	public String getCIF() {
-		return CIF;
-	}
-
-	public void setCIF(String cIF) {
-		CIF = cIF;
-	}
-
-	public String getRepresentative() {
-		return representative;
-	}
-
-	public void setRepresentative(String representative) {
-		this.representative = representative;
-	}
-
-	public String getDNI() {
-		return DNI;
-	}
-
-	public void setDNI(String dNI) {
-		DNI = dNI;
-	}
-
-	public Date getDateIni() {
-		return dateIni;
-	}
-
-	public void setDateIni(Date dateIni) {
-		this.dateIni = dateIni;
-	}
-
-	public Date getDateFin() {
-		return dateFin;
-	}
-
-	public void setDateFin(Date dateFin) {
-		this.dateFin = dateFin;
-	}
-
-	public String getCC() {
-		return CC;
-	}
-
-	public void setCC(String cC) {
-		CC = cC;
-	}
-
-	public Integer getT() {
-		return T;
-	}
-
-	public void setT(Integer t) {
-		T = t;
-	}
-
-	public String getfAddress() {
-		return fAddress;
-	}
-
-	public void setfAddress(String fAddress) {
-		this.fAddress = fAddress;
-	}
-
-	public Integer getfPostalCode() {
-		return fPostalCode;
-	}
-
-	public void setfPostalCode(Integer fPostalCode) {
-		this.fPostalCode = fPostalCode;
-	}
-
-	public String getfProvince() {
-		return fProvince;
-	}
-
-	public void setfProvince(String fProvince) {
-		this.fProvince = fProvince;
-	}
-
-	public String getfCity() {
-		return fCity;
-	}
-
-	public void setfCity(String fCity) {
-		this.fCity = fCity;
-	}
-
-	public String getfCountry() {
-		return fCountry;
-	}
-
-	public void setfCountry(String fCountry) {
-		this.fCountry = fCountry;
-	}
-
-	public String getRega() {
-		return rega;
-	}
-
-	public void setRega(String rega) {
-		this.rega = rega;
-	}
-
 	public Integer getNumHydros() {
 		return numHydros;
 	}
@@ -239,6 +240,23 @@ public class Client {
 		this.numHydros = numHydros;
 	}
 
+	public Integer getNumFarms() {
+		return numFarms;
+	}
 
+	public void setNumFarms(Integer numFarms) {
+		this.numFarms = numFarms;
+	}
+
+	@Override
+	public String toString() {
+		return "Client [id=" + id + ", name=" + name + ", CIF=" + CIF + ", repName=" + repName + ", repSurname1="
+				+ repSurname1 + ", repSurname2=" + repSurname2 + ", DNI=" + DNI + ", bankAccount=" + bankAccount
+				+ ", dateAgreementBegin=" + dateAgreementBegin + ", dateAgreementEnd=" + dateAgreementEnd
+				+ ", agreementDuration=" + agreementDuration + ", agreementType=" + agreementType + ", streetType="
+				+ streetType + ", fiscalAddress=" + fiscalAddress + ", unit=" + unit + ", postalCode=" + postalCode
+				+ ", province=" + province + ", city=" + city + ", country=" + country + ", numHydros=" + numHydros
+				+ ", numFarms=" + numFarms + "]";
+	}
 
 }
