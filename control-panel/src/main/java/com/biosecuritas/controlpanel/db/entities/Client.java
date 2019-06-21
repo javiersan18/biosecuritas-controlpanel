@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Type;
 
@@ -62,9 +63,10 @@ public class Client {
 
 	private String fCountry;
 
-	private Integer numC;
-
 	private String rega;
+
+	@Transient
+	private Integer numHydros;
 
 	public Client() {
 	}
@@ -221,14 +223,6 @@ public class Client {
 		this.fCountry = fCountry;
 	}
 
-	public Integer getNumC() {
-		return numC;
-	}
-
-	public void setNumC(Integer numC) {
-		this.numC = numC;
-	}
-
 	public String getRega() {
 		return rega;
 	}
@@ -237,14 +231,14 @@ public class Client {
 		this.rega = rega;
 	}
 
-	@Override
-	public String toString() {
-		return "Client [clientCode=" + clientCode + ", name=" + name + ", address=" + address + ", postalCode="
-				+ postalCode + ", province=" + province + ", city=" + city + ", country=" + country + ", CIF=" + CIF
-				+ ", representative=" + representative + ", DNI=" + DNI + ", dateIni=" + dateIni + ", dateFin="
-				+ dateFin + ", CC=" + CC + ", T=" + T + ", fAddress=" + fAddress + ", fPostalCode=" + fPostalCode
-				+ ", fProvince=" + fProvince + ", fCity=" + fCity + ", fCountry=" + fCountry + ", numC=" + numC
-				+ ", rega=" + rega + "]";
+	public Integer getNumHydros() {
+		return numHydros;
 	}
+
+	public void setNumHydros(Integer numHydros) {
+		this.numHydros = numHydros;
+	}
+
+
 
 }

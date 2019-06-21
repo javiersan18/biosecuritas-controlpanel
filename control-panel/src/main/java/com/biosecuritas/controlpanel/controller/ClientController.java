@@ -1,5 +1,8 @@
 package com.biosecuritas.controlpanel.controller;
 
+import java.math.BigInteger;
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.apache.logging.log4j.LogManager;
@@ -29,12 +32,28 @@ public class ClientController {
 	@GetMapping(path = "/clients")
 	public String getAllClients(@RequestParam(required = false) String status,
 			@RequestParam(required = false) String errorDesc, Model model) {
-		model.addAttribute("clients", clientRepository.findAll());
+		model.addAttribute("clients", finAllWithNumHydrolyzers());
 		model.addAttribute("newClient", new Client());
 		model.addAttribute("editClient", new Client());
 		model.addAttribute("status", status);
 		model.addAttribute("errorDesc", errorDesc);
 		return "clients/clients";
+	}
+
+	private List<Client> finAllWithNumHydrolyzers() {
+		List<Object[]> count = clientRepository.countHydrosAllClients();
+		List<Client> clients = clientRepository.findAll();
+
+		for (Object[] o : count) {
+			Integer nH = ((BigInteger) o[1]).intValue();
+			Integer id = (Integer) o[0];
+			for (Client c : clients) {
+				if (c.getClientCode().equals(id)) {
+					c.setNumHydros(nH);
+				}
+			}
+		}
+		return clients;
 	}
 
 	@PostMapping("/add-client")
@@ -85,7 +104,7 @@ public class ClientController {
 			return "clients/clients";
 		}
 
-		model.addAttribute("clients", clientRepository.findAll());
+		model.addAttribute("clients", finAllWithNumHydrolyzers());
 		model.addAttribute("newClient", new Client());
 		model.addAttribute("editClient", clientRepository.findById(id));
 		model.addAttribute("status", "view");
