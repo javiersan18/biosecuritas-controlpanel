@@ -27,7 +27,7 @@
 $(document)
 .ready(
     function() {
-        //window.history.pushState({}, document.title, "/clients");
+        //window.history.pushState({}, document.title, "/hydrolyzers");
         var status = $("#status").val();
         var errorDesc = $("#errorDesc").val();
         console.log("status: " + status);
@@ -98,8 +98,10 @@ $(document)
 					<thead>
 						<tr>
 							<th th:text="#{hydros.table.hydroId}"></th>
-							<th th:text="#{hydros.table.clientName}"></th>
-							<th th:text="#{hydros.table.dateIni}"></th>
+							<th th:text="#{hydros.table.farmName}"></th>
+							<th th:text="#{hydros.table.serialCode}"></th>
+							<th th:text="#{hydros.table.date}"></th>
+							<th th:text="#{hydros.table.hydroWeight}"></th>
 							<th th:text="#{hydros.table.maxWeight}"></th>
 							<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 							<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
@@ -109,8 +111,10 @@ $(document)
 					<tbody>
 						<tr th:each="hydro : ${hydros}">
 							<td th:text="${hydro.id}"></td>
-							<td th:text="${hydro.clientId.name}"></td>
-							<td th:text="${#dates.format(hydro.dateIni, 'dd-MM-yyyy')}"></td>
+							<td th:text="${hydro.farmId.name}"></td>
+							<td th:text="${hydro.serialCode}"></td>
+							<td th:text="${#dates.format(hydro.date, 'dd-MM-yyyy')}"></td>
+							<td th:text="${hydro.hydroWeight}"></td>
 							<td th:text="${hydro.maxWeight}"></td>
 							<td><a th:href="@{/view-hydro/{id}(id=${hydro.id})}"><span th:uk-tooltip="#{common.functions.details}"
 									data-uk-icon="icon: table" class="uk-margin-small-right"></span></a></td>
@@ -124,7 +128,8 @@ $(document)
 									<div class="uk-modal-body">
 										<h4 th:text="#{hydros.delete.confirmation}" />
 										<p th:text="#{hydros.table.hydroId} +': ' + ${hydro.id}"></p>
-										<p th:text="#{hydros.table.clientName} +': ' + ${hydro.clientId.name}"></p>
+										<p th:text="#{hydros.table.farmId} +': ' + ${hydro.farmId.id}"></p>
+										<p th:text="#{hydros.table.farmName} +': ' + ${hydro.farmId.name}"></p>
 									</div>
 									<div class="uk-modal-footer uk-text-right">
 										<button class="uk-button uk-button-default uk-modal-close" type="button" th:text="#{common.functions.cancel}"></button>
@@ -151,17 +156,21 @@ $(document)
 								<div class="uk-form-controls">
 									<input class="uk-input uk-form-small" name="hydroId" th:field="*{id}" type="text" disabled>
 								</div>
-								<label class="uk-form-label" th:text="#{hydros.table.clientId}"></label>
+								<label class="uk-form-label" th:text="#{hydros.table.farmId}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="clientId" th:field="*{clientId.clientCode}" type="text" disabled>
+									<input class="uk-input uk-form-small" name="farmId" th:field="*{farmId.id}" type="text" disabled>
 								</div>
-								<label class="uk-form-label" th:text="#{hydros.table.clientName}"></label>
+								<label class="uk-form-label" th:text="#{hydros.table.farmName}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="clientName" th:field="*{clientId.name}" type="text" disabled>
+									<input class="uk-input uk-form-small" name="farmId" th:field="*{farmId.name}" type="text" disabled>
 								</div>
-								<label class="uk-form-label" th:text="#{hydros.table.dateIni}"></label>
+								<label class="uk-form-label" th:text="#{hydros.table.date}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="dateIni" th:field="*{dateIni}" type="text" disabled>
+									<input class="uk-input uk-form-small" name="date" th:field="*{date}" type="text" disabled>
+								</div>
+								<label class="uk-form-label" th:text="#{hydros.table.hydroWeight}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="hydroWeight" th:field="*{hydroWeight}" type="text" disabled>
 								</div>
 								<label class="uk-form-label" th:text="#{hydros.table.maxWeight}"></label>
 								<div class="uk-form-controls">
@@ -190,15 +199,22 @@ $(document)
 					$('form').each(function(){
 						$(this).validate({	
 							rules : {
-								clientId : {
+								farmId : {
 									required : true,
 									min: 1
+								},
+								serialCode : {
+									required : true
+								}
+								hydroWeight : {
+									required : true,
+									number: true
 								},
 								maxWeight : {
 									required : true,
 									number: true
 								},
-								dateIni : {
+								date : {
 									required : true
 								}
 							},
@@ -223,7 +239,7 @@ $(document)
 
 				});
 			</script>
-			
+
 			<div id="modal-form" class="uk-modal-container" uk-modal>
 				<div class="uk-modal-dialog uk-modal-body">
 					<button class="uk-modal-close-full uk-close-large" type="button" uk-close></button>
@@ -234,20 +250,29 @@ $(document)
 						</div>
 						<div class="uk-modal-body">
 							<div class="uk-margin">
-								<label class="uk-form-label" th:text="#{hydros.addNew.client}"></label>
+								<label class="uk-form-label" th:text="#{hydros.addNew.farm}"></label>
 								<div class="uk-form-controls">
-									<select class="uk-select uk-form-small" id="clients-list" name="clientList" th:field="*{clientId}">
-										<option value="0" th:text="#{hydros.addNew.selectClient}"></option>
-										<option th:each="client : ${clients}" th:value="${client.clientCode}" th:text="${client.name}"></option>
+									<select class="uk-select uk-form-small" id="farms-list" name="farmList" th:field="*{farmId}">
+										<option value="0" th:text="#{hydros.addNew.selectFarm}"></option>
+										<option th:each="farm : ${farms}" th:value="${farm.id}" th:text="${farm.name}"></option>
 									</select>
 								</div>
-								<label class="uk-form-label" th:text="#{hydros.table.dateIni}"></label>
+								<label class="uk-form-label" th:text="#{hydros.table.serialCode}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="dateIni" th:field="*{dateIni}" type="date" placeholder="dd/mm/aaaa">
+									<input class="uk-input uk-form-small" name="serialCode" th:field="*{serialCode}" type="text" placeholder="620">
+								</div>
+								<label class="uk-form-label" th:text="#{hydros.table.date}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="date" th:field="*{date}" type="date" placeholder="dd/mm/aaaa">
+								</div>
+								<label class="uk-form-label" th:text="#{hydros.table.hydroWeight}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="hydroWeight" th:field="*{hydroWeight}" type="text"
+										placeholder="620">
 								</div>
 								<label class="uk-form-label" th:text="#{hydros.table.maxWeight}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="maxWeight" th:field="*{maxWeight}" type="text" placeholder="620">
+									<input class="uk-input uk-form-small" name="maxWeight" th:field="*{maxWeight}" type="text" placeholder="7000">
 								</div>
 							</div>
 						</div>
@@ -259,7 +284,7 @@ $(document)
 					</form>
 				</div>
 			</div>
-			
+
 			<div id="modal-form-edit" class="uk-modal-container" uk-modal>
 				<div class="uk-modal-dialog uk-modal-body">
 					<button class="uk-modal-close-full uk-close-large" type="button" uk-close></button>
@@ -270,21 +295,30 @@ $(document)
 						</div>
 						<div class="uk-modal-body">
 							<div class="uk-margin">
-								<label class="uk-form-label" th:text="#{hydros.addNew.client}"></label>
+								<label class="uk-form-label" th:text="#{hydros.addNew.farm}"></label> <input type="hidden" name="hydroId"
+									th:field="*{id}" />
 								<div class="uk-form-controls">
-									<select class="uk-select uk-form-small" id="clients-list" name="clientList" th:field="*{clientId}">
-										<option value="" th:text="#{hydros.addNew.selectClient}"></option>
-										<option th:each="client : ${clients}" th:value="${client.clientCode}" th:text="${client.name}"></option>
+									<select class="uk-select uk-form-small" id="farms-list" name="farmList" th:field="*{farmId}">
+										<option value="0" th:text="#{hydros.addNew.selectFarm}"></option>
+										<option th:each="farm : ${farms}" th:value="${farm.id}" th:text="${farm.name}"></option>
 									</select>
 								</div>
-								<input type="hidden" name="hydroId" th:field="*{id}" /> <label class="uk-form-label"
-									th:text="#{hydros.table.dateIni}"></label>
+								<label class="uk-form-label" th:text="#{hydros.table.serialCode}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="dateIni" th:field="*{dateIni}" type="date" placeholder="dd/mm/aaaa">
+									<input class="uk-input uk-form-small" name="serialCode" th:field="*{serialCode}" type="text" placeholder="620">
+								</div>
+								<label class="uk-form-label" th:text="#{hydros.table.date}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="date" th:field="*{date}" type="date" placeholder="dd/mm/aaaa">
+								</div>
+								<label class="uk-form-label" th:text="#{hydros.table.hydroWeight}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="hydroWeight" th:field="*{hydroWeight}" type="text"
+										placeholder="620">
 								</div>
 								<label class="uk-form-label" th:text="#{hydros.table.maxWeight}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="maxWeight" th:field="*{maxWeight}" type="text" placeholder="620">
+									<input class="uk-input uk-form-small" name="maxWeight" th:field="*{maxWeight}" type="text" placeholder="7000">
 								</div>
 							</div>
 						</div>
@@ -296,7 +330,7 @@ $(document)
 					</form>
 				</div>
 			</div>
-		
+
 		</div>
 		<!-- /CONTENT -->
 

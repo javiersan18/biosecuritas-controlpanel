@@ -1,6 +1,5 @@
 package com.biosecuritas.controlpanel.controller;
 
-import java.math.BigInteger;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -32,16 +31,20 @@ public class ClientController {
 	@GetMapping(path = "/clients")
 	public String getAllClients(@RequestParam(required = false) String status,
 			@RequestParam(required = false) String errorDesc, Model model) {
-		model.addAttribute("clients", finAllWithNumHydrolyzers());
+		List<Client> clients = finAllWithNumHydrolyzers();
+		model.addAttribute("clients", clients);
 		model.addAttribute("newClient", new Client());
 		model.addAttribute("editClient", new Client());
+		if (status == null && clients.isEmpty()) {
+			status = "empty";
+		}
 		model.addAttribute("status", status);
 		model.addAttribute("errorDesc", errorDesc);
 		return "clients/clients";
 	}
 
 	private List<Client> finAllWithNumHydrolyzers() {
-		//List<Object[]> count = clientRepository.countHydrosAllClients();
+		// List<Object[]> count = clientRepository.countHydrosAllClients();
 		List<Client> clients = clientRepository.findAll();
 
 		/*
@@ -54,75 +57,81 @@ public class ClientController {
 
 	@PostMapping("/add-client")
 	public String addClient(@ModelAttribute("newClient") @Valid Client client, BindingResult result, Model model) {
+
+		model.addAttribute("clients", clientRepository.findAll());
+		model.addAttribute("status", "created");
+		model.addAttribute("newClient", new Client());
+		model.addAttribute("editClient", new Client());
+
 		if (result.hasErrors()) {
-			model.addAttribute("clients", clientRepository.findAll());
 			model.addAttribute("newClient", client);
-			model.addAttribute("editClient", new Client());
-			model.addAttribute("errors", "error");
+			model.addAttribute("status", "error");
+			model.addAttribute("errorDesc", "errordesc");
 			log.error(result.toString());
 			return "clients/clients";
 		}
 
 		clientRepository.save(client);
-		model.addAttribute("clients", clientRepository.findAll());
-		model.addAttribute("status", "created");
-		model.addAttribute("newClient", new Client());
-		model.addAttribute("editClient", new Client());
 		return "redirect:/clients";
 	}
 
 	@GetMapping("/edit-client/{id}")
 	public String editClient(@PathVariable("id") Integer id, @Valid Client client, BindingResult result, Model model) {
-		if (result.hasErrors()) {
-			model.addAttribute("clients", clientRepository.findAll());
-			model.addAttribute("newClient", client);
-			model.addAttribute("editClient", new Client());
-			model.addAttribute("errors", "error");
-			log.error(result.toString());
-			return "clients/clients";
-		}
 
 		model.addAttribute("clients", clientRepository.findAll());
 		model.addAttribute("newClient", new Client());
 		model.addAttribute("editClient", clientRepository.findById(id));
 		model.addAttribute("status", "edit");
+
+		if (result.hasErrors()) {
+			model.addAttribute("newClient", client);
+			model.addAttribute("editClient", new Client());
+			model.addAttribute("status", "error");
+			model.addAttribute("errorDesc", "errordesc");
+			log.error(result.toString());
+			return "clients/clients";
+		}
+
 		return "clients/clients";
 	}
 
 	@GetMapping("/view-client/{id}")
 	public String viewClient(@PathVariable("id") Integer id, @Valid Client client, BindingResult result, Model model) {
-		if (result.hasErrors()) {
-			model.addAttribute("clients", clientRepository.findAll());
-			model.addAttribute("newClient", client);
-			model.addAttribute("editClient", new Client());
-			model.addAttribute("errors", "error");
-			log.error(result.toString());
-			return "clients/clients";
-		}
 
 		model.addAttribute("clients", finAllWithNumHydrolyzers());
 		model.addAttribute("newClient", new Client());
 		model.addAttribute("editClient", clientRepository.findById(id));
 		model.addAttribute("status", "view");
+
+		if (result.hasErrors()) {
+			model.addAttribute("newClient", client);
+			model.addAttribute("editClient", new Client());
+			model.addAttribute("status", "error");
+			model.addAttribute("errorDesc", "errordesc");
+			log.error(result.toString());
+			return "clients/clients";
+		}
+
 		return "clients/clients";
 	}
 
 	@PostMapping("/update-client")
 	public String updateClient(@Valid Client client, BindingResult result, Model model) {
+
+		model.addAttribute("clients", clientRepository.findAll());
+		model.addAttribute("newClient", new Client());
+		model.addAttribute("editClient", new Client());
+		model.addAttribute("status", "updated");
+
 		if (result.hasErrors()) {
-			model.addAttribute("clients", clientRepository.findAll());
 			model.addAttribute("newClient", client);
-			model.addAttribute("editClient", new Client());
-			model.addAttribute("errors", "error");
+			model.addAttribute("status", "error");
+			model.addAttribute("errorDesc", "errordesc");
 			log.error(result.toString());
 			return "clients/clients";
 		}
 
 		clientRepository.save(client);
-		model.addAttribute("clients", clientRepository.findAll());
-		model.addAttribute("newClient", new Client());
-		model.addAttribute("editClient", new Client());
-		model.addAttribute("status", "updated");
 		return "redirect:/clients";
 	}
 

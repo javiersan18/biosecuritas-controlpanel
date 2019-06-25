@@ -52,7 +52,8 @@ public class InstallationController {
 	}
 
 	@GetMapping(path = "/installations")
-	public String getAllInstallations(@RequestParam(required = false) String status, Model model) {
+	public String getAllInstallations(@RequestParam(required = false) String status,
+			@RequestParam(required = false) String errorDesc, Model model) {
 		List<Installation> installs = installationRepository.findAll();
 		model.addAttribute("installations", installs);
 		model.addAttribute("clients", clientRepository.findAll());
@@ -64,6 +65,7 @@ public class InstallationController {
 			status = "empty";
 		}
 		model.addAttribute("status", status);
+		model.addAttribute("errorDesc", errorDesc);
 		return "installations/installations";
 	}
 
