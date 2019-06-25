@@ -26,7 +26,7 @@
 </script>
 <script type="text/javascript">
 $(document).ready(function() {
-	$("#table-body").find("tr").hide().filter("[data-active='true']").show();
+	$("#table-body").find("tr").hide().filter("[data-status='active']").show();
     //window.history.pushState({}, document.title, "/clients");
     var status = $("#status").val();
     var errorDesc = $("#errorDesc").val();
@@ -82,18 +82,24 @@ $(window).on("load", function(){
 		
 	$("#all").on('click', function(){
 		var rows = $("#table-body").find("tr").hide();
-		rows.filter("[data-active='true']").show();
-		rows.filter("[data-active='false']").show();
+		rows.filter("[data-status='active']").show();
+		rows.filter("[data-status='ready_for_pickup']").show();
+		rows.filter("[data-status='finished']").show();
 	});  
 	
 	$("#actives").on('click', function(){
 		var rows = $("#table-body").find("tr").hide();
-		rows.filter("[data-active='true']").show();
+		rows.filter("[data-status='active']").show();
 	}); 
-			
-	$("#inactives").on('click', function(){
+	
+	$("#ready").on('click', function(){
 		var rows = $("#table-body").find("tr").hide();
-		rows.filter("[data-active='false']").show();
+		rows.filter("[data-status='ready_for_pickup']").show();
+	}); 
+					
+	$("#finished").on('click', function(){
+		var rows = $("#table-body").find("tr").hide();
+		rows.filter("[data-status='finished']").show();
 	});  
 	
 });
@@ -124,7 +130,8 @@ $(window).on("load", function(){
 					<ul class="uk-flex-right" uk-tab>
 						<li><a href="#" id="all">Todas</a></li>
 						<li class="uk-active" id="actives"><a href="#">Activas</a></li>
-						<li><a href="#" id="inactives">Historico</a></li>
+						<li><a href="#" id="ready">Recogidas</a></li>
+						<li><a href="#" id="finished">Histórico</a></li>
 					</ul>
 					<table id="installations-table" class="uk-table uk-table-hover uk-table-striped uk-table-small">
 						<thead>
@@ -132,27 +139,31 @@ $(window).on("load", function(){
 								<th th:text="#{installations.table.installationId}"></th>
 								<th th:text="#{installations.table.hydrolyzerId}"></th>
 								<th th:text="#{installations.table.clientName}"></th>
+								<th th:text="#{installations.table.farmName}"></th>
 								<th th:text="#{installations.table.deliveryDate}"></th>
 								<th th:text="#{installations.table.sealDate}"></th>
-								<th th:text="#{installations.table.returnDate}"></th>
-								<th th:text="#{installations.table.initialWeight}"></th>
+								<th th:text="#{installations.table.collectedDate}"></th>
+								<th th:text="#{installations.table.finishedDate}"></th>
 								<th th:text="#{installations.table.collectedWeight}"></th>
+								<th th:text="#{installations.table.status}"></th>
 								<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 								<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 								<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 							</tr>
 						</thead>
 						<tbody id="table-body">
-							<tr th:each="install : ${installations}" th:data-active="${install.active}">
+							<tr th:each="install : ${installations}" th:data-status="${install.status}">
 
 								<td th:text="${install.id}"></td>
 								<td th:text="${install.hydrolyzerId.id}"></td>
 								<td th:text="${install.clientId.name}"></td>
+								<td th:text="${install.farmId.name}"></td>
 								<td th:text="${#dates.format(install.deliveryDate, 'dd-MM-yyyy')}"></td>
 								<td th:text="${#dates.format(install.sealDate, 'dd-MM-yyyy')}"></td>
-								<td th:text="${#dates.format(install.returnDate, 'dd-MM-yyyy')}"></td>
-								<td th:text="${install.initialWeight}"></td>
+								<td th:text="${#dates.format(install.collectedDate, 'dd-MM-yyyy')}"></td>
+								<td th:text="${#dates.format(install.finishedDate, 'dd-MM-yyyy')}"></td>
 								<td th:text="${install.collectedWeight}"></td>
+								<td th:text="${install.status}"></td>
 								<td><a th:href="@{/view-install/{id}(id=${install.id})}"><span
 										th:uk-tooltip="#{common.functions.details}" data-uk-icon="icon: table" class="uk-margin-small-right"></span></a></td>
 								<td><a th:href="@{/edit-install/{id}(id=${install.id})}"><span th:uk-tooltip="#{common.functions.edit}"
@@ -169,7 +180,7 @@ $(window).on("load", function(){
 										<div class="uk-modal-body">
 											<h4 th:text="#{installations.delete.confirmation}" />
 											<p th:text="#{installations.table.installationId} +': ' + ${install.id}"></p>
-											<p th:text="#{installations.table.clientId} +': ' + ${install.clientId.clientCode}"></p>
+											<p th:text="#{installations.table.clientId} +': ' + ${install.clientId.id}"></p>
 											<p th:text="#{installations.table.clientName} +': ' + ${install.clientId.name}"></p>
 											<p th:text="#{installations.table.farmId} +': ' + ${install.farmId.id}"></p>
 											<p th:text="#{installations.table.farmAddress} +': ' + ${install.farmId.address}"></p>
@@ -199,7 +210,7 @@ $(window).on("load", function(){
 							<div class="uk-margin">
 								<label class="uk-form-label" th:text="#{installations.table.clientId}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="clientId" th:field="*{clientId.clientCode}" type="text" disabled>
+									<input class="uk-input uk-form-small" name="clientId" th:field="*{clientId.id}" type="text" disabled>
 								</div>
 								<label class="uk-form-label" th:text="#{installations.table.clientName}"></label>
 								<div class="uk-form-controls">
@@ -209,9 +220,9 @@ $(window).on("load", function(){
 								<div class="uk-form-controls">
 									<input class="uk-input uk-form-small" name="farmId" th:field="*{farmId.id}" type="text" disabled>
 								</div>
-								<label class="uk-form-label" th:text="#{installations.table.farmAddress}"></label>
+								<label class="uk-form-label" th:text="#{installations.table.farmName}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="farmAddress" th:field="*{farmId.address}" type="text" disabled>
+									<input class="uk-input uk-form-small" name="farmName" th:field="*{farmId.name}" type="text" disabled>
 								</div>
 								<label class="uk-form-label" th:text="#{installations.table.deliveryDate}"></label>
 								<div class="uk-form-controls">
@@ -221,17 +232,21 @@ $(window).on("load", function(){
 								<div class="uk-form-controls">
 									<input class="uk-input uk-form-small" name="sealDate" th:field="*{sealDate}" type="text" disabled>
 								</div>
-								<label class="uk-form-label" th:text="#{installations.table.returnDate}"></label>
+								<label class="uk-form-label" th:text="#{installations.table.collectedDate}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="returnDate" th:field="*{returnDate}" type="text" disabled>
+									<input class="uk-input uk-form-small" name="collectedDate" th:field="*{collectedDate}" type="text" disabled>
 								</div>
-								<label class="uk-form-label" th:text="#{installations.table.initialWeight}"></label>
+								<label class="uk-form-label" th:text="#{installations.table.finishedDate}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="initialWeight" th:field="*{initialWeight}" type="text" disabled>
+									<input class="uk-input uk-form-small" name="finishedDate" th:field="*{finishedDate}" type="text" disabled>
 								</div>
 								<label class="uk-form-label" th:text="#{installations.table.collectedWeight}"></label>
 								<div class="uk-form-controls">
 									<input class="uk-input uk-form-small" name="collectedWeight" th:field="*{collectedWeight}" type="text" disabled>
+								</div>
+								<label class="uk-form-label" th:text="#{installations.table.status}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="status" th:field="*{status}" type="text" disabled>
 								</div>
 							</div>
 						</div>
@@ -271,14 +286,13 @@ $(window).on("load", function(){
 								deliveryDate : {
 									required : true
 								},
-								initialWeight : {
-									required : true,
-									number: true
-								},
 								sealDate : {
 									required : false
 								},
-								returnDate : {
+								collectedDate : {
+									required : false
+								},
+								finishedDate : {
 									required : false
 								},
 								collectedWeight : {
@@ -323,8 +337,7 @@ $(window).on("load", function(){
 								<div class="uk-form-controls">
 									<select class="uk-select uk-form-small" id="clients-list" name="clientList" th:field="*{clientId}">
 										<option value="0" th:text="#{installations.addNew.selectClient}"></option>
-										<option th:each="client : ${clients}" th:value="${client.clientCode}"
-											th:text="'['+${client.clientCode}+'] '+${client.name}"></option>
+										<option th:each="client : ${clients}" th:value="${client.id}" th:text="'['+${client.id}+'] '+${client.name}"></option>
 									</select>
 								</div>
 								<label class="uk-form-label" th:text="#{installations.addNew.farm}"></label>
@@ -332,7 +345,7 @@ $(window).on("load", function(){
 									<select class="uk-select uk-form-small" id="farms-list" name="farmList" th:field="*{farmId}">
 										<option value="0" th:text="#{installations.addNew.selectFarm}" data-clientId='0'></option>
 										<option th:each="farm : ${farms}" th:value="${farm.id}" th:text="'['+${farm.id}+'] '+${farm.address}"
-											th:data-clientId="${farm.clientId.clientCode}"></option>
+											th:data-clientId="${farm.clientId.id}"></option>
 									</select>
 								</div>
 								<label class="uk-form-label" th:text="#{installations.addNew.hydrolyzer}"></label>
@@ -340,18 +353,13 @@ $(window).on("load", function(){
 									<select class="uk-select uk-form-small" id="hydros-list" name="hydroList" th:field="*{hydrolyzerId}">
 										<option value="0" th:text="#{installations.addNew.selectHydro}" data-clientId='0'></option>
 										<option th:each="hydro : ${hydros}" th:value="${hydro.id}" th:text="${hydro.id}"
-											th:data-clientId="${hydro.clientId.clientCode}"></option>
+											th:data-clientId="${hydro.clientId.id}"></option>
 									</select>
 								</div>
 								<label class="uk-form-label" th:text="#{installations.table.deliveryDate}"></label>
 								<div class="uk-form-controls">
 									<input class="uk-input uk-form-small" name="deliveryDate" th:field="*{deliveryDate}" type="date"
 										placeholder="08/05/2019">
-								</div>
-								<label class="uk-form-label" th:text="#{installations.table.initialWeight}"></label>
-								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="initialWeight" th:field="*{initialWeight}" type="text"
-										placeholder="100">
 								</div>
 							</div>
 						</div>
@@ -379,7 +387,7 @@ $(window).on("load", function(){
 								<div class="uk-form-controls">
 									<select class="uk-select uk-form-small" id="clients-list" name="clientList" th:field="*{clientId}">
 										<option value="" th:text="#{installations.addNew.selectClient}"></option>
-										<option th:each="client : ${clients}" th:value="${client.clientCode}" th:text="${client.name}"></option>
+										<option th:each="client : ${clients}" th:value="${client.id}" th:text="${client.name}"></option>
 									</select>
 								</div>
 								<label class="uk-form-label" th:text="#{installations.addNew.farm}"></label>
@@ -396,8 +404,8 @@ $(window).on("load", function(){
 										<option th:each="hydro : ${hydros}" th:value="${hydro.id}" th:text="${hydro.id}"></option>
 									</select>
 								</div>
-								<input type="hidden" name="installationId" th:field="*{id}" /><input type="hidden" name="active"
-									th:field="*{active}" /> <label class="uk-form-label" th:text="#{installations.table.deliveryDate}"></label>
+								<input type="hidden" name="installationId" th:field="*{id}" /><input type="hidden" name="status"
+									th:field="*{status}" /> <label class="uk-form-label" th:text="#{installations.table.deliveryDate}"></label>
 								<div class="uk-form-controls">
 									<input class="uk-input uk-form-small" name="deliveryDate" th:field="*{deliveryDate}" type="date"
 										placeholder="08/05/2019">
@@ -411,11 +419,6 @@ $(window).on("load", function(){
 								<div class="uk-form-controls">
 									<input class="uk-input uk-form-small" name="returnDate" th:field="*{returnDate}" type="date"
 										placeholder="08/05/2019">
-								</div>
-								<label class="uk-form-label" th:text="#{installations.table.initialWeight}"></label>
-								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="initialWeight" th:field="*{initialWeight}" type="text"
-										placeholder="100">
 								</div>
 								<label class="uk-form-label" th:text="#{installations.table.collectedWeight}"></label>
 								<div class="uk-form-controls">
