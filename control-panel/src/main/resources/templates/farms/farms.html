@@ -105,13 +105,12 @@ $(document)
 							<tr>
 								<th th:text="#{farms.table.farmId}"></th>
 								<th th:text="#{farms.table.clientName}"></th>
+								<th th:text="#{farms.table.name}"></th>
+								<th th:text="#{farms.table.REGA}"></th>
 								<th th:text="#{farms.table.address}"></th>
 								<th th:text="#{farms.table.province}"></th>
 								<th th:text="#{farms.table.city}"></th>
 								<th th:text="#{farms.table.postalCode}"></th>
-								<th th:text="#{farms.table.country}"></th>
-								<th th:text="#{farms.table.contactPhone}"></th>
-								<th th:text="#{farms.table.contactName}"></th>
 								<th th:text="#{farms.table.noSandach}"></th>
 								<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 								<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
@@ -123,13 +122,12 @@ $(document)
 							<tr th:each="farm : ${farms}">
 								<td th:text="${farm.id}"></td>
 								<td th:text="${farm.clientId.name}"></td>
+								<td th:text="${farm.name}"></td>
+								<td th:text="${farm.REGA}"></td>
 								<td th:text="${farm.address}"></td>
 								<td th:text="${farm.province}"></td>
 								<td th:text="${farm.city}"></td>
 								<td th:text="${farm.postalCode}"></td>
-								<td th:text="${farm.country}"></td>
-								<td th:text="${farm.contactPhone}"></td>
-								<td th:text="${farm.contactName}"></td>
 								<td th:text="${farm.numSandach}"></td>
 								<td><a href="#modal-map"
 									th:onclick="'$(function(){ map.invalidateSize(); addMarker('+${farm.latitude}+','+${farm.longitude}+'); centerMap(9);})'"
@@ -177,15 +175,31 @@ $(document)
 								</div>
 								<label class="uk-form-label" th:text="#{farms.table.clientId}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="clientId" th:field="*{clientId.clientCode}" type="text" disabled>
+									<input class="uk-input uk-form-small" name="clientId" th:field="*{clientId.id}" type="text" disabled>
 								</div>
 								<label class="uk-form-label" th:text="#{farms.table.clientName}"></label>
 								<div class="uk-form-controls">
 									<input class="uk-input uk-form-small" name="clientName" th:field="*{clientId.name}" type="text" disabled>
 								</div>
+								<label class="uk-form-label" th:text="#{farms.table.name}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="name" th:field="*{name}" type="text" disabled>
+								</div>
+								<label class="uk-form-label" th:text="#{farms.table.REGA}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="REGA" th:field="*{REGA}" type="text" disabled>
+								</div>
+								<label class="uk-form-label" th:text="#{farms.table.streetType}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="streetType" th:field="*{streetType}" type="text" disabled>
+								</div>
 								<label class="uk-form-label" th:text="#{farms.table.address}"></label>
 								<div class="uk-form-controls">
 									<input class="uk-input uk-form-small" name="address" th:field="*{address}" type="text" disabled>
+								</div>
+								<label class="uk-form-label" th:text="#{farms.table.unit}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="unit" th:field="*{unit}" type="text" disabled>
 								</div>
 								<label class="uk-form-label" th:text="#{farms.table.province}"></label>
 								<div class="uk-form-controls">
@@ -210,14 +224,6 @@ $(document)
 								<label class="uk-form-label" th:text="#{farms.table.longitude}"></label>
 								<div class="uk-form-controls">
 									<input class="uk-input uk-form-small" name="longitude" th:field="*{longitude}" type="text" disabled>
-								</div>
-								<label class="uk-form-label" th:text="#{farms.table.contactPhone}"></label>
-								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="contactPhone" th:field="*{contactPhone}" type="text" disabled>
-								</div>
-								<label class="uk-form-label" th:text="#{farms.table.contactName}"></label>
-								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="contactName" th:field="*{contactName}" type="text" disabled>
 								</div>
 								<label class="uk-form-label" th:text="#{farms.table.noSandach}"></label>
 								<div class="uk-form-controls">
@@ -251,7 +257,19 @@ $(document)
 									required : true,
 									min: 1
 								},
+								name : {
+									required : true
+								},
+								REGA : {
+									required : true
+								},
+								streetType : {
+									required : true
+								},
 								address : {
+									required : true
+								},
+								unit : {
 									required : true
 								},
 								province : {
@@ -274,12 +292,6 @@ $(document)
 								longitude : {
 									required : true,
 									number: true
-								},
-								contactPhone : {
-									required : true
-								},
-								contactName : {
-									required : true
 								},
 								numSandach : {
 									required : true
@@ -321,14 +333,30 @@ $(document)
 								<div class="uk-form-controls">
 									<select class="uk-select uk-form-small" id="clients-list" name="clientList" th:field="*{clientId}">
 										<option value='0' th:text="#{farms.addNew.selectClient}"></option>
-										<option th:each="client : ${clients}" th:value="${client.clientCode}" th:text="${client.name}"></option>
+										<option th:each="client : ${clients}" th:value="${client.id}" th:text="${client.name}"></option>
 									</select>
 								</div>
-
+								<label class="uk-form-label" th:text="#{farms.table.name}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="name" th:field="*{name}" type="text" placeholder="Granjas papito">
+								</div>
+								<label class="uk-form-label" th:text="#{farms.table.REGA}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="REGA" th:field="*{REGA}" type="text" placeholder="XXXXXXXXXXXXX">
+								</div>
+								<label class="uk-form-label" th:text="#{farms.table.streetType}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="streetType" th:field="*{streetType}" type="text"
+										placeholder="Calle">
+								</div>
 								<label class="uk-form-label" th:text="#{farms.table.address}"></label>
 								<div class="uk-form-controls">
 									<input class="uk-input uk-form-small" name="address" th:field="*{address}" type="text"
-										placeholder="Saavedra Fajardo 7...">
+										placeholder="Saavedra Fajardo...">
+								</div>
+								<label class="uk-form-label" th:text="#{farms.table.unit}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="unit" th:field="*{unit}" type="text" placeholder="7">
 								</div>
 								<label class="uk-form-label" th:text="#{farms.table.province}"></label>
 								<div class="uk-form-controls">
@@ -346,32 +374,21 @@ $(document)
 								</div>
 								<label class="uk-form-label" th:text="#{farms.table.country}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="country" th:field="*{country}" type="text" placeholder="ES...">
+									<input class="uk-input uk-form-small" name="country" th:field="*{country}" type="text" placeholder="España...">
 								</div>
 								<label class="uk-form-label" th:text="#{farms.table.latitude}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="latitude" th:field="*{latitude}" type="text" placeholder="40,1563">
+									<input class="uk-input uk-form-small" name="latitude" th:field="*{latitude}" type="text" placeholder="40.1563">
 								</div>
 								<label class="uk-form-label" th:text="#{farms.table.longitude}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="longitude" th:field="*{longitude}" type="text" placeholder="3,5495">
-								</div>
-								<label class="uk-form-label" th:text="#{farms.table.contactPhone}"></label>
-								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="contactPhone" th:field="*{contactPhone}" type="text"
-										placeholder="686574620...">
-								</div>
-								<label class="uk-form-label" th:text="#{farms.table.contactName}"></label>
-								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="contactName" th:field="*{contactName}" type="text"
-										placeholder="Papi...">
+									<input class="uk-input uk-form-small" name="longitude" th:field="*{longitude}" type="text" placeholder="3.5495">
 								</div>
 								<label class="uk-form-label" th:text="#{farms.table.noSandach}"></label>
 								<div class="uk-form-controls">
 									<input class="uk-input uk-form-small" name="numSandach" th:field="*{numSandach}" type="text"
 										placeholder="12345678953313546...">
 								</div>
-
 							</div>
 
 						</div>
@@ -399,14 +416,31 @@ $(document)
 								<div class="uk-form-controls">
 									<select class="uk-select uk-form-small" id="clients-list" name="clientList" th:field="*{clientId}">
 										<option value="" th:text="#{farms.addNew.selectClient}"></option>
-										<option th:each="client : ${clients}" th:value="${client.clientCode}" th:text="${client.name}"></option>
+										<option th:each="client : ${clients}" th:value="${client.id}" th:text="${client.name}"></option>
 									</select>
 								</div>
 								<input type="hidden" name="farmId" th:field="*{id}" /> <label class="uk-form-label"
-									th:text="#{farms.table.address}"></label>
+									th:text="#{farms.table.name}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="name" th:field="*{name}" type="text" placeholder="Granjas papito">
+								</div>
+								<label class="uk-form-label" th:text="#{farms.table.REGA}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="REGA" th:field="*{REGA}" type="text" placeholder="XXXXXXXXXXXXX">
+								</div>
+								<label class="uk-form-label" th:text="#{farms.table.streetType}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="streetType" th:field="*{streetType}" type="text"
+										placeholder="Calle">
+								</div>
+								<label class="uk-form-label" th:text="#{farms.table.address}"></label>
 								<div class="uk-form-controls">
 									<input class="uk-input uk-form-small" name="address" th:field="*{address}" type="text"
-										placeholder="Saavedra Fajardo 7...">
+										placeholder="Saavedra Fajardo...">
+								</div>
+								<label class="uk-form-label" th:text="#{farms.table.unit}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="unit" th:field="*{unit}" type="text" placeholder="7">
 								</div>
 								<label class="uk-form-label" th:text="#{farms.table.province}"></label>
 								<div class="uk-form-controls">
@@ -424,32 +458,21 @@ $(document)
 								</div>
 								<label class="uk-form-label" th:text="#{farms.table.country}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="country" th:field="*{country}" type="text" placeholder="ES...">
+									<input class="uk-input uk-form-small" name="country" th:field="*{country}" type="text" placeholder="España...">
 								</div>
 								<label class="uk-form-label" th:text="#{farms.table.latitude}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="latitude" th:field="*{latitude}" type="text" placeholder="40,1563">
+									<input class="uk-input uk-form-small" name="latitude" th:field="*{latitude}" type="text" placeholder="40.1563">
 								</div>
 								<label class="uk-form-label" th:text="#{farms.table.longitude}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="longitude" th:field="*{longitude}" type="text" placeholder="3,5495">
-								</div>
-								<label class="uk-form-label" th:text="#{farms.table.contactPhone}"></label>
-								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="contactPhone" th:field="*{contactPhone}" type="text"
-										placeholder="686574620...">
-								</div>
-								<label class="uk-form-label" th:text="#{farms.table.contactName}"></label>
-								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="contactName" th:field="*{contactName}" type="text"
-										placeholder="Papi...">
+									<input class="uk-input uk-form-small" name="longitude" th:field="*{longitude}" type="text" placeholder="3.5495">
 								</div>
 								<label class="uk-form-label" th:text="#{farms.table.noSandach}"></label>
 								<div class="uk-form-controls">
 									<input class="uk-input uk-form-small" name="numSandach" th:field="*{numSandach}" type="text"
 										placeholder="12345678953313546...">
 								</div>
-
 							</div>
 
 						</div>
@@ -495,11 +518,6 @@ $(document)
 					</div>
 				</div>
 			</div>
-
-
-
-
-
 
 		</div>
 
