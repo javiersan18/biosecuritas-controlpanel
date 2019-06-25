@@ -184,6 +184,10 @@
 								<div class="uk-form-controls">
 									<input class="uk-input uk-form-small" name="repSurname1" th:field="*{repSurname1}" type="text" disabled>
 								</div>
+								<label class="uk-form-label" th:text="#{clients.table.repSurname2}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="repSurname2" th:field="*{repSurname2}" type="text" disabled>
+								</div>
 								<label class="uk-form-label" th:text="#{clients.table.DNI}"></label>
 								<div class="uk-form-controls">
 									<input class="uk-input uk-form-small" name="DNI" th:field="*{DNI}" type="text" disabled>
@@ -267,22 +271,43 @@
 						$(this).validate({					
 							debug: false,
 							rules : {
-								clientName : {
+								name : {
 									required : true
 								},
 								cif : {
 									required : true
 								},
-								representative : {
+								repName : {
 									required : true
+								},
+								repSurname1 : {
+									required : true
+								},
+								repSurname2 : {
+									required : false
 								},
 								DNI : {
 									required : true
 								},
-								dateIni : {
+								bankAccount : {
+									required : false
+								},
+								dateAgreementBegin : {
 									required : true
 								},
-								address : {
+								agreementDuration : {
+									required : true
+								},
+								dateAgreementEnd : {
+									required : true
+								},
+								streetType : {
+									required : false
+								},
+								fiscalAddress : {
+									required : true
+								},
+								unit : {
 									required : true
 								},
 								province : {
@@ -292,7 +317,7 @@
 									required : true
 								},
 								country : {
-									required : true
+									required : false
 								},
 								postalCode : {
 									required : true,
@@ -340,33 +365,49 @@
 								<div class="uk-form-controls">
 									<input class="uk-input uk-form-small" name="CIF" th:field="*{CIF}" type="text">
 								</div>
-								<label class="uk-form-label" th:text="#{clients.table.representative}"></label>
+								<label class="uk-form-label" th:text="#{clients.table.repName}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="representative" th:field="*{representative}" type="text">
+									<input class="uk-input uk-form-small" name="repName" th:field="*{repName}" type="text">
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.repSurname1}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="repSurname1" th:field="*{repSurname1}" type="text">
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.repSurname2}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="repSurname2" th:field="*{repSurname2}" type="text">
 								</div>
 								<label class="uk-form-label" th:text="#{clients.table.DNI}"></label>
 								<div class="uk-form-controls">
 									<input class="uk-input uk-form-small" name="DNI" th:field="*{DNI}" type="text">
 								</div>
-								<label class="uk-form-label" th:text="#{clients.table.CC}"></label>
+								<label class="uk-form-label" th:text="#{clients.table.bankAccount}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="CC" th:field="*{CC}" type="text">
+									<input class="uk-input uk-form-small" name="bankAccount" th:field="*{bankAccount}" type="text">
 								</div>
-								<label class="uk-form-label" th:text="#{clients.table.dateIni}"></label>
+								<label class="uk-form-label" th:text="#{clients.table.dateAgreementBegin}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="dateIni" th:field="*{dateIni}" type="date">
+									<input class="uk-input uk-form-small" name="dateAgreementBegin" th:field="*{dateAgreementBegin}" type="date">
 								</div>
-								<label class="uk-form-label" th:text="#{clients.table.T}"></label>
+								<label class="uk-form-label" th:text="#{clients.table.agreementDuration}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="T" th:field="*{T}" type="text">
+									<input class="uk-input uk-form-small" name="agreementDuration" th:field="*{agreementDuration}" type="text">
 								</div>
-								<label class="uk-form-label" th:text="#{clients.table.dateFin}"></label>
+								<label class="uk-form-label" th:text="#{clients.table.dateAgreementEnd}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="dateFin" th:field="*{dateFin}" type="date">
+									<input class="uk-input uk-form-small" name="dateAgreementEnd" th:field="*{dateAgreementEnd}" type="date">
 								</div>
-								<label class="uk-form-label" th:text="#{clients.table.address}"></label>
+								<label class="uk-form-label" th:text="#{clients.table.streetType}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="address" th:field="*{address}" type="text">
+									<input class="uk-input uk-form-small" name="streetType" th:field="*{streetType}" type="text">
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.fiscalAddress}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="fiscalAddress" th:field="*{fiscalAddress}" type="text">
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.unit}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="unit" th:field="*{unit}" type="text">
 								</div>
 								<label class="uk-form-label" th:text="#{clients.table.province}"></label>
 								<div class="uk-form-controls">
@@ -383,10 +424,6 @@
 								<label class="uk-form-label" th:text="#{clients.table.country}"></label>
 								<div class="uk-form-controls">
 									<input class="uk-input uk-form-small" name="country" th:field="*{country}" type="text">
-								</div>
-								<label class="uk-form-label" th:text="#{clients.table.REGA}"></label>
-								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="rega" th:field="*{rega}" type="text">
 								</div>
 							</div>
 
@@ -411,41 +448,57 @@
 						<div class="uk-modal-body">
 							<div class="uk-margin">
 								<input type="hidden" name="clientId" th:field="*{id}" /> <label class="uk-form-label"
-									th:text="#{hydros.table.dateIni}"></label> <label class="uk-form-label" th:text="#{clients.table.name}"></label>
+									th:text="#{clients.table.name}"></label>
 								<div class="uk-form-controls">
 									<input class="uk-input uk-form-small" name="clientName" th:field="*{name}" type="text">
 								</div>
 								<label class="uk-form-label" th:text="#{clients.table.CIF}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="cif" th:field="*{CIF}" type="text">
+									<input class="uk-input uk-form-small" name="CIF" th:field="*{CIF}" type="text">
 								</div>
-								<label class="uk-form-label" th:text="#{clients.table.representative}"></label>
+								<label class="uk-form-label" th:text="#{clients.table.repName}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="representative" th:field="*{representative}" type="text">
+									<input class="uk-input uk-form-small" name="repName" th:field="*{repName}" type="text">
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.repSurname1}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="repSurname1" th:field="*{repSurname1}" type="text">
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.repSurname2}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="repSurname2" th:field="*{repSurname2}" type="text">
 								</div>
 								<label class="uk-form-label" th:text="#{clients.table.DNI}"></label>
 								<div class="uk-form-controls">
 									<input class="uk-input uk-form-small" name="DNI" th:field="*{DNI}" type="text">
 								</div>
-								<label class="uk-form-label" th:text="#{clients.table.CC}"></label>
+								<label class="uk-form-label" th:text="#{clients.table.bankAccount}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="CC" th:field="*{CC}" type="text">
+									<input class="uk-input uk-form-small" name="bankAccount" th:field="*{bankAccount}" type="text">
 								</div>
-								<label class="uk-form-label" th:text="#{clients.table.dateIni}"></label>
+								<label class="uk-form-label" th:text="#{clients.table.dateAgreementBegin}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="dateIni" th:field="*{dateIni}" type="date">
+									<input class="uk-input uk-form-small" name="dateAgreementBegin" th:field="*{dateAgreementBegin}" type="date">
 								</div>
-								<label class="uk-form-label" th:text="#{clients.table.T}"></label>
+								<label class="uk-form-label" th:text="#{clients.table.agreementDuration}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="T" th:field="*{T}" type="text">
+									<input class="uk-input uk-form-small" name="agreementDuration" th:field="*{agreementDuration}" type="text">
 								</div>
-								<label class="uk-form-label" th:text="#{clients.table.dateFin}"></label>
+								<label class="uk-form-label" th:text="#{clients.table.dateAgreementEnd}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="dateFin" th:field="*{dateFin}" type="date">
+									<input class="uk-input uk-form-small" name="dateAgreementEnd" th:field="*{dateAgreementEnd}" type="date">
 								</div>
-								<label class="uk-form-label" th:text="#{clients.table.address}"></label>
+								<label class="uk-form-label" th:text="#{clients.table.streetType}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="address" th:field="*{address}" type="text">
+									<input class="uk-input uk-form-small" name="streetType" th:field="*{streetType}" type="text">
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.fiscalAddress}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="fiscalAddress" th:field="*{fiscalAddress}" type="text">
+								</div>
+								<label class="uk-form-label" th:text="#{clients.table.unit}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="unit" th:field="*{unit}" type="text">
 								</div>
 								<label class="uk-form-label" th:text="#{clients.table.province}"></label>
 								<div class="uk-form-controls">
@@ -462,10 +515,6 @@
 								<label class="uk-form-label" th:text="#{clients.table.country}"></label>
 								<div class="uk-form-controls">
 									<input class="uk-input uk-form-small" name="country" th:field="*{country}" type="text">
-								</div>
-								<label class="uk-form-label" th:text="#{clients.table.REGA}"></label>
-								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="rega" th:field="*{rega}" type="text">
 								</div>
 							</div>
 						</div>

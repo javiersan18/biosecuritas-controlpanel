@@ -2,11 +2,15 @@ package com.biosecuritas.controlpanel.db.entities;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -25,7 +29,6 @@ public class Farm {
 	private String REGA;
 
 	@ManyToOne
-	@Column(nullable = false)
 	private Client clientId;
 
 	@Column(name = "street_type")
@@ -48,7 +51,9 @@ public class Farm {
 
 	private Double longitude;
 
-	@ManyToMany
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinTable(name = "farm_contact", joinColumns = { @JoinColumn(name = "contact_id") }, inverseJoinColumns = {
+			@JoinColumn(name = "farm_id") })
 	private Set<Contact> contacts;
 
 	@Column(name = "num_sandach")

@@ -1,18 +1,10 @@
 package com.biosecuritas.controlpanel.db.entities;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -22,11 +14,6 @@ public class Contact {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinTable(name = "contact_farm", joinColumns = { @JoinColumn(name = "contact_id") }, inverseJoinColumns = {
-			@JoinColumn(name = "farm_id") })
-	private Set<Farm> farms = new HashSet<>();
 
 	@Column(nullable = false)
 	private String name;
@@ -52,14 +39,6 @@ public class Contact {
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public Set<Farm> getFarms() {
-		return farms;
-	}
-
-	public void setFarms(Set<Farm> farms) {
-		this.farms = farms;
 	}
 
 	public String getName() {
@@ -104,8 +83,8 @@ public class Contact {
 
 	@Override
 	public String toString() {
-		return "Contact [id=" + id + ", farms=" + farms + ", name=" + name + ", surname1=" + surname1 + ", surname2="
-				+ surname2 + ", phone=" + phone + ", active=" + active + "]";
+		return "Contact [id=" + id + ", name=" + name + ", surname1=" + surname1 + ", surname2=" + surname2 + ", phone="
+				+ phone + ", active=" + active + "]";
 	}
 
 }

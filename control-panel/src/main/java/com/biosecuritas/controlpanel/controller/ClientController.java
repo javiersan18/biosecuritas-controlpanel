@@ -41,18 +41,14 @@ public class ClientController {
 	}
 
 	private List<Client> finAllWithNumHydrolyzers() {
-		List<Object[]> count = clientRepository.countHydrosAllClients();
+		//List<Object[]> count = clientRepository.countHydrosAllClients();
 		List<Client> clients = clientRepository.findAll();
 
-		for (Object[] o : count) {
-			Integer nH = ((BigInteger) o[1]).intValue();
-			Integer id = (Integer) o[0];
-			for (Client c : clients) {
-				if (c.getClientCode().equals(id)) {
-					c.setNumHydros(nH);
-				}
-			}
-		}
+		/*
+		 * for (Object[] o : count) { Integer nH = ((BigInteger) o[1]).intValue();
+		 * Integer id = (Integer) o[0]; for (Client c : clients) { if
+		 * (c.getId().equals(id)) { c.setNumHydros(nH); } } }
+		 */
 		return clients;
 	}
 
