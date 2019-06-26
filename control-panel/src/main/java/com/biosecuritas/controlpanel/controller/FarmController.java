@@ -33,17 +33,17 @@ public class FarmController {
 	private ClientRepository clientRepository;
 
 	@GetMapping(path = "/farms")
-	public String getAllFarms(@RequestParam(required = false) String status,
+	public String getAllFarms(@RequestParam(required = false) String statusResponse,
 			@RequestParam(required = false) String errorDesc, Model model) {
 		List<Farm> farms = farmRepository.findAll();
 		model.addAttribute("farms", farms);
 		model.addAttribute("clients", clientRepository.findAll());
 		model.addAttribute("newFarm", new Farm());
 		model.addAttribute("editFarm", new Farm());
-		if (status == null && farms.isEmpty()) {
-			status = "empty";
+		if (statusResponse == null && farms.isEmpty()) {
+			statusResponse = "empty";
 		}
-		model.addAttribute("status", status);
+		model.addAttribute("statusResponse", statusResponse);
 		model.addAttribute("errorDesc", errorDesc);
 		return "farms/farms";
 	}
@@ -52,13 +52,13 @@ public class FarmController {
 	public String addFarm(@ModelAttribute("newFarm") @Valid Farm farm, BindingResult result, Model model) {
 
 		model.addAttribute("farms", farmRepository.findAll());
-		model.addAttribute("status", "created");
+		model.addAttribute("statusResponse", "created");
 		model.addAttribute("newFarm", new Farm());
 		model.addAttribute("editFarm", new Farm());
 
 		if (result.hasErrors()) {
 			model.addAttribute("newFarm", farm);
-			model.addAttribute("status", "error");
+			model.addAttribute("statusResponse", "error");
 			model.addAttribute("errorDesc", "errorDesc");
 			log.error(result.toString());
 			return "farms/farms";
@@ -75,12 +75,12 @@ public class FarmController {
 		model.addAttribute("newFarm", new Farm());
 		model.addAttribute("editFarm", farmRepository.findById(id));
 		model.addAttribute("clients", clientRepository.findAll());
-		model.addAttribute("status", "edit");
+		model.addAttribute("statusResponse", "edit");
 
 		if (result.hasErrors()) {
 			model.addAttribute("newFarm", farm);
 			model.addAttribute("editFarm", new Farm());
-			model.addAttribute("status", "error");
+			model.addAttribute("statusResponse", "error");
 			model.addAttribute("errorDesc", "errorDesc");
 			log.error(result.toString());
 			return "farms/farms";
@@ -96,11 +96,11 @@ public class FarmController {
 		model.addAttribute("newFarm", new Farm());
 		model.addAttribute("editFarm", farmRepository.findById(id));
 		model.addAttribute("clients", clientRepository.findAll());
-		model.addAttribute("status", "view");
+		model.addAttribute("statusResponse", "view");
 
 		if (result.hasErrors()) {
 			model.addAttribute("newFarm", farm);
-			model.addAttribute("status", "error");
+			model.addAttribute("statusResponse", "error");
 			model.addAttribute("errorDesc", "errorDesc");
 			log.error(result.toString());
 			return "farms/farms";
@@ -116,11 +116,11 @@ public class FarmController {
 		model.addAttribute("newFarm", new Farm());
 		model.addAttribute("editFarm", new Farm());
 		model.addAttribute("clients", clientRepository.findAll());
-		model.addAttribute("status", "updated");
+		model.addAttribute("statusResponse", "updated");
 
 		if (result.hasErrors()) {
 			model.addAttribute("newFarm", farm);
-			model.addAttribute("status", "error");
+			model.addAttribute("statusResponse", "error");
 			model.addAttribute("errorDesc", "errorDesc");
 			log.error(result.toString());
 			return "farms/farms";
@@ -140,9 +140,9 @@ public class FarmController {
 			model.addAttribute("newFarm", new Farm());
 			model.addAttribute("editFarm", new Farm());
 			model.addAttribute("clients", clientRepository.findAll());
-			model.addAttribute("status", "deleted");
+			model.addAttribute("statusResponse", "deleted");
 		} catch (DataIntegrityViolationException e) {
-			model.addAttribute("status", "error");
+			model.addAttribute("statusResponse", "error");
 			model.addAttribute("errorDesc",
 					"fixxxxxx: No se ha podido borrar el cliente porque existen Granjas o Contenedores asociados a este cliente.");
 		}

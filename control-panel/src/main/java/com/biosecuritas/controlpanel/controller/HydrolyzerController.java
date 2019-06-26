@@ -44,17 +44,17 @@ public class HydrolyzerController {
 	}
 
 	@GetMapping(path = "/hydrolyzers")
-	public String getAllHydrolyzers(@RequestParam(required = false) String status,
+	public String getAllHydrolyzers(@RequestParam(required = false) String statusResponse,
 			@RequestParam(required = false) String errorDesc, Model model) {
 		List<Hydrolyzer> hydros = hydrolyzerRepository.findAll();
 		model.addAttribute("hydros", hydros);
 		model.addAttribute("farms", farmRepository.findAll());
 		model.addAttribute("newHydro", new Hydrolyzer());
 		model.addAttribute("editHydro", new Hydrolyzer());
-		if (status == null && hydros.isEmpty()) {
-			status = "empty";
+		if (statusResponse == null && hydros.isEmpty()) {
+			statusResponse = "empty";
 		}
-		model.addAttribute("status", status);
+		model.addAttribute("statusResponse", statusResponse);
 		model.addAttribute("errorDesc", errorDesc);
 
 		return "hydrolyzers/hydrolyzers";
@@ -65,11 +65,11 @@ public class HydrolyzerController {
 		model.addAttribute("hydros", hydrolyzerRepository.findAll());
 		model.addAttribute("newHydro", new Hydrolyzer());
 		model.addAttribute("editHydro", new Hydrolyzer());
-		model.addAttribute("status", "created");
+		model.addAttribute("statusResponse", "created");
 
 		if (result.hasErrors()) {
 			model.addAttribute("newHydro", hydro);
-			model.addAttribute("status", "error");
+			model.addAttribute("statusResponse", "error");
 			model.addAttribute("errorDesc", "errordesc");
 			log.error(result.toString());
 			return "hydrolyzers/hydrolyzers";
@@ -86,11 +86,11 @@ public class HydrolyzerController {
 		model.addAttribute("newHydro", new Hydrolyzer());
 		model.addAttribute("editHydro", hydrolyzerRepository.findById(id));
 		model.addAttribute("farms", farmRepository.findAll());
-		model.addAttribute("status", "edit");
+		model.addAttribute("statusResponse", "edit");
 
 		if (result.hasErrors()) {
 			model.addAttribute("editHydro", hydro);
-			model.addAttribute("status", "error");
+			model.addAttribute("statusResponse", "error");
 			model.addAttribute("errorDesc", "errorDesc");
 			log.error(result.toString());
 			return "hydrolyzers/hydrolyzers";
@@ -106,12 +106,12 @@ public class HydrolyzerController {
 		model.addAttribute("newHydro", new Hydrolyzer());
 		model.addAttribute("editHydro", hydrolyzerRepository.findById(id));
 		model.addAttribute("farms", farmRepository.findAll());
-		model.addAttribute("status", "view");
+		model.addAttribute("statusResponse", "view");
 
 		if (result.hasErrors()) {
 			model.addAttribute("newHydro", hydro);
 			model.addAttribute("editHydro", new Hydrolyzer());
-			model.addAttribute("status", "error");
+			model.addAttribute("statusResponse", "error");
 			model.addAttribute("erorDesc", "errordesc");
 			log.error(result.toString());
 			return "hydrolyzers/hydrolyzers";
@@ -126,11 +126,11 @@ public class HydrolyzerController {
 		model.addAttribute("newHydro", new Hydrolyzer());
 		model.addAttribute("editHydro", new Hydrolyzer());
 		model.addAttribute("farms", farmRepository.findAll());
-		model.addAttribute("status", "updated");
+		model.addAttribute("statusResponse", "updated");
 
 		if (result.hasErrors()) {
 			model.addAttribute("editHydro", hydro);
-			model.addAttribute("status", "error");
+			model.addAttribute("statusResponse", "error");
 			model.addAttribute("errorDesc", "errordesc");
 			log.error(result.toString());
 			return "hydrolyzers/hydrolyzers";
@@ -150,9 +150,9 @@ public class HydrolyzerController {
 			model.addAttribute("newHydro", new Hydrolyzer());
 			model.addAttribute("editHydro", new Hydrolyzer());
 			model.addAttribute("farms", farmRepository.findAll());
-			model.addAttribute("status", "deleted");
+			model.addAttribute("statusResponse", "deleted");
 		} catch (DataIntegrityViolationException e) {
-			model.addAttribute("status", "error");
+			model.addAttribute("statusResponse", "error");
 			model.addAttribute("errorDesc",
 					"fixxxxxx: No se ha podido borrar el cliente porque existen Granjas o Contenedores asociados a este cliente.");
 		}

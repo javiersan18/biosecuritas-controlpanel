@@ -25,7 +25,7 @@ public class RoutesController {
 
 	@GetMapping(path = "/routes")
 	public String showMap(Model model) {
-		model.addAttribute("installations", installationRepository.findByStatus(InstallationStatus.SEALED));
+		model.addAttribute("installations", installationRepository.findByStatus(InstallationStatus.READY_FOR_PICKUP));
 		model.addAttribute("editInstall", new Installation());
 		return "routes/prepare";
 	}
@@ -34,13 +34,13 @@ public class RoutesController {
 	public String viewInstallRoutes(@PathVariable("id") Integer id, @Valid Installation install, BindingResult result,
 			Model model) {
 
-		model.addAttribute("installations", installationRepository.findByStatus(InstallationStatus.SEALED));
+		model.addAttribute("installations", installationRepository.findByStatus(InstallationStatus.READY_FOR_PICKUP));
 		model.addAttribute("editInstall", installationRepository.findById(id));
-		model.addAttribute("status", "view");
+		model.addAttribute("statusResponse", "view");
 
 		if (result.hasErrors()) {
 			model.addAttribute("editInstall", install);
-			model.addAttribute("status", "error");
+			model.addAttribute("statusResponse", "error");
 			model.addAttribute("errorDesc", "errorDesc");
 			log.error(result.toString());
 			return "/installations/installations";

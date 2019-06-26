@@ -37,11 +37,11 @@ $(document)
 .ready(
     function() {
         //window.history.pushState({}, document.title, "/clients");
-        var status = $("#status").val();
+        var statusResponse = $("#statusResponse").val();
         var errorDesc = $("#errorDesc").val();
-        console.log("status: " + status);
+        console.log("statusResponse: " + statusResponse);
         console.log("error: " + errorDesc);
-        if (status == "edit") {
+        if (statusResponse == "edit") {
             UIkit.modal('#modal-form-edit', {
                 modal: false,
                 keyboard: false,
@@ -49,30 +49,30 @@ $(document)
                 center: true
             }).show();
         }
-        if (status == "view") {
+        if (statusResponse == "view") {
             UIkit.modal('#modal-form-view', {
                 modal: false,
                 keyboard: false,
                 bgclose: false,
                 center: true
             }).show();
-        } else if (status == "created") {
+        } else if (statusResponse == "created") {
             $("#table-data")
                 .before(
                     '<div id="item-created" class="uk-alert-success" uk-alert><a class="uk-alert-close" uk-close></a><p>' + createdMessage + '</p></div>');
-        } else if (status == "updated") {
+        } else if (statusResponse == "updated") {
             $("#table-data")
                 .before(
                     '<div id="item-updated" class="uk-alert-success" uk-alert><a class="uk-alert-close" uk-close></a><p>' + updatedMessage + '</p></div>');
-        } else if (status == "deleted") {
+        } else if (statusResponse == "deleted") {
             $("#table-data")
                 .before(
                     '<div id="item-deleted" class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>' + deletedMessage + '</p></div>');
-        } else if (status == "empty") {
+        } else if (statusResponse == "empty") {
             $("#table-data")
                 .before(
                     '<div id="item-empty" class="uk-alert-primary" uk-alert><a class="uk-alert-close" uk-close></a><p>' + emptyMessage + '</p></div>');
-        } else if (status == "error") {
+        } else if (statusResponse == "error") {
             $("#table-data")
                 .before(
                     '<div id="item-deleted" class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>ERROR: ' + errorDesc + '</p></div>');
@@ -528,7 +528,7 @@ $(document)
 		<div th:replace="fragments/footer :: footer"></div>
 		<!--/FOOTER-->
 
-		<input type="hidden" id="status" name="status" th:value="${status}" /> <input type="hidden" id="errorDesc"
+		<input type="hidden" id="statusResponse" name="statusResponse" th:value="${statusResponse}" /> <input type="hidden" id="errorDesc"
 			name="errorDesc" th:value="${errorDesc}" />
 	</div>
 

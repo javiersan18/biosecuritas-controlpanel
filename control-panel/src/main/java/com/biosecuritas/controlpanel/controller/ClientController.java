@@ -29,16 +29,16 @@ public class ClientController {
 	private ClientRepository clientRepository;
 
 	@GetMapping(path = "/clients")
-	public String getAllClients(@RequestParam(required = false) String status,
+	public String getAllClients(@RequestParam(required = false) String statusResponse,
 			@RequestParam(required = false) String errorDesc, Model model) {
 		List<Client> clients = finAllWithNumHydrolyzers();
 		model.addAttribute("clients", clients);
 		model.addAttribute("newClient", new Client());
 		model.addAttribute("editClient", new Client());
-		if (status == null && clients.isEmpty()) {
-			status = "empty";
+		if (statusResponse == null && clients.isEmpty()) {
+			statusResponse = "empty";
 		}
-		model.addAttribute("status", status);
+		model.addAttribute("statusResponse", statusResponse);
 		model.addAttribute("errorDesc", errorDesc);
 		return "clients/clients";
 	}
@@ -59,13 +59,13 @@ public class ClientController {
 	public String addClient(@ModelAttribute("newClient") @Valid Client client, BindingResult result, Model model) {
 
 		model.addAttribute("clients", clientRepository.findAll());
-		model.addAttribute("status", "created");
+		model.addAttribute("statusResponse", "created");
 		model.addAttribute("newClient", new Client());
 		model.addAttribute("editClient", new Client());
 
 		if (result.hasErrors()) {
 			model.addAttribute("newClient", client);
-			model.addAttribute("status", "error");
+			model.addAttribute("statusResponse", "error");
 			model.addAttribute("errorDesc", "errordesc");
 			log.error(result.toString());
 			return "clients/clients";
@@ -81,12 +81,12 @@ public class ClientController {
 		model.addAttribute("clients", clientRepository.findAll());
 		model.addAttribute("newClient", new Client());
 		model.addAttribute("editClient", clientRepository.findById(id));
-		model.addAttribute("status", "edit");
+		model.addAttribute("statusResponse", "edit");
 
 		if (result.hasErrors()) {
 			model.addAttribute("newClient", client);
 			model.addAttribute("editClient", new Client());
-			model.addAttribute("status", "error");
+			model.addAttribute("statusResponse", "error");
 			model.addAttribute("errorDesc", "errordesc");
 			log.error(result.toString());
 			return "clients/clients";
@@ -101,12 +101,12 @@ public class ClientController {
 		model.addAttribute("clients", finAllWithNumHydrolyzers());
 		model.addAttribute("newClient", new Client());
 		model.addAttribute("editClient", clientRepository.findById(id));
-		model.addAttribute("status", "view");
+		model.addAttribute("statusResponse", "view");
 
 		if (result.hasErrors()) {
 			model.addAttribute("newClient", client);
 			model.addAttribute("editClient", new Client());
-			model.addAttribute("status", "error");
+			model.addAttribute("statusResponse", "error");
 			model.addAttribute("errorDesc", "errordesc");
 			log.error(result.toString());
 			return "clients/clients";
@@ -121,11 +121,11 @@ public class ClientController {
 		model.addAttribute("clients", clientRepository.findAll());
 		model.addAttribute("newClient", new Client());
 		model.addAttribute("editClient", new Client());
-		model.addAttribute("status", "updated");
+		model.addAttribute("statusResponse", "updated");
 
 		if (result.hasErrors()) {
 			model.addAttribute("newClient", client);
-			model.addAttribute("status", "error");
+			model.addAttribute("statusResponse", "error");
 			model.addAttribute("errorDesc", "errordesc");
 			log.error(result.toString());
 			return "clients/clients";
@@ -145,9 +145,9 @@ public class ClientController {
 			model.addAttribute("clients", clientRepository.findAll());
 			model.addAttribute("newClient", new Client());
 			model.addAttribute("editClient", new Client());
-			model.addAttribute("status", "deleted");
+			model.addAttribute("statusResponse", "deleted");
 		} catch (DataIntegrityViolationException e) {
-			model.addAttribute("status", "error");
+			model.addAttribute("statusResponse", "error");
 			model.addAttribute("errorDesc",
 					"No se ha podido borrar el cliente porque existen Granjas o Contenedores asociados a este cliente.");
 		}

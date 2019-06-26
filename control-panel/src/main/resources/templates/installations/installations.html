@@ -28,11 +28,11 @@
 $(document).ready(function() {
 	$("#table-body").find("tr").hide().filter("[data-status='active']").show();
     //window.history.pushState({}, document.title, "/clients");
-    var status = $("#status").val();
+    var statusResponse = $("#statusResponse").val();
     var errorDesc = $("#errorDesc").val();
-    console.log("status: " + status);
+    console.log("statusResponse: " + statusResponse);
     console.log("error: " + errorDesc);
-    if (status == "edit") {
+    if (statusResponse == "edit") {
         UIkit.modal('#modal-form-edit', {
             modal: false,
             keyboard: false,
@@ -40,30 +40,30 @@ $(document).ready(function() {
             center: true
         }).show();
     }
-    if (status == "view") {
+    if (statusResponse == "view") {
         UIkit.modal('#modal-form-view', {
             modal: false,
             keyboard: false,
             bgclose: false,
             center: true
         }).show();
-    } else if (status == "created") {
+    } else if (statusResponse == "created") {
         $("#table-data")
             .before(
                 '<div id="item-created" class="uk-alert-success" uk-alert><a class="uk-alert-close" uk-close></a><p>' + createdMessage + '</p></div>');
-    } else if (status == "updated") {
+    } else if (statusResponse == "updated") {
         $("#table-data")
             .before(
                 '<div id="item-updated" class="uk-alert-success" uk-alert><a class="uk-alert-close" uk-close></a><p>' + updatedMessage + '</p></div>');
-    } else if (status == "deleted") {
+    } else if (statusResponse == "deleted") {
         $("#table-data")
             .before(
                 '<div id="item-deleted" class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>' + deletedMessage + '</p></div>');
-    } else if (status == "empty") {
+    } else if (statusResponse == "empty") {
         $("#table-data")
             .before(
                 '<div id="item-empty" class="uk-alert-primary" uk-alert><a class="uk-alert-close" uk-close></a><p>' + emptyMessage + '</p></div>');
-    } else if (status == "error") {
+    } else if (statusResponse == "error") {
         $("#table-data")
             .before(
                 '<div id="item-deleted" class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>ERROR: ' + errorDesc + '</p></div>');
@@ -152,7 +152,7 @@ $(window).on("load", function(){
 							</tr>
 						</thead>
 						<tbody id="table-body">
-							<tr th:each="install : ${installations}" th:data-status="${install.status}">
+							<tr th:each="install : ${installations}" th:data-status="${install.statusResponse}">
 
 								<td th:text="${install.id}"></td>
 								<td th:text="${install.hydrolyzerId.id}"></td>
@@ -415,9 +415,14 @@ $(window).on("load", function(){
 									<input class="uk-input uk-form-small" name="sealDate" th:field="*{sealDate}" type="date"
 										placeholder="08/05/2019">
 								</div>
-								<label class="uk-form-label" th:text="#{installations.table.returnDate}"></label>
+								<label class="uk-form-label" th:text="#{installations.table.collectedDate}"></label>
 								<div class="uk-form-controls">
-									<input class="uk-input uk-form-small" name="returnDate" th:field="*{returnDate}" type="date"
+									<input class="uk-input uk-form-small" name="collectedDate" th:field="*{collectedDate}" type="date"
+										placeholder="08/05/2019">
+								</div>
+								<label class="uk-form-label" th:text="#{installations.table.finishedDate}"></label>
+								<div class="uk-form-controls">
+									<input class="uk-input uk-form-small" name="finishedDate" th:field="*{finishedDate}" type="date"
 										placeholder="08/05/2019">
 								</div>
 								<label class="uk-form-label" th:text="#{installations.table.collectedWeight}"></label>
@@ -443,8 +448,8 @@ $(window).on("load", function(){
 		<div th:replace="fragments/footer :: footer"></div>
 		<!--/FOOTER-->
 
-		<input type="hidden" id="status" name="status" th:value="${status}" /> <input type="hidden" id="errorDesc"
-			name="errorDesc" th:value="${errorDesc}" />
+		<input type="hidden" id="statusResponse" name="statusResponse" th:value="${statusResponse}" /> <input type="hidden"
+			id="errorDesc" name="errorDesc" th:value="${errorDesc}" />
 	</div>
 
 </body>

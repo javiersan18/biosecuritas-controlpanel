@@ -52,7 +52,7 @@ public class InstallationController {
 	}
 
 	@GetMapping(path = "/installations")
-	public String getAllInstallations(@RequestParam(required = false) String status,
+	public String getAllInstallations(@RequestParam(required = false) String statusResponse,
 			@RequestParam(required = false) String errorDesc, Model model) {
 		List<Installation> installs = installationRepository.findAll();
 		model.addAttribute("installations", installs);
@@ -61,10 +61,10 @@ public class InstallationController {
 		model.addAttribute("hydros", hydrolyzerRepository.findAll());
 		model.addAttribute("newInstall", new Installation());
 		model.addAttribute("editInstall", new Installation());
-		if (status == null && installs.isEmpty()) {
-			status = "empty";
+		if (statusResponse == null && installs.isEmpty()) {
+			statusResponse = "empty";
 		}
-		model.addAttribute("status", status);
+		model.addAttribute("statusResponse", statusResponse);
 		model.addAttribute("errorDesc", errorDesc);
 		return "installations/installations";
 	}
@@ -79,11 +79,11 @@ public class InstallationController {
 		model.addAttribute("hydros", hydrolyzerRepository.findAll());
 		model.addAttribute("newInstall", new Installation());
 		model.addAttribute("editInstall", new Installation());
-		model.addAttribute("status", "created");
+		model.addAttribute("statusResponse", "created");
 
 		if (result.hasErrors()) {
 			model.addAttribute("newInstall", install);
-			model.addAttribute("status", "error");
+			model.addAttribute("statusResponse", "error");
 			model.addAttribute("errorDesc", "errorDesc");
 			log.error(result.toString());
 			return "installations/installations";
@@ -103,11 +103,11 @@ public class InstallationController {
 		model.addAttribute("hydros", hydrolyzerRepository.findAll());
 		model.addAttribute("newInstall", new Installation());
 		model.addAttribute("editInstall", installationRepository.findById(id));
-		model.addAttribute("status", "edit");
+		model.addAttribute("statusResponse", "edit");
 
 		if (result.hasErrors()) {
 			model.addAttribute("editInstall", install);
-			model.addAttribute("status", "error");
+			model.addAttribute("statusResponse", "error");
 			model.addAttribute("errorDesc", "errorDesc");
 			log.error(result.toString());
 			return "installations/installations";
@@ -126,11 +126,11 @@ public class InstallationController {
 		model.addAttribute("hydros", hydrolyzerRepository.findAll());
 		model.addAttribute("newInstall", new Installation());
 		model.addAttribute("editInstall", installationRepository.findById(id));
-		model.addAttribute("status", "view");
+		model.addAttribute("statusResponse", "view");
 
 		if (result.hasErrors()) {
 			model.addAttribute("editInstall", install);
-			model.addAttribute("status", "error");
+			model.addAttribute("statusResponse", "error");
 			model.addAttribute("errorDesc", "errorDesc");
 			log.error(result.toString());
 			return "installations/installations";
@@ -148,11 +148,11 @@ public class InstallationController {
 		model.addAttribute("hydros", hydrolyzerRepository.findAll());
 		model.addAttribute("newInstall", new Installation());
 		model.addAttribute("editInstall", new Installation());
-		model.addAttribute("status", "updated");
+		model.addAttribute("statusResponse", "updated");
 
 		if (result.hasErrors()) {
 			model.addAttribute("editInstall", install);
-			model.addAttribute("status", "error");
+			model.addAttribute("statusResponse", "error");
 			model.addAttribute("errorDesc", "errorDesc");
 			log.error(result.toString());
 			return "installations/installations";
@@ -175,9 +175,9 @@ public class InstallationController {
 			model.addAttribute("hydros", hydrolyzerRepository.findAll());
 			model.addAttribute("newInstall", new Installation());
 			model.addAttribute("editInstall", new Installation());
-			model.addAttribute("status", "deleted");
+			model.addAttribute("statusResponse", "deleted");
 		} catch (DataIntegrityViolationException e) {
-			model.addAttribute("status", "error");
+			model.addAttribute("statusResponse", "error");
 			model.addAttribute("errorDesc",
 					"fixxxxxx: No se ha podido borrar el cliente porque existen Granjas o Contenedores asociados a este cliente.");
 		}
