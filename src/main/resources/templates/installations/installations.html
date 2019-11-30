@@ -77,7 +77,10 @@ $(window).on("load", function(){
 
 	$selectClients.on( 'change' , function() {
 		$selectFarms.html($optionsFarms.filter('[data-clientId="' + this.value + '"]'));
-		$selectHydros.html($optionsHydros.filter('[data-clientId="' + this.value + '"]'));
+	}).trigger('change');	
+	
+	$selectFarms.on( 'change' , function() {
+		$selectHydros.html($optionsHydros.filter('[data-farmId="' + this.value + '"]'));
 	}).trigger('change');	
 		
 	$("#all").on('click', function(){
@@ -351,9 +354,9 @@ $(window).on("load", function(){
 								<label class="uk-form-label" th:text="#{installations.addNew.hydrolyzer}"></label>
 								<div class="uk-form-controls">
 									<select class="uk-select uk-form-small" id="hydros-list" name="hydroList" th:field="*{hydrolyzerId}">
-										<option value="0" th:text="#{installations.addNew.selectHydro}" data-clientId='0'></option>
+										<option value="0" th:text="#{installations.addNew.selectHydro}" data-farmId='0'></option>
 										<option th:each="hydro : ${hydros}" th:value="${hydro.id}" th:text="${hydro.id}"
-											th:data-clientId="${hydro.clientId.id}"></option>
+											th:data-farmId="${hydro.farmId.id}"></option>
 									</select>
 								</div>
 								<label class="uk-form-label" th:text="#{installations.table.deliveryDate}"></label>
